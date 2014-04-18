@@ -401,6 +401,13 @@
           <GroupName>Drivers</GroupName>
           <Files>
             <File>
+              <FileName>24cxx.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>drivers\24cxx.c</FilePath>
+            </File>
+          </Files>
+          <Files>
+            <File>
               <FileName>board.c</FileName>
               <FileType>1</FileType>
               <FilePath>drivers\board.c</FilePath>
@@ -408,9 +415,30 @@
           </Files>
           <Files>
             <File>
+              <FileName>logic_f4.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>drivers\logic_f4.c</FilePath>
+            </File>
+          </Files>
+          <Files>
+            <File>
               <FileName>serial.c</FileName>
               <FileType>1</FileType>
               <FilePath>drivers\serial.c</FilePath>
+            </File>
+          </Files>
+          <Files>
+            <File>
+              <FileName>soft_i2c_f4.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>drivers\soft_i2c_f4.c</FilePath>
+            </File>
+          </Files>
+          <Files>
+            <File>
+              <FileName>spi_user_f4.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>drivers\spi_user_f4.c</FilePath>
             </File>
           </Files>
           <Files>
@@ -791,6 +819,20 @@
           <GroupName>finsh</GroupName>
           <Files>
             <File>
+              <FileName>shell.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\finsh\shell.c</FilePath>
+            </File>
+          </Files>
+          <Files>
+            <File>
+              <FileName>symbol.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\finsh\symbol.c</FilePath>
+            </File>
+          </Files>
+          <Files>
+            <File>
               <FileName>cmd.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\components\finsh\cmd.c</FilePath>
@@ -847,13 +889,6 @@
           </Files>
           <Files>
             <File>
-              <FileName>finsh_token.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\components\finsh\finsh_token.c</FilePath>
-            </File>
-          </Files>
-          <Files>
-            <File>
               <FileName>finsh_var.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\components\finsh\finsh_var.c</FilePath>
@@ -868,16 +903,9 @@
           </Files>
           <Files>
             <File>
-              <FileName>shell.c</FileName>
+              <FileName>finsh_token.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\components\finsh\shell.c</FilePath>
-            </File>
-          </Files>
-          <Files>
-            <File>
-              <FileName>symbol.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\components\finsh\symbol.c</FilePath>
+              <FilePath>..\..\components\finsh\finsh_token.c</FilePath>
             </File>
           </Files>
         </Group>
