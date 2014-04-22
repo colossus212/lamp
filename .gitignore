@@ -13,6 +13,11 @@
 *.map
 *.axf
 *.lnp
+*.bin
+*.dep
+*.Administrator
+*.uvopt
+build
 
 #################
 ## Eclipse
