@@ -4,6 +4,7 @@
 
 #include "stm32f4xx.h"
 
+#define pwm_ena(x) logic_out(4,x)
 
 typedef struct logic_io
 {

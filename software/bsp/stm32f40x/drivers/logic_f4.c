@@ -4,13 +4,14 @@
 #include "logic_f4.h"
 
 #define in_size 4
-#define out_size 4
+#define out_size 5
 
 logic_io GPIO_in[in_size] = 
 	{{GPIOE,GPIO_Pin_2}, {GPIOE,GPIO_Pin_3}, {GPIOE,GPIO_Pin_4}, {GPIOE,GPIO_Pin_5}};
 	
 logic_io GPIO_out[out_size] = 
-	{{GPIOG,GPIO_Pin_10},{GPIOG,GPIO_Pin_11},{GPIOE,GPIO_Pin_0},{GPIOE,GPIO_Pin_1}};
+	{{GPIOG,GPIO_Pin_10},{GPIOG,GPIO_Pin_11},{GPIOE,GPIO_Pin_0},{GPIOE,GPIO_Pin_1},
+	 {GPIOG,GPIO_Pin_8}};
 
 void logic_init(void)
 {
@@ -69,7 +70,7 @@ uint8_t logic_in(uint8_t num)
 		return 255;		
 	}
 	
-	rt_kprintf("io%d is %d\n",num,GPIO_ReadInputDataBit(GPIO_in[num].GPIOx, GPIO_in[num].GPIO_Pin));	
+//	rt_kprintf("io%d is %d\n",num,GPIO_ReadInputDataBit(GPIO_in[num].GPIOx, GPIO_in[num].GPIO_Pin));	
 	return GPIO_ReadInputDataBit(GPIO_in[num].GPIOx, GPIO_in[num].GPIO_Pin);
 }
 #ifdef FINSH_USING_SYMTAB
