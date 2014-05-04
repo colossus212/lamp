@@ -32,7 +32,7 @@
 #define UART6_RX_PIN_SOURCE GPIO_PinSource9
 #define UART6_GPIO	    	GPIOG
 
-#if MB_MASTER_RTU_ENABLED > 0 || MB_MASTER_ASCII_ENABLED
+#if MB_MASTER_RTU_ENABLED > 0 || MB_MASTER_ASCII_ENABLED > 0
 /* ----------------------- static functions ---------------------------------*/
 static void prvvUARTTxReadyISR(void);
 static void prvvUARTRxISR(void);
@@ -42,6 +42,7 @@ void vMBMasterPortSerialEnable(BOOL xRxEnable, BOOL xTxEnable)
 {
 	if (xRxEnable)
 	{
+//		vMBDelay(1000);
 //		MASTER_RS485_RECEIVE_MODE;
 		USART_ITConfig(USART6, USART_IT_RXNE, ENABLE);
 	}
@@ -79,14 +80,14 @@ BOOL xMBMasterPortSerialInit(UCHAR ucPORT, ULONG ulBaudRate, UCHAR ucDataBits,
 	//USART6_TX
 	GPIO_InitStructure.GPIO_Pin   = UART6_GPIO_TX;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_25MHz;
 	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
 	GPIO_InitStructure.GPIO_PuPd  = GPIO_PuPd_UP;
 	GPIO_Init(GPIOG, &GPIO_InitStructure);
 	//USART6_RX
 	GPIO_InitStructure.GPIO_Pin   = UART6_GPIO_RX;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_25MHz;
 	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
 	GPIO_InitStructure.GPIO_PuPd  = GPIO_PuPd_UP;
 	GPIO_Init(GPIOG, &GPIO_InitStructure);
@@ -192,6 +193,11 @@ void prvvUARTRxISR(void)
 void USART6_IRQHandler(void)
 {
 	rt_interrupt_enter();
+	//溢出错误
+	if (USART_GetFlagStatus(USART6, USART_FLAG_ORE) == SET)
+	{
+		prvvUARTRxISR();
+	}
 	//接收中断
 	if (USART_GetITStatus(USART6, USART_IT_RXNE) == SET)
 	{
@@ -207,5 +213,3 @@ void USART6_IRQHandler(void)
 }
 
 #endif
-
-

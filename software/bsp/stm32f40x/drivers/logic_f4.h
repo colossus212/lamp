@@ -15,7 +15,7 @@ typedef struct logic_io
 typedef enum logic_name
 {
 	mcu_run = 0,
-	
+	usart3_dir = 5,
 }logic_name;	
 
 void logic_init(void);

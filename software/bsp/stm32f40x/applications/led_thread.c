@@ -31,7 +31,7 @@ int led_thread_start(void)
 
 	led_thread = rt_thread_create("led_thread",
 								rt_led_thread_entry, RT_NULL,
-								4096, 5, 20);
+								4096, 30, 20);
 
 	if (led_thread != RT_NULL)
 		rt_thread_startup(led_thread);

@@ -27,7 +27,7 @@
 #include "mb_m.h"
 #include "mbport.h"
 
-#if MB_MASTER_RTU_ENABLED > 0 || MB_MASTER_ASCII_ENABLED
+#if MB_MASTER_RTU_ENABLED > 0 || MB_MASTER_ASCII_ENABLED > 0
 /* ----------------------- Variables ----------------------------------------*/
 static USHORT usT35TimeOut50us;
 static USHORT usPrescalerValue = 0;
@@ -39,6 +39,7 @@ static void prvvTIMERExpiredISR(void);
 BOOL xMBMasterPortTimersInit(USHORT usTimeOut50us)
 {
 	NVIC_InitTypeDef NVIC_InitStructure;
+	TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
 	//====================================时钟初始化===========================
 	//使能定时器2时钟
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);
@@ -51,12 +52,17 @@ BOOL xMBMasterPortTimersInit(USHORT usTimeOut50us)
 	usPrescalerValue = (uint16_t) (SystemCoreClock/2 / 20000) - 1;
 	//保存T35定时器计数值
 	usT35TimeOut50us = usTimeOut50us; 
-
+	
+	TIM_TimeBaseStructure.TIM_Prescaler = usPrescalerValue;
+	TIM_TimeBaseStructure.TIM_ClockDivision = 0;
+	TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
+	TIM_TimeBaseStructure.TIM_Period = (uint16_t) usT35TimeOut50us;
+	TIM_TimeBaseInit(TIM2, &TIM_TimeBaseStructure);
 	//预装载使能
-//	TIM_ARRPreloadConfig(TIM2, ENABLE);
+	TIM_ARRPreloadConfig(TIM2, ENABLE);
 	//====================================中断初始化===========================
 	//设置NVIC优先级分组为Group2：0-3抢占式优先级，0-3的响应式优先级
-//	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);//board.c中已经定义
+	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);//board.c中已经定义
 	NVIC_InitStructure.NVIC_IRQChannel = TIM2_IRQn;
 	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
 	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
@@ -66,8 +72,10 @@ BOOL xMBMasterPortTimersInit(USHORT usTimeOut50us)
 	TIM_ClearITPendingBit(TIM2, TIM_IT_Update);
 	//定时器2溢出中断关闭
 	TIM_ITConfig(TIM2, TIM_IT_Update, DISABLE);
+	TIM_ITConfig(TIM2, TIM_IT_Update, ENABLE);
 	//定时器2禁能
 	TIM_Cmd(TIM2, DISABLE);
+	TIM_Cmd(TIM2, ENABLE);
 	return TRUE;
 }
 

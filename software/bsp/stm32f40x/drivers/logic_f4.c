@@ -4,14 +4,14 @@
 #include "logic_f4.h"
 
 #define in_size 4
-#define out_size 5
+#define out_size 6
 
 logic_io GPIO_in[in_size] = 
 	{{GPIOE,GPIO_Pin_2}, {GPIOE,GPIO_Pin_3}, {GPIOE,GPIO_Pin_4}, {GPIOE,GPIO_Pin_5}};
 	
 logic_io GPIO_out[out_size] = 
 	{{GPIOG,GPIO_Pin_10},{GPIOG,GPIO_Pin_11},{GPIOE,GPIO_Pin_0},{GPIOE,GPIO_Pin_1},
-	 {GPIOG,GPIO_Pin_8}};
+	 {GPIOG,GPIO_Pin_8}, {GPIOE,GPIO_Pin_13}};
 
 void logic_init(void)
 {

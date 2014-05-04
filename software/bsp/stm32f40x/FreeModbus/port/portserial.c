@@ -26,7 +26,6 @@
 #include "mbport.h"
 /*----------------------------- variable ------------------------------------*/
 rt_device_t slave_dev;
-
 /* ----------------------- static functions ---------------------------------*/
 static void prvvUARTTxReadyISR(void);
 static void prvvUARTRxISR(void);
@@ -36,21 +35,25 @@ void vMBPortSerialEnable(BOOL xRxEnable, BOOL xTxEnable)
 {
 	if (xRxEnable)
 	{
+		/* 485通信时，等待串口移位寄存器中的数据发送完成后，再去使能485的接收、失能485的发送
+		 * 该延时时间可以结合CPU主频及串口波特率做适当调整
+		 * */
+		vMBDelay(1000);
 		SLAVE_RS485_RECEIVE_MODE;
-		USART_ITConfig(USART3, USART_IT_RXNE, ENABLE);
+		USART_ITConfig(USART1, USART_IT_RXNE, ENABLE);
 	}
 	else
 	{
 		SLAVE_RS485_SEND_MODE;
-		USART_ITConfig(USART3, USART_IT_RXNE, DISABLE);
+		USART_ITConfig(USART1, USART_IT_RXNE, DISABLE);
 	}
 	if (xTxEnable)
 	{
-		USART_ITConfig(USART3, USART_IT_TXE, ENABLE);
+		USART_ITConfig(USART1, USART_IT_TXE, ENABLE);
 	}
 	else
 	{
-		USART_ITConfig(USART3, USART_IT_TXE, DISABLE);
+		USART_ITConfig(USART1, USART_IT_TXE, DISABLE);
 	}
 }
 
@@ -137,6 +140,3 @@ void USART3_IRQHandler(void)
 	}
 	rt_interrupt_leave();
 }
-
-
-
