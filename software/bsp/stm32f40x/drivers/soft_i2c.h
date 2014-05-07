@@ -17,8 +17,7 @@ extern rt_mutex_t i2c_lock;
 #define i2c_lock()    rt_mutex_take(i2c_lock, RT_WAITING_FOREVER);
 #define i2c_unlock()  rt_mutex_release(i2c_lock);
 
-void init_soft_i2c_4xx(void);
-void init_soft_i2c_10x(void);
+void init_soft_i2c(void);
 void start(void);
 void send_NACK(void);
 void send_ACK(void);

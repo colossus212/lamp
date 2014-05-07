@@ -1,6 +1,6 @@
 #include "stm32f4xx.h"
 #include "arm_math.h"
-#include "logic_f4.h"
+#include "logic.h"
 #include "rtthread.h"
 #include "finsh.h"
 

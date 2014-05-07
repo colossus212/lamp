@@ -3,6 +3,7 @@
 #include "soft_i2c.h"
 #include "finsh.h"
 #include "24cxx.h"
+#include "color.h"
 
 #define OP_WRITE 0xa0          //写命令
 #define OP_READ  0xa1           // 读命令
@@ -97,14 +98,26 @@ void read_page(uint16_t addr,uint8_t *read_data)
 }
 
 /**********************************************************/
-uint8_t write_bytes(uint16_t addr,void *write_data,uint8_t num)
+uint8_t write_bytes(uint16_t addr,void *write_data,uint16_t num)
 // 在指定地址addr处写入数据write_data
 {
 	uint8_t *p = (uint8_t *)write_data;
 
-	if ((addr + num) > EE_MEM_SIZE)
-		return 0;
+	if (addr >= EE_MEM_SIZE)
+	{
+		rt_kprintf("\033[47;31m parameter 'addr' is error!!!\n");
+			return 0;		
+	}
+	else
+	{
+		if((addr + num) > EE_MEM_SIZE || ( num > EE_MEM_SIZE))
+		{
+			rt_kprintf("\033[47;31m parameter 'num' is error!!!\n");
+			num = EE_MEM_SIZE - addr;
+		}
+	}
 
+	i2c_lock();
 	while (num >= page_size)
 	{
 		write_page(addr, p);
@@ -118,17 +131,30 @@ uint8_t write_bytes(uint16_t addr,void *write_data,uint8_t num)
 		write_byte(addr++, *p++);
 		num--;
 	}
+	i2c_unlock();
 	return 1;
 }
 
-uint8_t read_bytes(uint16_t addr,void *read_data,uint8_t num)
+uint8_t read_bytes(uint16_t addr,void *read_data,uint16_t num)
 // 在指定地址读取
 {
 	uint8_t *p = (uint8_t *)read_data;
 
-	if ((addr + num) > EE_MEM_SIZE)
-		return 0;
-
+	if (addr >= EE_MEM_SIZE)
+	{
+		rt_kprintf("\033[47;31m parameter 'addr' is error!!!\n");
+			return 0;		
+	}
+	else
+	{
+		if((addr + num) > EE_MEM_SIZE || ( num > EE_MEM_SIZE))
+		{
+			rt_kprintf("\033[47;31m parameter 'num' is error!!!\n");
+			num = EE_MEM_SIZE - addr;
+		}
+	}
+	
+	i2c_lock();
 	while (num >= page_size)
 	{
 		read_page(addr, p);
@@ -142,6 +168,7 @@ uint8_t read_bytes(uint16_t addr,void *read_data,uint8_t num)
 		*p++ = read_random(addr++);
 		num--;
 	}
+	i2c_unlock();
 	return 1;
 }
 
@@ -174,10 +201,10 @@ uint8_t  test_eeprom(void)
 				err = 1;
 			}
 		}
-		if(err) rt_kprintf("test page %d read write error!\n",j);
+		if(err) rt_kprintf(red"test page %d read write error!\n"no_color,j);
 	}
 		
-	if(err) rt_kprintf("test read write error!\n");
+	if(err) rt_kprintf(red"test read write error!\n"no_color);
 	else	rt_kprintf("test read write success!\n");
 	return err;
 }

@@ -4,23 +4,12 @@
 //#include "stm32adc.h"
 #include "arm_math.h"
 #include "my_math.h"
-#include "logic_f4.h"
+#include "logic.h"
+#include "typedefs.h"
 
 #define IGBT_FREQ 20000
 #define pwm_period (SystemCoreClock / IGBT_FREQ - 1)
 
-typedef struct pwm_struct
-{
-	uint8_t mode;//1 = power mode ; 0 = current mode
-	uint8_t busy_flag;//1 = busy
-	uint16_t current_max;
-	uint16_t power_max;
-	uint16_t positive_pulse;
-	uint16_t negative_pulse;
-	
-	uint16_t c_array[501];//precision is 0.1A//the last is 0//50us*500=25ms
-	
-}pwm_st;
 float pid_out[500] = {0};
 
 pwm_st buck_part;
@@ -91,7 +80,7 @@ void pwm_init(void)
 //	TIM_BDTRConfig(TIM1, &TIM_BDTRInitStructure);
 	
 	NVIC_InitStructure.NVIC_IRQChannel = TIM8_UP_TIM13_IRQn;
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
 	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
 	NVIC_Init(&NVIC_InitStructure);

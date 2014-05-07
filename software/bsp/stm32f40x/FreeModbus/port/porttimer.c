@@ -61,8 +61,8 @@ BOOL xMBPortTimersInit(USHORT usTim1Timerout50us)
 	//设置NVIC优先级分组为Group2：0-3抢占式优先级，0-3的响应式优先级
 //	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);//board.c中已经定义
 	NVIC_InitStructure.NVIC_IRQChannel = TIM3_IRQn;
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 2;
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 2;
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
 	NVIC_Init(&NVIC_InitStructure);
 	//清除溢出中断标志位

@@ -18,6 +18,7 @@
 
 #include "stm32f4xx.h"
 #include "board.h"
+#include "soft_i2c.h"
 
 /**
  * @addtogroup STM32
@@ -90,14 +91,16 @@ void rtthread_startup(void)
 
 	/* init all device */
 	rt_device_init_all();
+	
+	init_soft_i2c();
 
 	/* init application */
 	rt_application_init();
-	
-	led_thread_start();
 
+	led_thread_start();
 	master_thread_start();
-		slave_thread_start();
+	slave_thread_start();
+	
 #ifdef RT_USING_FINSH
 	/* init finsh */
 	finsh_system_init();

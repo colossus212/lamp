@@ -16,9 +16,18 @@ void rt_slave_thread_entry(void* parameter)
 	while(1)
 	{
 //		eMBPoll( );
-		/*errorCode = */eMBMasterReqWriteCoil(1,8,0xFF00,RT_WAITING_FOREVER);
-		eMBMasterReqWriteHoldingRegister(1,3,usSRegHoldBuf[0],RT_WAITING_FOREVER);
-		rt_thread_delay(5);
+//		/*errorCode = */eMBMasterReqWriteCoil(1,8,0xFF00,RT_WAITING_FOREVER);
+//		eMBMasterReqWriteHoldingRegister(1,3,usSRegHoldBuf[0],RT_WAITING_FOREVER);
+		//		errorCode = eMBMasterReqReadDiscreteInputs(1,3,8,RT_WAITING_FOREVER);
+//		eMBMasterReqWriteMultipleCoils(1,3,5,ucModbusUserData,RT_WAITING_FOREVER);
+//		errorCode = eMBMasterReqWriteCoil(1,8,0xFF00,RT_WAITING_FOREVER);
+		eMBMasterReqReadCoils(1,0,32,RT_WAITING_FOREVER);
+//		errorCode = eMBMasterReqReadInputRegister(1,3,2,RT_WAITING_FOREVER);
+//		errorCode = eMBMasterReqWriteHoldingRegister(1,3,usModbusUserData[0],RT_WAITING_FOREVER);
+//		errorCode = eMBMasterReqWriteMultipleHoldingRegister(1,3,2,usModbusUserData,RT_WAITING_FOREVER);
+//		eMBMasterReqReadHoldingRegister(1,3,2,RT_WAITING_FOREVER);
+//		errorCode = eMBMasterReqReadWriteMultipleHoldingRegister(1,3,2,usModbusUserData,5,2,RT_WAITING_FOREVER);
+//		rt_thread_delay(5);
 	}
 }
 

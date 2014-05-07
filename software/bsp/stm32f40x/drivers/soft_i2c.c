@@ -1,10 +1,14 @@
-#include "stm32f10x.h"
+//#include "stm32f10x.h"
+#include "stm32f4xx.h"
 #include <rtthread.h>
 #include "soft_i2c.h"
 
-#define I2C_PORT	GPIOC
-#define SCL_IO GPIO_Pin_2
-#define SDA_IO GPIO_Pin_1
+#define I2C_PORT_RCC	RCC_AHB1Periph_GPIOB	
+#define I2C_PORT	GPIOB
+#define SCL_IO GPIO_Pin_6
+#define SDA_IO GPIO_Pin_7
+
+#define CPU 407//103
 
 #define oneus 60 //72MHz//
 #define fiveus 360//72MHz
@@ -17,35 +21,34 @@
 
 rt_mutex_t i2c_lock;
 
-void init_soft_i2c_10x(void)
-{
-	GPIO_InitTypeDef GPIO_InitStructure;
+void init_soft_i2c(void)
+{	
+ 	GPIO_InitTypeDef GPIO_InitStructure;
+ 	
+#ifdef STM32F10x
 	
-	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC  , ENABLE);
-	
-	/* PB6 PB7 pull-push*/
+	RCC_APB2PeriphClockCmd(I2C_PORT_RCC  , ENABLE);	
+	/* gpio init*/
 	GPIO_InitStructure.GPIO_Pin = SCL_IO |SDA_IO;
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_OD;
 	GPIO_Init(I2C_PORT, &GPIO_InitStructure);	
+#endif
+	
+#ifdef STM32F4XX
+ 	RCC_AHB1PeriphClockCmd(I2C_PORT_RCC, ENABLE);
+ 	/* gpio init*/
+	GPIO_StructInit(&GPIO_InitStructure);
+ 	GPIO_InitStructure.GPIO_Pin = SCL_IO |SDA_IO;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;//
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;//
+	GPIO_InitStructure.GPIO_OType = GPIO_OType_OD;//
+	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL ;//
+	GPIO_Init(I2C_PORT, &GPIO_InitStructure);	
+#endif
 	i2c_lock = rt_mutex_create("I2cLock", RT_IPC_FLAG_FIFO);
-	
 }
-void init_soft_i2c_4xx(void)
-{	
-// 	GPIO_InitTypeDef GPIO_InitStructure;
-// 		
-// 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE);
-// 	
-// 	GPIO_InitStructure.GPIO_Pin = SCL_IO |SDA_IO;
-//   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;//
-//   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;//
-//   GPIO_InitStructure.GPIO_OType = GPIO_OType_OD;//
-//   GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL ;//
-//   GPIO_Init(I2C_PORT, &GPIO_InitStructure);
 
-	
-}
 
 void ee_delay(uint16_t us)
 {

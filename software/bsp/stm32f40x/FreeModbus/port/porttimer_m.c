@@ -61,11 +61,11 @@ BOOL xMBMasterPortTimersInit(USHORT usTimeOut50us)
 	//预装载使能
 	TIM_ARRPreloadConfig(TIM2, ENABLE);
 	//====================================中断初始化===========================
-	//设置NVIC优先级分组为Group2：0-3抢占式优先级，0-3的响应式优先级
-	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);//board.c中已经定义
+//	//设置NVIC优先级分组为Group2：0-3抢占式优先级，0-3的响应式优先级
+//	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);//board.c中已经定义
 	NVIC_InitStructure.NVIC_IRQChannel = TIM2_IRQn;
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 2;
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 3;
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
 	NVIC_Init(&NVIC_InitStructure);
 	//清除溢出中断标志位

@@ -1,25 +1,27 @@
 //#include "logicio_out.h"
 #include "stm32f4xx.h"
 #include "finsh.h"
-#include "logic_f4.h"
+#include "logic.h"
+#include "color.h"
 
 #define in_size 4
-#define out_size 6
+#define out_size 7
 
 logic_io GPIO_in[in_size] = 
 	{{GPIOE,GPIO_Pin_2}, {GPIOE,GPIO_Pin_3}, {GPIOE,GPIO_Pin_4}, {GPIOE,GPIO_Pin_5}};
 	
 logic_io GPIO_out[out_size] = 
 	{{GPIOG,GPIO_Pin_10},{GPIOG,GPIO_Pin_11},{GPIOE,GPIO_Pin_0},{GPIOE,GPIO_Pin_1},
-	 {GPIOG,GPIO_Pin_8}, {GPIOE,GPIO_Pin_13}};
+	 {GPIOG,GPIO_Pin_8}, {GPIOE,GPIO_Pin_13},{GPIOB,GPIO_Pin_5}};
 
 void logic_init(void)
 {
     GPIO_InitTypeDef GPIO_InitStructure;
-	
 	uint8_t i = 0;
+#ifdef STM32F4XX
+	
 //	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);
-//	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE);
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE);
 //	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC, ENABLE);
 //	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOD, ENABLE);
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOE, ENABLE);
@@ -46,7 +48,34 @@ void logic_init(void)
 		GPIO_InitStructure.GPIO_Pin   = GPIO_in[i].GPIO_Pin;
 		GPIO_Init(GPIO_in[i].GPIOx, &GPIO_InitStructure);
 	}
+#endif
+
+#ifdef STM32F10x	
+//	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE);
+//	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC, ENABLE);
+//	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOD, ENABLE);
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOE, ENABLE);
+//	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOF, ENABLE);
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOG, ENABLE);
+//	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOI, ENABLE);
 	
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+	for(i = 0; i < out_size; i++)
+	{
+		GPIO_InitStructure.GPIO_Pin   = GPIO_out[i].GPIO_Pin;
+		GPIO_Init(GPIO_out[i].GPIOx, &GPIO_InitStructure);
+	}
+	
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
+	for(i = 0; i < in_size; i++)
+	{
+		GPIO_InitStructure.GPIO_Pin   = GPIO_in[i].GPIO_Pin;
+		GPIO_Init(GPIO_in[i].GPIOx, &GPIO_InitStructure);
+	}
+#endif	
 }
 
 
@@ -54,7 +83,7 @@ uint8_t logic_out(uint8_t num, uint8_t value)
 {
 	if(num >= out_size)	
 	{
-		rt_kprintf("para num is err!\n");
+		rt_kprintf(red"para num is err!\n"no_color);
 		return 255;		
 	}
 	
@@ -66,7 +95,7 @@ uint8_t logic_in(uint8_t num)
 {	
 	if(num >= in_size)	
 	{
-		rt_kprintf("para num is err!\n");
+		rt_kprintf(red"para num is err!\n"no_color);
 		return 255;		
 	}
 	

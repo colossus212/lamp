@@ -2,7 +2,7 @@
 #define __SPI_USER_
 
 #include "rtthread.h"
-#include "stm32f10x.h"
+#include "stm32f4xx.h"
 extern rt_mutex_t spi1lock;
 extern rt_mutex_t spi2lock;
 
@@ -11,8 +11,7 @@ extern rt_mutex_t spi2lock;
 #define spi2_lock()    rt_mutex_take(spi2lock, RT_WAITING_FOREVER);
 #define spi2_unlock()  rt_mutex_release(spi2lock);
 
-void SPI1_Init(void);
-void SPI2_Init(void);
+void spi_initialize(void);
 uint8_t SPI1_ReadWriteByte(uint8_t TxData);
 uint8_t SPI2_ReadWriteByte(uint8_t TxData);
 

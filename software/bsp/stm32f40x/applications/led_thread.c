@@ -1,6 +1,6 @@
 #include "stm32f4xx.h"
 #include "rtthread.h"
-#include "logic_f4.h"
+#include "logic.h"
 
 extern void adc_initialize(void);
 extern void pwm_init(void);
@@ -11,15 +11,16 @@ void rt_led_thread_entry(void* parameter)
 	rt_thread_delay(1);
 	logic_init();
 	adc_initialize();
-	pwm_init();
+//	pwm_init();
+	
 	while(1)
 	{
 		logic_out(mcu_run, (i++%2 == 0)?0:1);
-		if(ss) 
-		{
-			TIM_Cmd(TIM8, ENABLE);
-			ss = 0;			
-		}
+//		if(ss) 
+//		{
+//			TIM_Cmd(TIM8, ENABLE);
+//			ss = 0;			
+//		}
 		rt_thread_delay(50);
 	}
 }
