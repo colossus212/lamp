@@ -30,14 +30,15 @@
 
 #include <assert.h>
 #include <inttypes.h>
+#include "logic.h"
 
 #define	INLINE
 #define PR_BEGIN_EXTERN_C           extern "C" {
 #define	PR_END_EXTERN_C             }
 
 //TODO  暂时先写B13引脚，等组网测试时再确认
-#define SLAVE_RS485_SEND_MODE  //GPIO_SetBits(GPIOB,GPIO_Pin_13)
-#define SLAVE_RS485_RECEIVE_MODE  //GPIO_ResetBits(GPIOB,GPIO_Pin_13)
+#define SLAVE_RS485_SEND_MODE  		logic_out(usart3_dir,0);
+#define SLAVE_RS485_RECEIVE_MODE	logic_out(usart3_dir,1);
 #define MASTER_RS485_SEND_MODE  //GPIO_SetBits(GPIOB,GPIO_Pin_13)
 #define MASTER_RS485_RECEIVE_MODE  //GPIO_ResetBits(GPIOB,GPIO_Pin_13)
 

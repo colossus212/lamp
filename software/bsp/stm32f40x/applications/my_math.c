@@ -103,19 +103,35 @@ uint16_t linear_interp_x(linear_interp_table * psource, uint16_t y, uint16_t siz
 		x = (float)y *psource[i].x /psource[i].y;
 	}
 	else if(i == size)
-				{
-					x = psource[i-2].x + (float)(y - psource[i-2].y)*(psource[i-1].x - psource[i-2].x)/(psource[i-1].y - psource[i-2].y);
-				}
-				else
-				{
-					x = psource[i-1].x + (float)(y - psource[i-1].y)*(psource[i].x - psource[i-1].x)/(psource[i].y - psource[i-1].y);
-				}
+		{
+			x = psource[i-2].x + (float)(y - psource[i-2].y)*(psource[i-1].x - psource[i-2].x)/(psource[i-1].y - psource[i-2].y);
+		}
+		else
+		{
+			x = psource[i-1].x + (float)(y - psource[i-1].y)*(psource[i].x - psource[i-1].x)/(psource[i].y - psource[i-1].y);
+		}
 #if debug_math == 1
 	rt_kprintf("linear_interp_y result x = %d,para y = %d\n ",(uint16_t)x,y);
 #endif
 	return (uint16_t)x;
 }
 /**************************************线性插值函数****************************************************/
+
+/****************************************线性偏移****************************************************/
+void linear_offset(uint16_t *psrc, uint16_t start, uint16_t end, uint16_t num)//*psrc = start + offset;
+{																				//num != 0;
+	float offset = 0, sum = 0;
+	uint16_t i = 0;
+	if(num == 0) return ;
+	offset = (float)((end - start)/num);
+	sum = (float)start;
+	for(i = 0; i < num; i++)
+	{
+			sum += offset;
+			*(psrc+i) = (uint16_t)sum;
+	}
+}
+/****************************************线性偏移****************************************************/
 
 /******************************************MY PID***************************************************/
 float  Ti = 0.0/*积分周期*/, Td = 0.0/*微分周期*/, T = 1.0/*采样周期*/;

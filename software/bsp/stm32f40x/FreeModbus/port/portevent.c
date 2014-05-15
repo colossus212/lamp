@@ -47,7 +47,7 @@ xMBPortEventGet( eMBEventType * eEvent )
     /* waiting forever OS event */
 	rt_event_recv(&xSlaveOsEvent,
 			EV_READY | EV_FRAME_RECEIVED | EV_EXECUTE | EV_FRAME_SENT,
-			RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, RT_WAITING_FOREVER,
+			RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, 300,//RT_WAITING_FOREVER,
 			&recvedEvent);
 	switch (recvedEvent)
 	{

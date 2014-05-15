@@ -6,14 +6,14 @@
 #include "my_math.h"
 #include "logic.h"
 #include "typedefs.h"
+#include <absacc.h>
+#include "variables.h"
 
 #define IGBT_FREQ 20000
 #define pwm_period (SystemCoreClock / IGBT_FREQ - 1)
 
 float pid_out[500] = {0};
-
-pwm_st buck_part;
-	
+float p_get[500] = {0};
 void pwm_init(void)
 {
 	GPIO_InitTypeDef GPIO_InitStructure;
@@ -25,7 +25,7 @@ void pwm_init(void)
 	DBGMCU_APB2PeriphConfig( DBGMCU_TIM8_STOP, ENABLE);//核心停止后终止PWM
 	
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC, ENABLE);
-	RCC_APB2PeriphClockCmd(RCC_APB2Periph_TIM8, ENABLE);
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_TIM8, ENABLE);////APB2 max frquency is 84M
 	
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
@@ -81,61 +81,76 @@ void pwm_init(void)
 	
 	NVIC_InitStructure.NVIC_IRQChannel = TIM8_UP_TIM13_IRQn;
 	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
 	NVIC_Init(&NVIC_InitStructure);
 	
+	TIM_ClearITPendingBit(TIM8, TIM_IT_Update);
 	TIM_ITConfig(TIM8, TIM_IT_Update, ENABLE);//interrupt
-	TIM_SelectOutputTrigger(TIM8, TIM_TRGOSource_OC1);
+//	TIM_SelectOutputTrigger(TIM8, TIM_TRGOSource_OC1);//可作为触发源，触发ADC等外设
 	TIM_CtrlPWMOutputs(TIM8, ENABLE);//pwm enable
 //	TIM_Cmd(TIM8, ENABLE);			//tim8 enable
 
 }
 
-void pid_1(void)
-{
-	uint16_t i = 0;
-}
+//void pid_1(void)
+//{
+//	uint16_t i = 0;
+//}
 
-void pid_2(void)
-{
-	uint16_t i = 0;
-}
+//void pid_2(void)
+//{
+//	uint16_t i = 0;
+//}
 
-void cal_array(uint16_t I, uint16_t width)
+//void cal_array(uint16_t I, uint16_t width)
+//{
+//	uint16_t i = 0;
+//	if(I > 3500) I = 3500;
+//	for(i = 0; i < 500; i++)
+//	{
+//		buck_part.p_array[i] = I;
+//	}
+//	buck_part.positive_pulse = width/50;
+//	if(buck_part.positive_pulse >= 500) buck_part.positive_pulse = 499;
+//	buck_part.negative_pulse = 500;
+//	
+////	pwm_ena(1);
+//}
+//#ifdef FINSH_USING_SYMTAB
+//FINSH_FUNCTION_EXPORT(cal_array, cal_array 0-3500*0.1A width:0-25000us);
+//#endif
+
+float	Kp3 = 0.0050f, Ki3 = 0.000f, Kd3 = 0.0f;
+
+void set_pid(uint32_t p, uint32_t i, uint32_t d)
 {
-	uint16_t i = 0;
-	if(I > 3500) I = 3500;
-	for(i = 0; i < 500; i++)
-	{
-		buck_part.c_array[i] = I;
-	}
-	buck_part.positive_pulse = width/50;
-	if(buck_part.positive_pulse >= 500) buck_part.positive_pulse = 499;
-	buck_part.negative_pulse = 500;
-	
-//	pwm_ena(1);
+	Kp3 = (float)p/10000;
+	Ki3 = (float)i/10000;
+	Kd3 = (float)d/10000;
+//	S3->Kp = (float32_t)p/10000;
+//	S3->Ki = (float32_t)i/10000;
+//	S3->Kd = (float32_t)d/10000;
+//	arm_pid_init_f32( S3,1);
 }
 #ifdef FINSH_USING_SYMTAB
-FINSH_FUNCTION_EXPORT(cal_array, cal_array 0-3500*0.1A width:0-25000us);
+FINSH_FUNCTION_EXPORT(set_pid, set_pid Kp3=p/10000 Ki3=i/10000 Kd3=d/10000);
 #endif
-
-float	Kp3 = 0.07f, Ki3 = 0.0f, Kd3 = 0.0f;
-//float max = 1000, min = 200;
-float_t pid3(float In, uint16_t Ref)
+////float max = 1000, min = 200;
+float_t pid3(uint16_t In, uint16_t Ref)//in and REF is percent
 {
 	static float PrevError_C3 = 0, IntTerm_C3 = 0/*sum of integral*/;
-	float Error = 0, Output = 0, R = 0;
+	float Error = 0, Output = 0;//, R = 0;
 
-	R = (float)(Ref/10);
-	Error = R - In;
+////	R = (float)(Ref/10);
+	Error = (float)(Ref - In);
 	
 	IntTerm_C3 += Ki3*Error;//IntTerm_C = Ki*(e(0) + e(1) + ... + e(k))
 	Output = Kp3 * Error;
 //	test_1 = IntTerm_C;
-//	if(IntTerm_C3 > (double)max)
+//	if(IntTerm_C3 > 1000)
 //	{
-//		IntTerm_C3 = (double)max;
+//		IntTerm_C3 = 1000;
 //	}
 //	if(IntTerm_C3 < (double)min)
 //	{
@@ -149,37 +164,36 @@ float_t pid3(float In, uint16_t Ref)
   return (Output);//u(k)
 }
 
-void control_power(uint16_t I1, pwm_st part)
+void control_power(uint16_t I1, uint8_t pwm_struct_num)
 {
 	
 }
 
-void start_tim8(void)
+void trig_laser(void)
 {
 	TIM_Cmd(TIM8, ENABLE);
 }
 #ifdef FINSH_USING_SYMTAB
-FINSH_FUNCTION_EXPORT(start_tim8, enable tim8);
+FINSH_FUNCTION_EXPORT(trig_laser, trigger laser);
 #endif
-void control_current(uint16_t I1, pwm_st part)//I1 is real current,I2 is reference current
+void control_current(float I1, uint8_t pwm_struct_num)//I1 is real current, unit 1A,I2 is reference current
 {
-	float percent = 0;
+	float percent = 0 ;
+	float i_percent = 0;
 	static uint16_t interrupt_times = 0;
 //	logic_out(1,1);
+	i_percent = (I1*2.857);//I1*1000/350,I1 uint 1A ,i_percent unit 0.1%
 	
-	if(interrupt_times < part.positive_pulse)
+	if(interrupt_times < pwm_struct[pwm_struct_num]. positive_pulse)
 	{
-		part.busy_flag = 1;
+		pwm_struct[pwm_struct_num].busy_flag = 1;
 		interrupt_times++;
-//		if(part.c_array[interrupt_times] == 0)
-//		{
-//			percent = 0;
-//		}
-//		else
-		{
+		{			
 			pwm_ena(1);
-			percent = pid3((float) I1, part.c_array[interrupt_times]);
+			percent = pid3(i_percent, pwm_struct[pwm_struct_num].p_array[interrupt_times]);			
+
 			pid_out[interrupt_times] = percent;
+			p_get[interrupt_times] = i_percent;
 			if(percent > 0.95f) percent = 0.95f;
 			if(percent < 0.0f) percent = 0;
 		}
@@ -188,12 +202,12 @@ void control_current(uint16_t I1, pwm_st part)//I1 is real current,I2 is referen
 	{
 		interrupt_times++;
 		percent = 0;
-		if( interrupt_times > part.positive_pulse + part.negative_pulse)
+		if( interrupt_times > pwm_struct[pwm_struct_num].positive_pulse + pwm_struct[pwm_struct_num].negative_pulse)
 		{
 			TIM_Cmd(TIM8, DISABLE);
 			pwm_ena(0);
 			interrupt_times = 0;
-			part.busy_flag = 0;
+			pwm_struct[pwm_struct_num].busy_flag = 0;
 		}
 	}
 	
@@ -215,19 +229,20 @@ void TIM8_UP_TIM13_IRQHandler(void)
 	I1 = adc_get(0);
 	I2 = adc_get(1);
 	power = adc_get(2);
+	trig_adc();
 	if(TIM_GetITStatus(TIM8, TIM_IT_Update) != RESET)
 	{	
 		TIM_ClearITPendingBit(TIM8, TIM_IT_Update);
-		if(buck_part.mode == 0)
+		if(pwm_struct[select_pwm].mode == 0)
 		{
-			control_current(I1, buck_part);
+			control_current(I1, select_pwm);
 		}
 		else
 		{
-			control_power(power, buck_part);
+			control_power(power, select_pwm);
 		}
 	}
-	trig_adc();
+	
 	logic_out(1,0);
 	rt_interrupt_leave();
 }
@@ -241,8 +256,17 @@ void open_tim8(void)
 FINSH_FUNCTION_EXPORT(open_tim8, open_tim8);
 #endif
 
-
-
+void print_pidout(void)
+{
+	uint16_t i = 0;
+	for(i = 0;i<500;i++)
+	{
+		rt_kprintf("pidout[%.3d] = %.4d%, percent = %.4d%, set_percent = %.4d%,\n",i,(uint16_t)(pid_out[i]*100),(uint16_t)(p_get[i]/10),pwm_struct[0].p_array[i]/10);
+	}
+}
+#ifdef FINSH_USING_SYMTAB
+FINSH_FUNCTION_EXPORT(print_pidout, print_pidout);
+#endif
 
 
 

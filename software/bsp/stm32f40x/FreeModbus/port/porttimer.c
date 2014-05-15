@@ -56,7 +56,7 @@ BOOL xMBPortTimersInit(USHORT usTim1Timerout50us)
 	TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
 	TIM_TimeBaseInit(TIM3, &TIM_TimeBaseStructure);
 	//预装载使能
-	TIM_ARRPreloadConfig(TIM3, ENABLE);
+//	TIM_ARRPreloadConfig(TIM3, ENABLE);
 	//====================================中断初始化===========================
 	//设置NVIC优先级分组为Group2：0-3抢占式优先级，0-3的响应式优先级
 //	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);//board.c中已经定义

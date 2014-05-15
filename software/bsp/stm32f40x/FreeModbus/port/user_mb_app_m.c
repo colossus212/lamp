@@ -124,7 +124,7 @@ eMBMasterRegHoldingCB( UCHAR * pucRegBuffer, USHORT usAddress, USHORT usNRegs, e
         switch ( eMode )
         {
             /* Pass current register values to the protocol stack. */
-        case MB_REG_READ:
+			case MB_REG_READ:
             while( usNRegs > 0 )
             {
 				*pucRegBuffer++ = ( unsigned char )( pusRegHoldingBuf[iRegIndex] >> 8 );
@@ -136,7 +136,7 @@ eMBMasterRegHoldingCB( UCHAR * pucRegBuffer, USHORT usAddress, USHORT usNRegs, e
 
             /* Update current register values with new values from the
              * protocol stack. */
-        case MB_REG_WRITE:
+			case MB_REG_WRITE:
             while( usNRegs > 0 )
             {
                 pusRegHoldingBuf[iRegIndex] = *pucRegBuffer++ << 8;

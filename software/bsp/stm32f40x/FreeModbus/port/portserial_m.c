@@ -43,12 +43,12 @@ void vMBMasterPortSerialEnable(BOOL xRxEnable, BOOL xTxEnable)
 	if (xRxEnable)
 	{
 //		vMBDelay(1000);
-//		MASTER_RS485_RECEIVE_MODE;
+		MASTER_RS485_RECEIVE_MODE;
 		USART_ITConfig(USART6, USART_IT_RXNE, ENABLE);
 	}
 	else
 	{
-//		MASTER_RS485_SEND_MODE;
+		MASTER_RS485_SEND_MODE;
 		USART_ITConfig(USART6, USART_IT_RXNE, DISABLE);
 	}
 	if (xTxEnable)

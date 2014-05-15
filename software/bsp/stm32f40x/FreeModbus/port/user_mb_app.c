@@ -56,8 +56,8 @@ eMBRegInputCB( UCHAR * pucRegBuffer, USHORT usAddress, USHORT usNRegs )
     eMBErrorCode    eStatus = MB_ENOERR;
     USHORT          iRegIndex;
     USHORT *        pusRegInputBuf;
-    UCHAR           REG_INPUT_START;
-    UCHAR           REG_INPUT_NREGS;
+    USHORT           REG_INPUT_START;
+    USHORT           REG_INPUT_NREGS;
     UCHAR           usRegInStart;
 
 	pusRegInputBuf = usSRegInBuf;
@@ -103,8 +103,8 @@ eMBRegHoldingCB( UCHAR * pucRegBuffer, USHORT usAddress, USHORT usNRegs, eMBRegi
     eMBErrorCode    eStatus = MB_ENOERR;
     USHORT          iRegIndex;
     USHORT *        pusRegHoldingBuf;
-    UCHAR           REG_HOLDING_START;
-    UCHAR           REG_HOLDING_NREGS;
+    USHORT           REG_HOLDING_START;
+    USHORT           REG_HOLDING_NREGS;
     UCHAR           usRegHoldStart;
 
 	pusRegHoldingBuf = usSRegHoldBuf;
@@ -167,8 +167,8 @@ eMBRegCoilsCB( UCHAR * pucRegBuffer, USHORT usAddress, USHORT usNCoils, eMBRegis
     eMBErrorCode    eStatus = MB_ENOERR;
     USHORT          iRegIndex , iRegBitIndex , iNReg;
 	UCHAR *         pucCoilBuf;
-    UCHAR           COIL_START;
-    UCHAR           COIL_NCOILS;
+    USHORT           COIL_START;
+    USHORT           COIL_NCOILS;
     UCHAR           usCoilStart;
     iNReg =  usNCoils / 8 + 1;        //占用寄存器数量
 
@@ -237,8 +237,8 @@ eMBRegDiscreteCB( UCHAR * pucRegBuffer, USHORT usAddress, USHORT usNDiscrete )
     eMBErrorCode    eStatus = MB_ENOERR;
 	USHORT          iRegIndex , iRegBitIndex , iNReg;
 	UCHAR *         pucDiscreteInputBuf;
-    UCHAR           DISCRETE_INPUT_START;
-    UCHAR           DISCRETE_INPUT_NDISCRETES;
+    USHORT           DISCRETE_INPUT_START;
+    USHORT           DISCRETE_INPUT_NDISCRETES;
     UCHAR           usDiscreteInputStart;
 	iNReg =  usNDiscrete / 8 + 1;        //占用寄存器数量
 

@@ -28,38 +28,55 @@
 #if MB_MASTER_RTU_ENABLED > 0 || MB_MASTER_ASCII_ENABLED > 0
 /* ----------------------- Defines ------------------------------------------*/
 /* ----------------------- Variables ----------------------------------------*/
-static eMBMasterEventType  eMasterQueuedEvent;
-static BOOL                xMasterEventInQueue;
 static struct rt_semaphore xMasterRunRes;
 static struct rt_event     xMasterOsEvent;
 /* ----------------------- Start implementation -----------------------------*/
 BOOL
 xMBMasterPortEventInit( void )
 {
-    xMasterEventInQueue = FALSE;
+	rt_event_init(&xMasterOsEvent,"master event",RT_IPC_FLAG_PRIO);
     return TRUE;
 }
 
 BOOL
 xMBMasterPortEventPost( eMBMasterEventType eEvent )
 {
-    xMasterEventInQueue = TRUE;
-    eMasterQueuedEvent = eEvent;
+	rt_event_send(&xMasterOsEvent, eEvent);
     return TRUE;
 }
 
 BOOL
 xMBMasterPortEventGet( eMBMasterEventType * eEvent )
 {
-    BOOL            xEventHappened = FALSE;
-
-    if( xMasterEventInQueue )
-    {
-        *eEvent = eMasterQueuedEvent;
-        xMasterEventInQueue = FALSE;
-        xEventHappened = TRUE;
-    }
-    return xEventHappened;
+    rt_uint32_t recvedEvent;
+    /* waiting forever OS event */
+	rt_event_recv(&xMasterOsEvent,
+			EV_MASTER_READY | EV_MASTER_FRAME_RECEIVED | EV_MASTER_EXECUTE |
+			EV_MASTER_FRAME_SENT | EV_MASTER_ERROR_PROCESS,
+			RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, RT_TICK_PER_SECOND, /*RT_WAITING_FOREVER,*/
+			&recvedEvent);
+	/* the enum type couldn't convert to int type */
+	switch (recvedEvent)
+	{
+	case EV_MASTER_READY:
+		*eEvent = EV_MASTER_READY;
+		break;
+	case EV_MASTER_FRAME_RECEIVED:
+		*eEvent = EV_MASTER_FRAME_RECEIVED;
+		break;
+	case EV_MASTER_EXECUTE:
+		*eEvent = EV_MASTER_EXECUTE;
+		break;
+	case EV_MASTER_FRAME_SENT:
+		*eEvent = EV_MASTER_FRAME_SENT;
+		break;
+	case EV_MASTER_ERROR_PROCESS:
+		*eEvent = EV_MASTER_ERROR_PROCESS;
+		break;
+	default:*eEvent = EV_MASTER_ERROR_PROCESS;
+		break;
+	}
+    return TRUE;
 }
 /**
  * This function is initialize the OS resource for modbus master.
@@ -68,7 +85,6 @@ xMBMasterPortEventGet( eMBMasterEventType * eEvent )
  */
 void vMBMasterOsResInit( void )
 {
-	rt_event_init(&xMasterOsEvent,"master event",RT_IPC_FLAG_PRIO);
 	rt_sem_init(&xMasterRunRes, "master res", 0x01 , RT_IPC_FLAG_PRIO);
 }
 

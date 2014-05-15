@@ -69,6 +69,7 @@ void rtthread_startup(void)
 	extern int led_thread_start(void);
 	extern int slave_thread_start(void);
 	extern int master_thread_start(void);
+	extern void bkpsram_init(void);
 	/* init board */
 	rt_hw_board_init();
 
@@ -91,9 +92,9 @@ void rtthread_startup(void)
 
 	/* init all device */
 	rt_device_init_all();
-	
+	bkpsram_init();
 	init_soft_i2c();
-
+	timer4_init();
 	/* init application */
 	rt_application_init();
 

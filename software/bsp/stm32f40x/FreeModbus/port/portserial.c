@@ -20,40 +20,44 @@
  */
 
 #include "port.h"
-
+#include "finsh.h"
 /* ----------------------- Modbus includes ----------------------------------*/
 #include "mb.h"
 #include "mbport.h"
+#include "logic.h"
 /*----------------------------- variable ------------------------------------*/
 rt_device_t slave_dev;
 /* ----------------------- static functions ---------------------------------*/
 static void prvvUARTTxReadyISR(void);
 static void prvvUARTRxISR(void);
 /* ----------------------- Start implementation -----------------------------*/
-
+uint32_t x= 10000;
 void vMBPortSerialEnable(BOOL xRxEnable, BOOL xTxEnable)
 {
+	
 	if (xRxEnable)
 	{
 		/* 485通信时，等待串口移位寄存器中的数据发送完成后，再去使能485的接收、失能485的发送
 		 * 该延时时间可以结合CPU主频及串口波特率做适当调整
 		 * */
-		vMBDelay(1000);
+		vMBDelay(3200);
 		SLAVE_RS485_RECEIVE_MODE;
-		USART_ITConfig(USART1, USART_IT_RXNE, ENABLE);
+		USART_ITConfig(USART3, USART_IT_RXNE, ENABLE);
 	}
 	else
 	{
 		SLAVE_RS485_SEND_MODE;
-		USART_ITConfig(USART1, USART_IT_RXNE, DISABLE);
+		USART_ITConfig(USART3, USART_IT_RXNE, DISABLE);
 	}
 	if (xTxEnable)
 	{
-		USART_ITConfig(USART1, USART_IT_TXE, ENABLE);
+//		SLAVE_RS485_SEND_MODE;
+		USART_ITConfig(USART3, USART_IT_TXE, ENABLE);
 	}
 	else
 	{
-		USART_ITConfig(USART1, USART_IT_TXE, DISABLE);
+//		SLAVE_RS485_RECEIVE_MODE;
+		USART_ITConfig(USART3, USART_IT_TXE, DISABLE);
 	}
 }
 
@@ -74,22 +78,32 @@ BOOL xMBPortSerialInit(UCHAR ucPORT, ULONG ulBaudRate, UCHAR ucDataBits,
 	else
 	{
 		rt_device_open(slave_dev,RT_DEVICE_OFLAG_RDWR);
+//		SLAVE_RS485_RECEIVE_MODE;
 		return TRUE;
 	}
+	
 }
 
 BOOL xMBPortSerialPutByte(CHAR ucByte)
 {
+//	SLAVE_RS485_SEND_MODE;
 	rt_device_write(slave_dev,0,&ucByte,1);
 	return TRUE;
 }
 
 BOOL xMBPortSerialGetByte(CHAR * pucByte)
 {
+//	SLAVE_RS485_RECEIVE_MODE;
 	rt_device_read(slave_dev,0,pucByte,1);
 	return TRUE;
 }
-
+void send_usart3(char dataa)
+{
+	xMBPortSerialPutByte( dataa);
+}
+#ifdef FINSH_USING_SYMTAB
+FINSH_FUNCTION_EXPORT(send_usart3, send_usart3);
+#endif
 /* 
  * Create an interrupt handler for the transmit buffer empty interrupt
  * (or an equivalent) for your target processor. This function should then
@@ -129,13 +143,14 @@ void USART3_IRQHandler(void)
 	//接收中断
 	if (USART_GetITStatus(USART3, USART_IT_RXNE) == SET)
 	{
-		USART_ClearITPendingBit(USART3, USART_IT_RXNE);
+//		USART_ClearITPendingBit(USART3, USART_IT_RXNE);
 		rt_hw_serial_isr(&uart3_device);
 		prvvUARTRxISR();
 	}
 	//发送中断
 	if (USART_GetITStatus(USART3, USART_IT_TXE) == SET)
 	{
+		USART_ClearITPendingBit(USART3, USART_IT_TC);
 		prvvUARTTxReadyISR();
 	}
 	rt_interrupt_leave();

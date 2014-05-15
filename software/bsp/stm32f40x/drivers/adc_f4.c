@@ -245,7 +245,7 @@ uint16_t adc_get(uint8_t ch)
 	{
 		case 0: arm_mean_q15(ADC1ConvertedValue, 15, &mean);
 				arm_rms_q15(ADC1ConvertedValue, 15, &rms);
-				mean = mean*12500/4095/33;//I = code*2.5V/4095/33R*5000
+				mean = mean*12500/4095/33;//I = code*2.5V/4095/33R*5000,unit 1A
 //				rt_kprintf("mean = %d, rms = %d", mean,rms);
 			break;
 		case 1: arm_mean_q15(ADC2ConvertedValue , 15, &mean);

@@ -443,6 +443,31 @@
               <FileType>1</FileType>
               <FilePath>.\applications\functions.c</FilePath>
             </File>
+            <File>
+              <FileName>typedefs.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\applications\typedefs.h</FilePath>
+            </File>
+            <File>
+              <FileName>variables.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\variables.c</FilePath>
+            </File>
+            <File>
+              <FileName>crc16.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\crc16.c</FilePath>
+            </File>
+            <File>
+              <FileName>variables.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\applications\variables.h</FilePath>
+            </File>
+            <File>
+              <FileName>input_thread.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\input_thread.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -538,6 +563,16 @@
                   </Cads>
                 </FileArmAds>
               </FileOption>
+            </File>
+            <File>
+              <FileName>bkpsram.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\drivers\bkpsram.c</FilePath>
+            </File>
+            <File>
+              <FileName>timer4.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\drivers\timer4.c</FilePath>
             </File>
           </Files>
         </Group>
