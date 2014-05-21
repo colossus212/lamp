@@ -59,10 +59,12 @@ void rt_slave_thread_entry(void* parameter)
 		if(xMBUtilGetBits(ucSCoilBuf, start_up_s, 1 ) == 1)
 		{
 			start_flag = 1;
+			
 		}
 		else
 		{
 			start_flag = 0;
+			xMBUtilSetBits( Y, Y8, 7, 0X08 );
 		}
 		rt_thread_delay(5);
 	}

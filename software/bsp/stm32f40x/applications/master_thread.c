@@ -20,7 +20,7 @@ void rt_master_thread_entry(void* parameter)
 	{
 		eMBMasterPoll( );
 		
-		rt_thread_delay(10);
+		rt_thread_delay(5);
 	}
 }
 

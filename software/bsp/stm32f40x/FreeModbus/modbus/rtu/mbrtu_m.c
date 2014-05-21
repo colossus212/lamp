@@ -235,8 +235,9 @@ xMBMasterRTUReceiveFSM( void )
     BOOL            xTaskNeedSwitch = FALSE;
     UCHAR           ucByte;
 
-    assert_param(( eSndState == STATE_M_TX_IDLE ) || ( eSndState == STATE_M_TX_XFWR ));
-
+//    assert_param(( eSndState == STATE_M_TX_IDLE ) || ( eSndState == STATE_M_TX_XFWR ));
+	if(( eSndState == STATE_M_TX_IDLE ) || ( eSndState == STATE_M_TX_XFWR ))
+	{
     /* Always read the character. */
     ( void )xMBMasterPortSerialGetByte( ( CHAR * ) & ucByte );
 
@@ -292,7 +293,12 @@ xMBMasterRTUReceiveFSM( void )
         }
         vMBMasterPortTimersT35Enable();
         break;
-    }
+		}
+	}
+	else
+	{
+		eRcvState = STATE_M_RX_IDLE;
+	}
     return xTaskNeedSwitch;
 }
 
@@ -301,45 +307,48 @@ xMBMasterRTUTransmitFSM( void )
 {
     BOOL            xNeedPoll = FALSE;
 
-    assert_param( eRcvState == STATE_M_RX_IDLE );
+//    assert_param( eRcvState == STATE_M_RX_IDLE );
+	if(eRcvState == STATE_M_RX_IDLE)
+	{
+		switch ( eSndState )
+		{
+			/* We should not get a transmitter event if the transmitter is in
+			 * idle state.  */
+		case STATE_M_TX_IDLE:
+			/* enable receiver/disable transmitter. */
+			vMBMasterPortSerialEnable( TRUE, FALSE );
+			break;
 
-    switch ( eSndState )
-    {
-        /* We should not get a transmitter event if the transmitter is in
-         * idle state.  */
-    case STATE_M_TX_IDLE:
-        /* enable receiver/disable transmitter. */
-        vMBMasterPortSerialEnable( TRUE, FALSE );
-        break;
-
-    case STATE_M_TX_XMIT:
-        /* check if we are finished. */
-        if( usMasterSndBufferCount != 0 )
-        {
-            xMBMasterPortSerialPutByte( ( CHAR )*pucMasterSndBufferCur );
-            pucMasterSndBufferCur++;  /* next byte in sendbuffer. */
-            usMasterSndBufferCount--;
-        }
-        else
-        {
-            xFrameIsBroadcast = ( ucMasterRTUSndBuf[MB_SER_PDU_ADDR_OFF] == MB_ADDRESS_BROADCAST ) ? TRUE : FALSE;
-            /* Disable transmitter. This prevents another transmit buffer
-             * empty interrupt. */
-            vMBMasterPortSerialEnable( TRUE, FALSE );
-            eSndState = STATE_M_TX_XFWR;
-            /* If the frame is broadcast ,master will enable timer of convert delay,
-             * else master will enable timer of respond timeout. */
-            if ( xFrameIsBroadcast == TRUE )
-            {
-            	vMBMasterPortTimersConvertDelayEnable( );
-            }
-            else
-            {
-            	vMBMasterPortTimersRespondTimeoutEnable( );
-            }
-        }
-        break;
-    }
+		case STATE_M_TX_XMIT:
+			/* check if we are finished. */
+			if( usMasterSndBufferCount != 0 )
+			{
+				xMBMasterPortSerialPutByte( ( CHAR )*pucMasterSndBufferCur );
+				pucMasterSndBufferCur++;  /* next byte in sendbuffer. */
+				usMasterSndBufferCount--;
+			}
+			else
+			{
+				xFrameIsBroadcast = ( ucMasterRTUSndBuf[MB_SER_PDU_ADDR_OFF] == MB_ADDRESS_BROADCAST ) ? TRUE : FALSE;
+				/* Disable transmitter. This prevents another transmit buffer
+				 * empty interrupt. */
+				vMBMasterPortSerialEnable( TRUE, FALSE );
+				eSndState = STATE_M_TX_XFWR;
+				/* If the frame is broadcast ,master will enable timer of convert delay,
+				 * else master will enable timer of respond timeout. */
+				if ( xFrameIsBroadcast == TRUE )
+				{
+					vMBMasterPortTimersConvertDelayEnable( );
+				}
+				else
+				{
+					vMBMasterPortTimersRespondTimeoutEnable( );
+				}
+			}
+			break;
+		default:break;
+		}
+	}
 
     return xNeedPoll;
 }
