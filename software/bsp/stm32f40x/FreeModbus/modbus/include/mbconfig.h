@@ -111,7 +111,7 @@ PR_BEGIN_EXTERN_C
 #if MB_MASTER_RTU_ENABLED > 0 || MB_MASTER_ASCII_ENABLED > 0
 /*! \brief If master send a broadcast frame,the master will wait time of convert to delay,
  * then master can send other frame */
-#define MB_MASTER_DELAY_MS_CONVERT              (200 )
+#define MB_MASTER_DELAY_MS_CONVERT              (50 )
 /*! \brief If master send a frame which is not broadcast,the master will wait sometime for slave.
  * And if slave is not respond in this time,the master will process this timeout error.
  * Then master can send other frame */

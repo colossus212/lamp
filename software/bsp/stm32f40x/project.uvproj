@@ -388,7 +388,7 @@
             <ScatterFile></ScatterFile>
             <IncludeLibs></IncludeLibs>
             <IncludeLibsPath></IncludeLibsPath>
-            <Misc> --keep __fsym_* --keep __vsym_* </Misc>
+            <Misc>--keep __fsym_* --keep __vsym_*</Misc>
             <LinkerInputFile></LinkerInputFile>
             <DisabledWarnings></DisabledWarnings>
           </LDads>
@@ -454,11 +454,6 @@
               <FilePath>.\applications\variables.c</FilePath>
             </File>
             <File>
-              <FileName>crc16.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\applications\crc16.c</FilePath>
-            </File>
-            <File>
               <FileName>variables.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\applications\variables.h</FilePath>
@@ -467,6 +462,11 @@
               <FileName>input_thread.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\applications\input_thread.c</FilePath>
+            </File>
+            <File>
+              <FileName>task2_thread.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\task2_thread.c</FilePath>
             </File>
           </Files>
         </Group>

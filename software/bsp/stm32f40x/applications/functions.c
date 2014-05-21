@@ -10,12 +10,12 @@ void calculate_array(uint8_t num)
 	
 	rt_memset(pwm_struct[num].p_array, 0, 500);//将数组清0
 	p = pwm_struct[num].p_array;
-	for(k = 0; k < 16; k++)
+	for(k = 0; k < 15; k++)//0-14
 	{	
-			linear_offset( p , program_data[num].percent[k] ,
-			program_data[num].percent[k+1], 
-			(program_data[num].t[k+1] - program_data[num].t[k])/50);
-			p += (program_data[num].t[k+1] - program_data[num].t[k])/50;//50us间隔
+		linear_offset( p , program_data[num].percent[k] ,
+		program_data[num].percent[k+1], 
+		(program_data[num].t[k+1] - program_data[num].t[k])/50);
+		p += (program_data[num].t[k+1] - program_data[num].t[k])/50;//50us间隔
 
 	}
 	pwm_struct[num].p_array[499] = 0;//数组最后一字节为0；
@@ -40,7 +40,7 @@ void check_slave_para(uint8_t j)//
 	
 	if(j < pwm_num)//t[k+1] > t[k]
 	{
-		for(i = 0; i < 16; i++)
+		for(i = 0; i < 15; i++)//0-14
 		{
 			if(program_data[j].t[i+1] < program_data[j].t[i])
 			{
@@ -83,7 +83,7 @@ void test_array(uint16_t pct, uint16_t t)
 //	program_data[0].percent[4] = 0;
 //	program_data[0].t[4] = t;
 	
-	program_data[0].CRC16_data = CRC16((uint8_t *)(program_data[0].percent), (sizeof(program)-2));
+//	program_data[0].CRC16_data = CRC16((uint8_t *)(program_data[0].percent), (sizeof(program)-2));
 	
 	check_slave_para(0);
 	calculate_array(0);

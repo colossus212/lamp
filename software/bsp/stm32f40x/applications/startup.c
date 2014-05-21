@@ -70,6 +70,7 @@ void rtthread_startup(void)
 	extern int slave_thread_start(void);
 	extern int master_thread_start(void);
 	extern void bkpsram_init(void);
+	extern int task2_thread_start(void);
 	/* init board */
 	rt_hw_board_init();
 
@@ -101,7 +102,7 @@ void rtthread_startup(void)
 	led_thread_start();
 	master_thread_start();
 	slave_thread_start();
-	
+	task2_thread_start();
 #ifdef RT_USING_FINSH
 	/* init finsh */
 	finsh_system_init();

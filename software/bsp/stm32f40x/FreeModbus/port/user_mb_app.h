@@ -34,11 +34,11 @@
 #define M_DISCRETE_INPUT_START        0
 #define M_DISCRETE_INPUT_NDISCRETES   16
 #define M_COIL_START                  0
-#define M_COIL_NCOILS                 64
+#define M_COIL_NCOILS                 4096
 #define M_REG_INPUT_START             0
-#define M_REG_INPUT_NREGS             100
-#define M_REG_HOLDING_START           0
-#define M_REG_HOLDING_NREGS           100
+#define M_REG_INPUT_NREGS             8
+#define M_REG_HOLDING_START           6001
+#define M_REG_HOLDING_NREGS           3756
 //主机模式：在保持寄存器中，各个地址对应的功能定义
 #define          M_HD_RESERVE                     0		  //保留
 

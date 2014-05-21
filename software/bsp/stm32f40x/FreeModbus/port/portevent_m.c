@@ -53,7 +53,7 @@ xMBMasterPortEventGet( eMBMasterEventType * eEvent )
 	rt_event_recv(&xMasterOsEvent,
 			EV_MASTER_READY | EV_MASTER_FRAME_RECEIVED | EV_MASTER_EXECUTE |
 			EV_MASTER_FRAME_SENT | EV_MASTER_ERROR_PROCESS,
-			RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, RT_TICK_PER_SECOND, /*RT_WAITING_FOREVER,*/
+			RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, /*RT_TICK_PER_SECOND,*/RT_WAITING_FOREVER,
 			&recvedEvent);
 	/* the enum type couldn't convert to int type */
 	switch (recvedEvent)
@@ -78,6 +78,7 @@ xMBMasterPortEventGet( eMBMasterEventType * eEvent )
 	}
     return TRUE;
 }
+
 /**
  * This function is initialize the OS resource for modbus master.
  * Note:The resource is define by OS.If you not use OS this function can be empty.
