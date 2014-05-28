@@ -14,6 +14,7 @@
 
 float pid_out[500] = {0};
 float p_get[500] = {0};
+
 void pwm_init(void)
 {
 	GPIO_InitTypeDef GPIO_InitStructure;
@@ -121,8 +122,8 @@ void pwm_init(void)
 //FINSH_FUNCTION_EXPORT(cal_array, cal_array 0-3500*0.1A width:0-25000us);
 //#endif
 
-float	Kp3 = 0.0050f, Ki3 = 0.000f, Kd3 = 0.0f;
-
+float	Kp3 = 0.002f, Ki3 = 0.0003f, Kd3 = 0.0f;
+uint8_t pid_flag = 0;//用于清零积分量。
 void set_pid(uint32_t p, uint32_t i, uint32_t d)
 {
 	Kp3 = (float)p/10000;
@@ -144,14 +145,14 @@ float_t pid3(uint16_t In, uint16_t Ref)//in and REF is percent
 
 ////	R = (float)(Ref/10);
 	Error = (float)(Ref - In);
-	
+	if(pid_flag) {IntTerm_C3 = 0;PrevError_C3 = 0; pid_flag = 0;}
 	IntTerm_C3 += Ki3*Error;//IntTerm_C = Ki*(e(0) + e(1) + ... + e(k))
 	Output = Kp3 * Error;
 //	test_1 = IntTerm_C;
-//	if(IntTerm_C3 > 1000)
-//	{
-//		IntTerm_C3 = 1000;
-//	}
+	if(IntTerm_C3 > 1.0f)
+	{
+		IntTerm_C3 = 1.0f;
+	}
 //	if(IntTerm_C3 < (double)min)
 //	{
 //		IntTerm_C3 = (double)min;
@@ -202,11 +203,15 @@ void control_current(float I1, uint8_t pwm_struct_num)//I1 is real current, unit
 	{
 		interrupt_times++;
 		percent = 0;
+		
+//		pid_out[interrupt_times] = percent;
+//		p_get[interrupt_times] = i_percent;
 		if( interrupt_times > pwm_struct[pwm_struct_num].positive_pulse + pwm_struct[pwm_struct_num].negative_pulse)
 		{
 			TIM_Cmd(TIM8, DISABLE);
 			pwm_ena(0);
 			interrupt_times = 0;
+			pid_flag = 1;
 			pwm_struct[pwm_struct_num].busy_flag = 0;
 		}
 	}
@@ -250,6 +255,12 @@ void TIM8_UP_TIM13_IRQHandler(void)
 extern uint8_t ss;
 void open_tim8(void)
 {
+	uint16_t i = 0;
+	for(i = 0;i<500;i++)
+	{
+		p_get[i] = 0;
+		pid_out[i] = 0;
+	}
 	ss = 1;
 }
 #ifdef FINSH_USING_SYMTAB
@@ -261,7 +272,8 @@ void print_pidout(void)
 	uint16_t i = 0;
 	for(i = 0;i<500;i++)
 	{
-		rt_kprintf("pidout[%.3d] = %.4d%, percent = %.4d%, set_percent = %.4d%,\n",i,(uint16_t)(pid_out[i]*100),(uint16_t)(p_get[i]/10),pwm_struct[0].p_array[i]/10);
+		rt_kprintf("pidout[%.3d] = %.4d%, i_percent = %.4d%, set_percent = %.4d%,\n",
+		i,(uint16_t)(pid_out[i]*100),(uint16_t)(p_get[i]/10),pwm_struct[0].p_array[i]/10);
 	}
 }
 #ifdef FINSH_USING_SYMTAB

@@ -35,7 +35,59 @@ typedef struct program
 //	program program_data[32];
 //	uint16_t CRC16_data;
 //}save_program;
-typedef enum PLC
+//typedef enum PLC
+//{
+//	Y0 		= 0,
+//	Y1 		= 1,
+//	Y2 		= 2,
+//	Y3 		= 3,
+//	Y4 		= 4,
+//	Y5 		= 5,
+//	Y6 		= 6,
+//	Y7 		= 7,
+//	Y8 		= 8,
+//	Y9 		= 9,
+//	Y10		= 10,
+//	Y11		= 11,
+//	Y12		= 12,
+//	Y13		= 13,
+//	Y14		= 14,
+//	Y15		= 15,
+//	
+//	X0		= 1000,
+//	X1		= 1001,
+//	X2		= 1002,
+//	X3		= 1003,
+//	X4		= 1004,
+//	X5		= 1005,
+//	X6		= 1006,
+//	X7		= 1007,
+//	X8		= 1008,
+//	X9		= 1009,
+//	X10		= 1010,
+//	X11		= 1011,
+//	X12		= 1012,
+//	X13		= 1013,
+//	X14		= 1014,
+//	X15		= 1015,
+//	X16		= 1016,
+//	X17		= 1017,
+//	X18		= 1018,
+//	X19		= 1019,
+//	X20		= 1020,
+//	X21		= 1021,
+//	X22		= 1022,
+//	X23		= 1023,
+//	
+//}PLC;
+
+typedef enum master_reg
+{
+	percent1_m 		= 0,
+	
+}master_reg;
+
+typedef enum master_coil
 {
 	Y0 		= 0,
 	Y1 		= 1,
@@ -78,18 +130,6 @@ typedef enum PLC
 	X21		= 1021,
 	X22		= 1022,
 	X23		= 1023,
-	
-}PLC;
-
-typedef enum master_reg
-{
-	percent1_m 		= 0,
-	
-}master_reg;
-
-typedef enum master_coil
-{
-	cpu_self_m		= 0,
 	
 }master_coil;
 
@@ -142,7 +182,7 @@ typedef enum slave_reg
 	total_num_high_s= (58-1),
 	
 	shutter			= (59-1),
-	tr_mode		= (60-1),//trigger_mode
+	tr_mode			= (60-1),//trigger_mode
 	power_mean		= (61-1),
 	power_peak		= (62-1),
 	vol_bat			= (63-1),
@@ -177,8 +217,8 @@ typedef enum slave_coil
 	save_s			= (12-1),
 	feedback		= (13-1),
 	start_up_s		= (14-1),
-	laser_on		= (15-1),
-	red_on			= (16-1),
+	laser_sw		= (15-1),
+	red_sw			= (16-1),
 	laser_on_ena	= (17-1),
 	laser_off_ena	= (18-1),
 	red_on_ena		= (19-1),
@@ -193,6 +233,27 @@ typedef enum slave_coil
 	io_pg2			= (25-1),
 	io_pd8			= (30-1),
 	io_pc4			= (38-1),
+	
+	miss_phase		= (40-1),
+	IGBT_t_alarm	= (41-1),
+	water_t_alarm	= (42-1),//水温报警
+	water_f_alarm	= (43-1),//流量报警
+	water_l_alarm	= (44-1),//水位报警
+	supply_alarm	= (45-1),//电源报警
+	soft_start		= (46-1),
+	charge_sta		= (47-1),
+	discharge_sta	= (48-1),
+	lamp1_sta		= (49-1),
+	lamp2_sta		= (50-1),
+	interlock_sta	= (51-1),
+	water_r_alarm	= (52-1),//水质报警
+	key_switch		= (53-1),
+	emergency_sw	= (54-1),
+	main_supply_sw	= (55-1),
+	ignition_sw		= (56-1),//点火开关
+	pre_burn_fail	= (57-1),
+	red_sta			= (58-1),//红光状态
+	contactor_err	= (59-1),
 	
 	x0_s			= (100-1),
 	x8_s			= (108-1),

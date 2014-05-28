@@ -123,6 +123,7 @@ void linear_offset(uint16_t *psrc, uint16_t start, uint16_t end, uint16_t num)//
 	float offset = 0, sum = 0;
 	uint16_t i = 0;
 	if(num == 0) return ;
+	if(num >500) return ;
 	offset = (float)((end - start)/num);
 	sum = (float)start;
 	for(i = 0; i < num; i++)

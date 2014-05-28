@@ -75,7 +75,7 @@ xMBUtilSetBits( UCHAR * ucByteBuf, USHORT usBitOffset, UCHAR ucNBits,
     usWordBuf |= ucByteBuf[usByteOffset + 1] << BITS_UCHAR;
 
     /* Zero out bit field bits and then or value bits into them. */
-    usWordBuf = ( USHORT )( ( usWordBuf & ( ~usMask ) ) | usValue );
+    usWordBuf = ( USHORT )( ( usWordBuf & ( ~usMask ) ) | (usMask & usValue) );
 
     /* move bits back into storage */
     ucByteBuf[usByteOffset] = ( UCHAR )( usWordBuf & 0xFF );

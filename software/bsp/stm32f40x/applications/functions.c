@@ -74,6 +74,11 @@ void Boot_initialization(void)//开机初始化
 void test_array(uint16_t pct, uint16_t t)
 {
 	uint16_t i = 0;
+	for(i = 0; i < 16; i++)
+	{
+		program_data[0].percent[i] = 0;
+		program_data[0].t[i] = 0;
+	}
 	program_data[0].percent[1] = pct;//50.0%
 	program_data[0].t[1] = 0;
 	program_data[0].percent[2] = pct;
