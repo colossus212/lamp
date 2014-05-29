@@ -8,7 +8,7 @@
 
 void rt_master_thread_entry(void* parameter)
 {	
-	rt_uint32_t e = 0;
+//	rt_uint32_t e = 0;
 	
 	rt_thread_delay(1);
 	// Initialize protocol stack in RTU mode for a Master

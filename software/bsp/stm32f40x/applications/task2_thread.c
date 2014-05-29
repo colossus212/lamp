@@ -17,14 +17,14 @@ uint16_t soft_disp	= 0;
 void rt_task2_thread_entry(void* parameter)
 {	
 	uint8_t ready_num = 0;//预燃次数
-	uint16_t buf = 0, result = 0;
-	char i = 0;
+//	uint16_t buf = 0, result = 0;
+//	char i = 0;
 	rt_thread_delay(RT_TICK_PER_SECOND);
 
 	while(1)
 	{
 		xMBUtilSetBits( Y, Y11, 1, 1 );//Y11=1;//水泵开关闭合
-	START_LOOP:	
+//	START_LOOP:	
 		if((start_flag == 1)&&(started_flag == 0)&&(pre_burn_err == 0))
 		{	
 			xMBUtilSetBits( Y, Y11, 1, 1 );//Y11=1;//水泵开关闭合
@@ -112,7 +112,7 @@ void rt_task2_thread_entry(void* parameter)
 				contact_err_flag = 1;
 				goto EER_LOOP;
 			}
-			rt_thread_delay(RT_TICK_PER_SECOND*3);
+//			rt_thread_delay(RT_TICK_PER_SECOND*3);
 		}
 		else
 		{

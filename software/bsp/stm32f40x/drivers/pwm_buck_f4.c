@@ -146,10 +146,11 @@ float_t pid3(uint16_t In, uint16_t Ref)//in and REF is percent
 ////	R = (float)(Ref/10);
 	Error = (float)(Ref - In);
 	if(pid_flag) {IntTerm_C3 = 0;PrevError_C3 = 0; pid_flag = 0;}
+	if(Error <= 600)//积分分离
 	IntTerm_C3 += Ki3*Error;//IntTerm_C = Ki*(e(0) + e(1) + ... + e(k))
 	Output = Kp3 * Error;
 //	test_1 = IntTerm_C;
-	if(IntTerm_C3 > 1.0f)
+	if(IntTerm_C3 > 1.0f)//积分限幅
 	{
 		IntTerm_C3 = 1.0f;
 	}
@@ -183,7 +184,7 @@ void control_current(float I1, uint8_t pwm_struct_num)//I1 is real current, unit
 	float i_percent = 0;
 	static uint16_t interrupt_times = 0;
 //	logic_out(1,1);
-	i_percent = (I1*2.857);//I1*1000/350,I1 uint 1A ,i_percent unit 0.1%
+	i_percent = (I1*2.857f);//I1*1000/350,I1 uint 1A ,i_percent unit 0.1%
 	
 	if(interrupt_times < pwm_struct[pwm_struct_num]. positive_pulse)
 	{
@@ -192,12 +193,14 @@ void control_current(float I1, uint8_t pwm_struct_num)//I1 is real current, unit
 		{			
 			pwm_ena(1);
 			percent = pid3(i_percent, pwm_struct[pwm_struct_num].p_array[interrupt_times]);			
-
+//			if(interrupt_times < 20) percent = 0.98f;//测试98%占空比时电流最大有多大.2ms
+//			else percent = 0;
 			pid_out[interrupt_times] = percent;
 			p_get[interrupt_times] = i_percent;
-			if(percent > 0.95f) percent = 0.95f;
+			if(percent > 0.98f) percent = 0.98f;
 			if(percent < 0.0f) percent = 0;
 		}
+		
 	}
 	else
 	{

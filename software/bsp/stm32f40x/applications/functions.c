@@ -10,12 +10,17 @@ void calculate_array(uint8_t num)
 	
 	rt_memset(pwm_struct[num].p_array, 0, 500);//将数组清0
 	p = pwm_struct[num].p_array;
+	
+	linear_offset( p , 0,
+		program_data[num].percent[0], 
+		program_data[num].t[0]*2);
+	p += program_data[num].t[0]*2;
 	for(k = 0; k < 15; k++)//0-14
 	{	
 		linear_offset( p , program_data[num].percent[k] ,
 		program_data[num].percent[k+1], 
-		(program_data[num].t[k+1] - program_data[num].t[k])/50);
-		p += (program_data[num].t[k+1] - program_data[num].t[k])/50;//50us间隔
+		(program_data[num].t[k+1] - program_data[num].t[k])*2);
+		p += (program_data[num].t[k+1] - program_data[num].t[k])*2;//50us间隔
 
 	}
 	pwm_struct[num].p_array[499] = 0;//数组最后一字节为0；
@@ -25,50 +30,53 @@ void calculate_array(uint8_t num)
 	
 }
 
-void calculate_all(void)
+void print_array(uint8_t num)
 {
-	uint16_t i = 0;
-	for(i = 0; i< pwm_num; i++)
+	uint16_t i  = 0;
+	if (num > 0) num = num - 1;
+	for(i = 0; i < 500; i++)
 	{
-		calculate_array(i);
+		rt_kprintf("array[%d] = %d\n",i, pwm_struct[num].p_array[i]);
 	}
 }
+#ifdef FINSH_USING_SYMTAB
+FINSH_FUNCTION_EXPORT(print_array, print_array);
+#endif
+//void calculate_all(void)
+//{
+//	uint16_t i = 0;
+//	for(i = 0; i< pwm_num; i++)
+//	{
+//		calculate_array(i);
+//	}
+//}
 
-void check_slave_para(uint8_t j)//
+
+
+void check_disp_para(void)//
 {
 	uint16_t i = 0;
 	
-	if(j < pwm_num)//t[k+1] > t[k]
+	for(i = 0; i < 15; i++)//0-14
 	{
-		for(i = 0; i < 15; i++)//0-14
+		if(usSRegHoldBuf[t0_s+i] > time_max)
 		{
-			if(program_data[j].t[i+1] < program_data[j].t[i])
-			{
-				program_data[j].t[i+1] = program_data[j].t[i];
-			}			
-			if(program_data[j].t[i+1] > time_max)
-			{
-				program_data[j].t[i+1] = time_max;
-			}
+			usSRegHoldBuf[t0_s+i] = time_max;
 		}
+		
+		if(usSRegHoldBuf[t0_s+i+1] < usSRegHoldBuf[t0_s+i])
+		{
+			usSRegHoldBuf[t0_s+i+1] = usSRegHoldBuf[t0_s+i];
+		}			
 	}
-}
-
-void check_all_para(void)
-{
-	uint8_t m = 0;
-	for(m = 0; m < pwm_num; m++)
+//	if(usSRegHoldBuf[t0_s] != 0)
+//	{
+//		usSRegHoldBuf[t0_s] = 0;//时间起点必须为0
+//	}
+	if(usSRegHoldBuf[t15_s] > time_max)
 	{
-		check_slave_para(m);
+		usSRegHoldBuf[t15_s] = time_max;
 	}
-}
-
-void Boot_initialization(void)//开机初始化
-{
-	read_para();
-	check_all_para();
-	calculate_all();
-	
 }
 
 void test_array(uint16_t pct, uint16_t t)
@@ -90,14 +98,11 @@ void test_array(uint16_t pct, uint16_t t)
 	
 //	program_data[0].CRC16_data = CRC16((uint8_t *)(program_data[0].percent), (sizeof(program)-2));
 	
-	check_slave_para(0);
 	calculate_array(0);
 }
 #ifdef FINSH_USING_SYMTAB
 FINSH_FUNCTION_EXPORT(test_array, test_array 0-1000/1000*350A width:0-25000us);
 #endif
-
-
 
 
 

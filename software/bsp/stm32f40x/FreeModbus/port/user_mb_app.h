@@ -15,7 +15,7 @@
 #define S_REG_INPUT_START             0
 #define S_REG_INPUT_NREGS             10
 #define S_REG_HOLDING_START           0
-#define S_REG_HOLDING_NREGS           512
+#define S_REG_HOLDING_NREGS           128
 //从机模式：在保持寄存器中，各个地址对应的功能定义
 #define          S_HD_RESERVE                     0		  //保留
 #define          S_HD_CPU_USAGE_MAJOR             1         //当前CPU利用率的整数位

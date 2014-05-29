@@ -78,10 +78,11 @@ void check_logic(void)
 		xMBUtilSetBits( Y, Y8, 7, 0X08 );
 	}
 	
-	if((soft_count_flag == 1)&&(xMBUtilGetBits(ucMCoilBuf[0], X22, 1 ) == 1))
+	if((soft_count_flag == 1)&&(xMBUtilGetBits(ucMCoilBuf[0], X21, 1 ) == 1))
 	{
-		soft_disp = 30 - (rt_tick_get() - soft_count)/RT_TICK_PER_SECOND;
-		if(soft_disp == 0)
+		usSRegHoldBuf[remain_time] = 60 - (rt_tick_get() - soft_count)/RT_TICK_PER_SECOND;
+		
+		if(usSRegHoldBuf[remain_time] == 0)
 		soft_count_flag = 0;
 	}
 	
@@ -89,29 +90,48 @@ void check_logic(void)
 
 void operation(void)
 {
-	if(wave != usSRegHoldBuf[wave_sel])
-	{
-		wave = usSRegHoldBuf[wave_sel];
+	if(usSRegHoldBuf[wave_sel] > 0)
+		wave = usSRegHoldBuf[wave_sel] - 1;
+	
+	if (xMBUtilGetBits(ucSCoilBuf, read_s, 1 ) == 1)
+	{		
 		read_scheme(wave);
+		check_disp_para();
+		calculate_array(wave);
+		select_pwm = wave;
+		xMBUtilSetBits( ucSCoilBuf, read_s, 1, 0 );
 	}
-
+	
 	if (xMBUtilGetBits(ucSCoilBuf, save_s, 1 ) == 1)
 	{
+		check_disp_para();
 		save_scheme(wave);
+		calculate_array(wave);
+		select_pwm = wave;		
 		xMBUtilSetBits( ucSCoilBuf, save_s, 1, 0 );
 	}
 }
 
+void set_coil(uint8_t n, uint8_t value)
+{
+	xMBUtilSetBits( ucSCoilBuf, n, 1, value );
+}
+#ifdef FINSH_USING_SYMTAB
+FINSH_FUNCTION_EXPORT(set_coil, set_coil num value);
+#endif
+
 void rt_slave_thread_entry(void* parameter)
 {	
-	rt_uint32_t e = -1;
+//	rt_uint32_t e = -1;
 	rt_thread_delay(1);
+	para_init();
 	logic_init();
 //	 xMBPortSerialInit(3,  115200,  8, MB_PAR_NONE );
 	eMBInit( MB_RTU, 0x01, 3, 115200, MB_PAR_NONE );
 	// Enable the Modbus Protocol Stack.
 	eMBEnable(  );
 	rt_thread_delay(1);
+	usSRegHoldBuf[wave_sel] = 1;
 	while(1)
 	{
 		eMBPoll( );
@@ -119,7 +139,7 @@ void rt_slave_thread_entry(void* parameter)
 		operation();
 //		xMBUtilSetBits( ucSCoilBuf, 35, 3, 0xff );
 //		xMBUtilSetBits( ucSCoilBuf, 35, 3, 0x01);
-
+		
 		xMBUtilSetBits( ucSCoilBuf, x0_s, 8, xMBUtilGetBits(ucMCoilBuf[0], X0, 8 ) );
 		xMBUtilSetBits( ucSCoilBuf, x8_s, 8, xMBUtilGetBits(ucMCoilBuf[0], X8, 8 ) );
 		xMBUtilSetBits( ucSCoilBuf, x16_s, 8, xMBUtilGetBits(ucMCoilBuf[0], X16, 8 ) );

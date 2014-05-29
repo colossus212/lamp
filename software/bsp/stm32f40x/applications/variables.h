@@ -25,6 +25,8 @@ extern uint8_t contact_err_flag;
 extern uint32_t soft_count;
 extern uint16_t soft_disp;
 extern uint8_t soft_count_flag;
+extern uint16_t wave;
+extern uint8_t select_pwm;
 
 #if      M_COIL_NCOILS%8
 extern UCHAR    ucMCoilBuf[MB_MASTER_TOTAL_SLAVE_NUM][M_COIL_NCOILS/8+1];
@@ -47,11 +49,10 @@ extern void trig_laser(void);
 extern UCHAR xMBUtilGetBits( UCHAR * ucByteBuf, USHORT usBitOffset, UCHAR ucNBits );
 extern void xMBUtilSetBits( UCHAR * ucByteBuf, USHORT usBitOffset, UCHAR ucNBits, UCHAR ucValue );
 extern USHORT usMBCRC16( UCHAR * pucFrame, USHORT usLen );
-extern char read_scheme(uint8_t num);
-extern void save_scheme(uint8_t num);
-
-
-
-
+extern char read_scheme(uint16_t num);
+extern void save_scheme(uint16_t num);
+extern void check_disp_para(void);
+extern void calculate_array(uint8_t num);
+extern uint8_t para_init(void);
 
 #endif

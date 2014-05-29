@@ -86,9 +86,9 @@ I (..\..\include\rtdebug.h)(0x52CABFEA)
 I (..\..\include\rtservice.h)(0x52CABFEA)
 I (..\..\include\rtm.h)(0x52CABFEA)
 I (drivers\logic.h)(0x53731C60)
-I (applications\variables.h)(0x537EEA90)
-I (applications\typedefs.h)(0x537D5C07)
-I (FreeModbus\port\user_mb_app.h)(0x537968D6)
+I (applications\variables.h)(0x5386D978)
+I (applications\typedefs.h)(0x5386DBE0)
+I (FreeModbus\port\user_mb_app.h)(0x53869607)
 I (FreeModbus\modbus\include\mb.h)(0x536074A8)
 I (FreeModbus\port\port.h)(0x53741F74)
 I (FreeModbus\modbus\include\mbconfig.h)(0x537C0738)
@@ -104,7 +104,7 @@ I (..\..\components\finsh\finsh.h)(0x52CABFEA)
 I (D:\Program Files\Keil\ARM\ARMCC\include\ctype.h)(0x52846618)
 I (D:\Program Files\Keil\ARM\ARMCC\include\stdlib.h)(0x5284661A)
 I (D:\Program Files\Keil\ARM\ARMCC\include\string.h)(0x5284661A)
-F (applications\master_thread.c)(0x537C01D2)(-c --cpu Cortex-M4.fp -g -O0 --apcs=interwork -I. -I..\..\components\finsh -I..\..\include -I..\..\libcpu\arm\common -I..\..\libcpu\arm\cortex-m4 -IFreeModbus\modbus\include -IFreeModbus\modbus\rtu -IFreeModbus\port -ILibraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x -ILibraries\CMSIS\Include -ILibraries\CMSIS\ST\STM32F4xx\Include -ILibraries\STM32F4xx_StdPeriph_Driver\inc -Iapplications -Idrivers-I "D:\Program Files\Keil\ARM\RV31\INC"-I "D:\Program Files\Keil\ARM\PACK\ARM\CMSIS\3.20.4\CMSIS\Include"-I "D:\Program Files\Keil\ARM\Inc\ST\STM32F4xx"-DUSE_STDPERIPH_DRIVER -DARM_MATH_CM4 -D__FPU_PRESENT="1" -o .\build\master_thread.o --omf_browse .\build\master_thread.crf --depend .\build\master_thread.d)
+F (applications\master_thread.c)(0x5386A518)(-c --cpu Cortex-M4.fp -g -O0 --apcs=interwork -I. -I..\..\components\finsh -I..\..\include -I..\..\libcpu\arm\common -I..\..\libcpu\arm\cortex-m4 -IFreeModbus\modbus\include -IFreeModbus\modbus\rtu -IFreeModbus\port -ILibraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x -ILibraries\CMSIS\Include -ILibraries\CMSIS\ST\STM32F4xx\Include -ILibraries\STM32F4xx_StdPeriph_Driver\inc -Iapplications -Idrivers-I "D:\Program Files\Keil\ARM\RV31\INC"-I "D:\Program Files\Keil\ARM\PACK\ARM\CMSIS\3.20.4\CMSIS\Include"-I "D:\Program Files\Keil\ARM\Inc\ST\STM32F4xx"-DUSE_STDPERIPH_DRIVER -DARM_MATH_CM4 -D__FPU_PRESENT="1" -o .\build\master_thread.o --omf_browse .\build\master_thread.crf --depend .\build\master_thread.d)
 I (Libraries\CMSIS\ST\STM32F4xx\Include\stm32f4xx.h)(0x52CABFEA)
 I (Libraries\CMSIS\Include\core_cm4.h)(0x52CABFEA)
 I (D:\Program Files\Keil\ARM\ARMCC\include\stdint.h)(0x5284661A)
@@ -156,16 +156,16 @@ I (drivers\logic.h)(0x53731C60)
 I (FreeModbus\modbus\include\mbport.h)(0x536074A8)
 I (FreeModbus\modbus\include\mbproto.h)(0x536074A8)
 I (FreeModbus\modbus\include\mb_m.h)(0x536074A8)
-I (FreeModbus\port\user_mb_app.h)(0x537968D6)
+I (FreeModbus\port\user_mb_app.h)(0x53869607)
 I (FreeModbus\modbus\include\mbframe.h)(0x536074A8)
 I (FreeModbus\modbus\include\mbutils.h)(0x536074A8)
-I (applications\variables.h)(0x537EEA90)
-I (applications\typedefs.h)(0x537D5C07)
+I (applications\variables.h)(0x5386D978)
+I (applications\typedefs.h)(0x5386DBE0)
 I (..\..\components\finsh\finsh.h)(0x52CABFEA)
 I (D:\Program Files\Keil\ARM\ARMCC\include\ctype.h)(0x52846618)
 I (D:\Program Files\Keil\ARM\ARMCC\include\stdlib.h)(0x5284661A)
 I (D:\Program Files\Keil\ARM\ARMCC\include\string.h)(0x5284661A)
-F (applications\my_math.c)(0x538403A2)(-c --cpu Cortex-M4.fp -g -O0 --apcs=interwork -I. -I..\..\components\finsh -I..\..\include -I..\..\libcpu\arm\common -I..\..\libcpu\arm\cortex-m4 -IFreeModbus\modbus\include -IFreeModbus\modbus\rtu -IFreeModbus\port -ILibraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x -ILibraries\CMSIS\Include -ILibraries\CMSIS\ST\STM32F4xx\Include -ILibraries\STM32F4xx_StdPeriph_Driver\inc -Iapplications -Idrivers-I "D:\Program Files\Keil\ARM\RV31\INC"-I "D:\Program Files\Keil\ARM\PACK\ARM\CMSIS\3.20.4\CMSIS\Include"-I "D:\Program Files\Keil\ARM\Inc\ST\STM32F4xx"-DUSE_STDPERIPH_DRIVER -DARM_MATH_CM4 -D__FPU_PRESENT="1" -o .\build\my_math.o --omf_browse .\build\my_math.crf --depend .\build\my_math.d)
+F (applications\my_math.c)(0x5386CC9E)(-c --cpu Cortex-M4.fp -g -O0 --apcs=interwork -I. -I..\..\components\finsh -I..\..\include -I..\..\libcpu\arm\common -I..\..\libcpu\arm\cortex-m4 -IFreeModbus\modbus\include -IFreeModbus\modbus\rtu -IFreeModbus\port -ILibraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x -ILibraries\CMSIS\Include -ILibraries\CMSIS\ST\STM32F4xx\Include -ILibraries\STM32F4xx_StdPeriph_Driver\inc -Iapplications -Idrivers-I "D:\Program Files\Keil\ARM\RV31\INC"-I "D:\Program Files\Keil\ARM\PACK\ARM\CMSIS\3.20.4\CMSIS\Include"-I "D:\Program Files\Keil\ARM\Inc\ST\STM32F4xx"-DUSE_STDPERIPH_DRIVER -DARM_MATH_CM4 -D__FPU_PRESENT="1" -o .\build\my_math.o --omf_browse .\build\my_math.crf --depend .\build\my_math.d)
 I (Libraries\CMSIS\ST\STM32F4xx\Include\stm32f4xx.h)(0x52CABFEA)
 I (Libraries\CMSIS\Include\core_cm4.h)(0x52CABFEA)
 I (D:\Program Files\Keil\ARM\ARMCC\include\stdint.h)(0x5284661A)
@@ -215,7 +215,7 @@ I (Libraries\CMSIS\Include\arm_math.h)(0x52CABFEA)
 I (D:\Program Files\Keil\ARM\RV31\INC\string.h)(0x4F58357C)
 I (D:\Program Files\Keil\ARM\RV31\INC\math.h)(0x4F58357A)
 I (applications\my_math.h)(0x536B2687)
-F (applications\slave_thread.c)(0x5383FAC5)(-c --cpu Cortex-M4.fp -g -O0 --apcs=interwork -I. -I..\..\components\finsh -I..\..\include -I..\..\libcpu\arm\common -I..\..\libcpu\arm\cortex-m4 -IFreeModbus\modbus\include -IFreeModbus\modbus\rtu -IFreeModbus\port -ILibraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x -ILibraries\CMSIS\Include -ILibraries\CMSIS\ST\STM32F4xx\Include -ILibraries\STM32F4xx_StdPeriph_Driver\inc -Iapplications -Idrivers-I "D:\Program Files\Keil\ARM\RV31\INC"-I "D:\Program Files\Keil\ARM\PACK\ARM\CMSIS\3.20.4\CMSIS\Include"-I "D:\Program Files\Keil\ARM\Inc\ST\STM32F4xx"-DUSE_STDPERIPH_DRIVER -DARM_MATH_CM4 -D__FPU_PRESENT="1" -o .\build\slave_thread.o --omf_browse .\build\slave_thread.crf --depend .\build\slave_thread.d)
+F (applications\slave_thread.c)(0x5386E618)(-c --cpu Cortex-M4.fp -g -O0 --apcs=interwork -I. -I..\..\components\finsh -I..\..\include -I..\..\libcpu\arm\common -I..\..\libcpu\arm\cortex-m4 -IFreeModbus\modbus\include -IFreeModbus\modbus\rtu -IFreeModbus\port -ILibraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x -ILibraries\CMSIS\Include -ILibraries\CMSIS\ST\STM32F4xx\Include -ILibraries\STM32F4xx_StdPeriph_Driver\inc -Iapplications -Idrivers-I "D:\Program Files\Keil\ARM\RV31\INC"-I "D:\Program Files\Keil\ARM\PACK\ARM\CMSIS\3.20.4\CMSIS\Include"-I "D:\Program Files\Keil\ARM\Inc\ST\STM32F4xx"-DUSE_STDPERIPH_DRIVER -DARM_MATH_CM4 -D__FPU_PRESENT="1" -o .\build\slave_thread.o --omf_browse .\build\slave_thread.crf --depend .\build\slave_thread.d)
 I (Libraries\CMSIS\ST\STM32F4xx\Include\stm32f4xx.h)(0x52CABFEA)
 I (Libraries\CMSIS\Include\core_cm4.h)(0x52CABFEA)
 I (D:\Program Files\Keil\ARM\ARMCC\include\stdint.h)(0x5284661A)
@@ -267,16 +267,16 @@ I (drivers\logic.h)(0x53731C60)
 I (FreeModbus\modbus\include\mbport.h)(0x536074A8)
 I (FreeModbus\modbus\include\mbproto.h)(0x536074A8)
 I (FreeModbus\modbus\include\mb_m.h)(0x536074A8)
-I (FreeModbus\port\user_mb_app.h)(0x537968D6)
+I (FreeModbus\port\user_mb_app.h)(0x53869607)
 I (FreeModbus\modbus\include\mbframe.h)(0x536074A8)
 I (FreeModbus\modbus\include\mbutils.h)(0x536074A8)
-I (applications\variables.h)(0x537EEA90)
-I (applications\typedefs.h)(0x537D5C07)
+I (applications\variables.h)(0x5386D978)
+I (applications\typedefs.h)(0x5386DBE0)
 I (..\..\components\finsh\finsh.h)(0x52CABFEA)
 I (D:\Program Files\Keil\ARM\ARMCC\include\ctype.h)(0x52846618)
 I (D:\Program Files\Keil\ARM\ARMCC\include\stdlib.h)(0x5284661A)
 I (D:\Program Files\Keil\ARM\ARMCC\include\string.h)(0x5284661A)
-F (applications\startup.c)(0x537AB313)(-c --cpu Cortex-M4.fp -g -O0 --apcs=interwork -I. -I..\..\components\finsh -I..\..\include -I..\..\libcpu\arm\common -I..\..\libcpu\arm\cortex-m4 -IFreeModbus\modbus\include -IFreeModbus\modbus\rtu -IFreeModbus\port -ILibraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x -ILibraries\CMSIS\Include -ILibraries\CMSIS\ST\STM32F4xx\Include -ILibraries\STM32F4xx_StdPeriph_Driver\inc -Iapplications -Idrivers-I "D:\Program Files\Keil\ARM\RV31\INC"-I "D:\Program Files\Keil\ARM\PACK\ARM\CMSIS\3.20.4\CMSIS\Include"-I "D:\Program Files\Keil\ARM\Inc\ST\STM32F4xx"-DUSE_STDPERIPH_DRIVER -DARM_MATH_CM4 -D__FPU_PRESENT="1" -o .\build\startup.o --omf_browse .\build\startup.crf --depend .\build\startup.d)
+F (applications\startup.c)(0x5386A5C5)(-c --cpu Cortex-M4.fp -g -O0 --apcs=interwork -I. -I..\..\components\finsh -I..\..\include -I..\..\libcpu\arm\common -I..\..\libcpu\arm\cortex-m4 -IFreeModbus\modbus\include -IFreeModbus\modbus\rtu -IFreeModbus\port -ILibraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x -ILibraries\CMSIS\Include -ILibraries\CMSIS\ST\STM32F4xx\Include -ILibraries\STM32F4xx_StdPeriph_Driver\inc -Iapplications -Idrivers-I "D:\Program Files\Keil\ARM\RV31\INC"-I "D:\Program Files\Keil\ARM\PACK\ARM\CMSIS\3.20.4\CMSIS\Include"-I "D:\Program Files\Keil\ARM\Inc\ST\STM32F4xx"-DUSE_STDPERIPH_DRIVER -DARM_MATH_CM4 -D__FPU_PRESENT="1" -o .\build\startup.o --omf_browse .\build\startup.crf --depend .\build\startup.d)
 I (..\..\include\rthw.h)(0x52CABFEA)
 I (..\..\include\rtthread.h)(0x52CABFEA)
 I (..\..\include\rtdef.h)(0x52CABFEA)
@@ -322,8 +322,26 @@ I (Libraries\STM32F4xx_StdPeriph_Driver\inc\misc.h)(0x52CABFEA)
 I (drivers\board.h)(0x53689863)
 I (drivers\soft_i2c.h)(0x5366FAF2)
 I (D:\Program Files\Keil\ARM\RV31\INC\stdint.h)(0x4F58357C)
+I (applications\variables.h)(0x5386D978)
+I (applications\typedefs.h)(0x5386DBE0)
+I (FreeModbus\port\user_mb_app.h)(0x53869607)
+I (FreeModbus\modbus\include\mb.h)(0x536074A8)
+I (FreeModbus\port\port.h)(0x53741F74)
+I (FreeModbus\modbus\include\mbconfig.h)(0x537C0738)
+I (D:\Program Files\Keil\ARM\ARMCC\include\assert.h)(0x52846616)
+I (D:\Program Files\Keil\ARM\ARMCC\include\inttypes.h)(0x52846618)
+I (drivers\logic.h)(0x53731C60)
+I (FreeModbus\modbus\include\mbport.h)(0x536074A8)
+I (FreeModbus\modbus\include\mbproto.h)(0x536074A8)
+I (FreeModbus\modbus\include\mb_m.h)(0x536074A8)
+I (FreeModbus\modbus\include\mbframe.h)(0x536074A8)
+I (FreeModbus\modbus\include\mbutils.h)(0x536074A8)
+I (..\..\components\finsh\finsh.h)(0x52CABFEA)
+I (D:\Program Files\Keil\ARM\ARMCC\include\ctype.h)(0x52846618)
+I (D:\Program Files\Keil\ARM\ARMCC\include\stdlib.h)(0x5284661A)
+I (D:\Program Files\Keil\ARM\ARMCC\include\string.h)(0x5284661A)
 F (.\Libraries\CMSIS\arm_cortexM4lf_math.lib)(0x4E2E27B2)()
-F (.\applications\save_read.c)(0x537B0FE2)(-c --cpu Cortex-M4.fp -g -O0 --apcs=interwork -I. -I..\..\components\finsh -I..\..\include -I..\..\libcpu\arm\common -I..\..\libcpu\arm\cortex-m4 -IFreeModbus\modbus\include -IFreeModbus\modbus\rtu -IFreeModbus\port -ILibraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x -ILibraries\CMSIS\Include -ILibraries\CMSIS\ST\STM32F4xx\Include -ILibraries\STM32F4xx_StdPeriph_Driver\inc -Iapplications -Idrivers-I "D:\Program Files\Keil\ARM\RV31\INC"-I "D:\Program Files\Keil\ARM\PACK\ARM\CMSIS\3.20.4\CMSIS\Include"-I "D:\Program Files\Keil\ARM\Inc\ST\STM32F4xx"-DUSE_STDPERIPH_DRIVER -DARM_MATH_CM4 -D__FPU_PRESENT="1" -o .\build\save_read.o --omf_browse .\build\save_read.crf --depend .\build\save_read.d)
+F (.\applications\save_read.c)(0x5386D85C)(-c --cpu Cortex-M4.fp -g -O0 --apcs=interwork -I. -I..\..\components\finsh -I..\..\include -I..\..\libcpu\arm\common -I..\..\libcpu\arm\cortex-m4 -IFreeModbus\modbus\include -IFreeModbus\modbus\rtu -IFreeModbus\port -ILibraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x -ILibraries\CMSIS\Include -ILibraries\CMSIS\ST\STM32F4xx\Include -ILibraries\STM32F4xx_StdPeriph_Driver\inc -Iapplications -Idrivers-I "D:\Program Files\Keil\ARM\RV31\INC"-I "D:\Program Files\Keil\ARM\PACK\ARM\CMSIS\3.20.4\CMSIS\Include"-I "D:\Program Files\Keil\ARM\Inc\ST\STM32F4xx"-DUSE_STDPERIPH_DRIVER -DARM_MATH_CM4 -D__FPU_PRESENT="1" -o .\build\save_read.o --omf_browse .\build\save_read.crf --depend .\build\save_read.d)
 I (Libraries\CMSIS\ST\STM32F4xx\Include\stm32f4xx.h)(0x52CABFEA)
 I (Libraries\CMSIS\Include\core_cm4.h)(0x52CABFEA)
 I (D:\Program Files\Keil\ARM\ARMCC\include\stdint.h)(0x5284661A)
@@ -359,9 +377,9 @@ I (Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_usart.h)(0x52CABFEA)
 I (Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_wwdg.h)(0x52CABFEA)
 I (Libraries\STM32F4xx_StdPeriph_Driver\inc\misc.h)(0x52CABFEA)
 I (drivers\24cxx.h)(0x5368485E)
-I (applications\typedefs.h)(0x537D5C07)
+I (applications\typedefs.h)(0x5386DBE0)
 I (D:\Program Files\Keil\ARM\RV31\INC\string.h)(0x4F58357C)
-I (applications\variables.h)(0x537EEA90)
+I (applications\variables.h)(0x5386D978)
 I (..\..\include\rtthread.h)(0x52CABFEA)
 I (..\..\include\rtdef.h)(0x52CABFEA)
 I (.\rtconfig.h)(0x53747A89)
@@ -369,7 +387,7 @@ I (D:\Program Files\Keil\ARM\ARMCC\include\stdarg.h)(0x5284661C)
 I (..\..\include\rtdebug.h)(0x52CABFEA)
 I (..\..\include\rtservice.h)(0x52CABFEA)
 I (..\..\include\rtm.h)(0x52CABFEA)
-I (FreeModbus\port\user_mb_app.h)(0x537968D6)
+I (FreeModbus\port\user_mb_app.h)(0x53869607)
 I (FreeModbus\modbus\include\mb.h)(0x536074A8)
 I (FreeModbus\port\port.h)(0x53741F74)
 I (FreeModbus\modbus\include\mbconfig.h)(0x537C0738)
@@ -386,7 +404,7 @@ I (..\..\components\finsh\finsh.h)(0x52CABFEA)
 I (D:\Program Files\Keil\ARM\ARMCC\include\ctype.h)(0x52846618)
 I (D:\Program Files\Keil\ARM\ARMCC\include\stdlib.h)(0x5284661A)
 I (D:\Program Files\Keil\ARM\ARMCC\include\string.h)(0x5284661A)
-F (.\applications\functions.c)(0x538402D0)(-c --cpu Cortex-M4.fp -g -O0 --apcs=interwork -I. -I..\..\components\finsh -I..\..\include -I..\..\libcpu\arm\common -I..\..\libcpu\arm\cortex-m4 -IFreeModbus\modbus\include -IFreeModbus\modbus\rtu -IFreeModbus\port -ILibraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x -ILibraries\CMSIS\Include -ILibraries\CMSIS\ST\STM32F4xx\Include -ILibraries\STM32F4xx_StdPeriph_Driver\inc -Iapplications -Idrivers-I "D:\Program Files\Keil\ARM\RV31\INC"-I "D:\Program Files\Keil\ARM\PACK\ARM\CMSIS\3.20.4\CMSIS\Include"-I "D:\Program Files\Keil\ARM\Inc\ST\STM32F4xx"-DUSE_STDPERIPH_DRIVER -DARM_MATH_CM4 -D__FPU_PRESENT="1" -o .\build\functions.o --omf_browse .\build\functions.crf --depend .\build\functions.d)
+F (.\applications\functions.c)(0x5386CA0B)(-c --cpu Cortex-M4.fp -g -O0 --apcs=interwork -I. -I..\..\components\finsh -I..\..\include -I..\..\libcpu\arm\common -I..\..\libcpu\arm\cortex-m4 -IFreeModbus\modbus\include -IFreeModbus\modbus\rtu -IFreeModbus\port -ILibraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x -ILibraries\CMSIS\Include -ILibraries\CMSIS\ST\STM32F4xx\Include -ILibraries\STM32F4xx_StdPeriph_Driver\inc -Iapplications -Idrivers-I "D:\Program Files\Keil\ARM\RV31\INC"-I "D:\Program Files\Keil\ARM\PACK\ARM\CMSIS\3.20.4\CMSIS\Include"-I "D:\Program Files\Keil\ARM\Inc\ST\STM32F4xx"-DUSE_STDPERIPH_DRIVER -DARM_MATH_CM4 -D__FPU_PRESENT="1" -o .\build\functions.o --omf_browse .\build\functions.crf --depend .\build\functions.d)
 I (Libraries\CMSIS\ST\STM32F4xx\Include\stm32f4xx.h)(0x52CABFEA)
 I (Libraries\CMSIS\Include\core_cm4.h)(0x52CABFEA)
 I (D:\Program Files\Keil\ARM\ARMCC\include\stdint.h)(0x5284661A)
@@ -421,9 +439,9 @@ I (Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_tim.h)(0x52CABFEA)
 I (Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_usart.h)(0x52CABFEA)
 I (Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_wwdg.h)(0x52CABFEA)
 I (Libraries\STM32F4xx_StdPeriph_Driver\inc\misc.h)(0x52CABFEA)
-I (applications\typedefs.h)(0x537D5C07)
+I (applications\typedefs.h)(0x5386DBE0)
 I (applications\my_math.h)(0x536B2687)
-I (applications\variables.h)(0x537EEA90)
+I (applications\variables.h)(0x5386D978)
 I (..\..\include\rtthread.h)(0x52CABFEA)
 I (..\..\include\rtdef.h)(0x52CABFEA)
 I (.\rtconfig.h)(0x53747A89)
@@ -431,7 +449,7 @@ I (D:\Program Files\Keil\ARM\ARMCC\include\stdarg.h)(0x5284661C)
 I (..\..\include\rtdebug.h)(0x52CABFEA)
 I (..\..\include\rtservice.h)(0x52CABFEA)
 I (..\..\include\rtm.h)(0x52CABFEA)
-I (FreeModbus\port\user_mb_app.h)(0x537968D6)
+I (FreeModbus\port\user_mb_app.h)(0x53869607)
 I (FreeModbus\modbus\include\mb.h)(0x536074A8)
 I (FreeModbus\port\port.h)(0x53741F74)
 I (FreeModbus\modbus\include\mbconfig.h)(0x537C0738)
@@ -448,9 +466,9 @@ I (..\..\components\finsh\finsh.h)(0x52CABFEA)
 I (D:\Program Files\Keil\ARM\ARMCC\include\ctype.h)(0x52846618)
 I (D:\Program Files\Keil\ARM\ARMCC\include\stdlib.h)(0x5284661A)
 I (D:\Program Files\Keil\ARM\ARMCC\include\string.h)(0x5284661A)
-F (.\applications\typedefs.h)(0x537D5C07)()
+F (.\applications\typedefs.h)(0x5386DBE0)()
 F (.\applications\variables.c)(0x537B0625)(-c --cpu Cortex-M4.fp -g -O0 --apcs=interwork -I. -I..\..\components\finsh -I..\..\include -I..\..\libcpu\arm\common -I..\..\libcpu\arm\cortex-m4 -IFreeModbus\modbus\include -IFreeModbus\modbus\rtu -IFreeModbus\port -ILibraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x -ILibraries\CMSIS\Include -ILibraries\CMSIS\ST\STM32F4xx\Include -ILibraries\STM32F4xx_StdPeriph_Driver\inc -Iapplications -Idrivers-I "D:\Program Files\Keil\ARM\RV31\INC"-I "D:\Program Files\Keil\ARM\PACK\ARM\CMSIS\3.20.4\CMSIS\Include"-I "D:\Program Files\Keil\ARM\Inc\ST\STM32F4xx"-DUSE_STDPERIPH_DRIVER -DARM_MATH_CM4 -D__FPU_PRESENT="1" -o .\build\variables.o --omf_browse .\build\variables.crf --depend .\build\variables.d)
-I (applications\variables.h)(0x537EEA90)
+I (applications\variables.h)(0x5386D978)
 I (Libraries\CMSIS\ST\STM32F4xx\Include\stm32f4xx.h)(0x52CABFEA)
 I (Libraries\CMSIS\Include\core_cm4.h)(0x52CABFEA)
 I (D:\Program Files\Keil\ARM\ARMCC\include\stdint.h)(0x5284661A)
@@ -492,8 +510,8 @@ I (D:\Program Files\Keil\ARM\ARMCC\include\stdarg.h)(0x5284661C)
 I (..\..\include\rtdebug.h)(0x52CABFEA)
 I (..\..\include\rtservice.h)(0x52CABFEA)
 I (..\..\include\rtm.h)(0x52CABFEA)
-I (applications\typedefs.h)(0x537D5C07)
-I (FreeModbus\port\user_mb_app.h)(0x537968D6)
+I (applications\typedefs.h)(0x5386DBE0)
+I (FreeModbus\port\user_mb_app.h)(0x53869607)
 I (FreeModbus\modbus\include\mb.h)(0x536074A8)
 I (FreeModbus\port\port.h)(0x53741F74)
 I (FreeModbus\modbus\include\mbconfig.h)(0x537C0738)
@@ -512,7 +530,7 @@ I (D:\Program Files\Keil\ARM\ARMCC\include\stdlib.h)(0x5284661A)
 I (D:\Program Files\Keil\ARM\ARMCC\include\string.h)(0x5284661A)
 I (D:\Program Files\Keil\ARM\ARMCC\include\absacc.h)(0x5284661A)
 I (D:\Program Files\Keil\ARM\RV31\INC\string.h)(0x4F58357C)
-F (.\applications\variables.h)(0x537EEA90)()
+F (.\applications\variables.h)(0x5386D978)()
 F (.\applications\input_thread.c)(0x53731603)(-c --cpu Cortex-M4.fp -g -O0 --apcs=interwork -I. -I..\..\components\finsh -I..\..\include -I..\..\libcpu\arm\common -I..\..\libcpu\arm\cortex-m4 -IFreeModbus\modbus\include -IFreeModbus\modbus\rtu -IFreeModbus\port -ILibraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x -ILibraries\CMSIS\Include -ILibraries\CMSIS\ST\STM32F4xx\Include -ILibraries\STM32F4xx_StdPeriph_Driver\inc -Iapplications -Idrivers-I "D:\Program Files\Keil\ARM\RV31\INC"-I "D:\Program Files\Keil\ARM\PACK\ARM\CMSIS\3.20.4\CMSIS\Include"-I "D:\Program Files\Keil\ARM\Inc\ST\STM32F4xx"-DUSE_STDPERIPH_DRIVER -DARM_MATH_CM4 -D__FPU_PRESENT="1" -o .\build\input_thread.o --omf_browse .\build\input_thread.crf --depend .\build\input_thread.d)
 I (Libraries\CMSIS\ST\STM32F4xx\Include\stm32f4xx.h)(0x52CABFEA)
 I (Libraries\CMSIS\Include\core_cm4.h)(0x52CABFEA)
@@ -555,9 +573,9 @@ I (D:\Program Files\Keil\ARM\ARMCC\include\stdarg.h)(0x5284661C)
 I (..\..\include\rtdebug.h)(0x52CABFEA)
 I (..\..\include\rtservice.h)(0x52CABFEA)
 I (..\..\include\rtm.h)(0x52CABFEA)
-I (applications\variables.h)(0x537EEA90)
-I (applications\typedefs.h)(0x537D5C07)
-I (FreeModbus\port\user_mb_app.h)(0x537968D6)
+I (applications\variables.h)(0x5386D978)
+I (applications\typedefs.h)(0x5386DBE0)
+I (FreeModbus\port\user_mb_app.h)(0x53869607)
 I (FreeModbus\modbus\include\mb.h)(0x536074A8)
 I (FreeModbus\port\port.h)(0x53741F74)
 I (FreeModbus\modbus\include\mbconfig.h)(0x537C0738)
@@ -574,7 +592,7 @@ I (..\..\components\finsh\finsh.h)(0x52CABFEA)
 I (D:\Program Files\Keil\ARM\ARMCC\include\ctype.h)(0x52846618)
 I (D:\Program Files\Keil\ARM\ARMCC\include\stdlib.h)(0x5284661A)
 I (D:\Program Files\Keil\ARM\ARMCC\include\string.h)(0x5284661A)
-F (.\applications\task2_thread.c)(0x538542C4)(-c --cpu Cortex-M4.fp -g -O0 --apcs=interwork -I. -I..\..\components\finsh -I..\..\include -I..\..\libcpu\arm\common -I..\..\libcpu\arm\cortex-m4 -IFreeModbus\modbus\include -IFreeModbus\modbus\rtu -IFreeModbus\port -ILibraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x -ILibraries\CMSIS\Include -ILibraries\CMSIS\ST\STM32F4xx\Include -ILibraries\STM32F4xx_StdPeriph_Driver\inc -Iapplications -Idrivers-I "D:\Program Files\Keil\ARM\RV31\INC"-I "D:\Program Files\Keil\ARM\PACK\ARM\CMSIS\3.20.4\CMSIS\Include"-I "D:\Program Files\Keil\ARM\Inc\ST\STM32F4xx"-DUSE_STDPERIPH_DRIVER -DARM_MATH_CM4 -D__FPU_PRESENT="1" -o .\build\task2_thread.o --omf_browse .\build\task2_thread.crf --depend .\build\task2_thread.d)
+F (.\applications\task2_thread.c)(0x5386997F)(-c --cpu Cortex-M4.fp -g -O0 --apcs=interwork -I. -I..\..\components\finsh -I..\..\include -I..\..\libcpu\arm\common -I..\..\libcpu\arm\cortex-m4 -IFreeModbus\modbus\include -IFreeModbus\modbus\rtu -IFreeModbus\port -ILibraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x -ILibraries\CMSIS\Include -ILibraries\CMSIS\ST\STM32F4xx\Include -ILibraries\STM32F4xx_StdPeriph_Driver\inc -Iapplications -Idrivers-I "D:\Program Files\Keil\ARM\RV31\INC"-I "D:\Program Files\Keil\ARM\PACK\ARM\CMSIS\3.20.4\CMSIS\Include"-I "D:\Program Files\Keil\ARM\Inc\ST\STM32F4xx"-DUSE_STDPERIPH_DRIVER -DARM_MATH_CM4 -D__FPU_PRESENT="1" -o .\build\task2_thread.o --omf_browse .\build\task2_thread.crf --depend .\build\task2_thread.d)
 I (Libraries\CMSIS\ST\STM32F4xx\Include\stm32f4xx.h)(0x52CABFEA)
 I (Libraries\CMSIS\Include\core_cm4.h)(0x52CABFEA)
 I (D:\Program Files\Keil\ARM\ARMCC\include\stdint.h)(0x5284661A)
@@ -617,9 +635,9 @@ I (..\..\include\rtdebug.h)(0x52CABFEA)
 I (..\..\include\rtservice.h)(0x52CABFEA)
 I (..\..\include\rtm.h)(0x52CABFEA)
 I (drivers\logic.h)(0x53731C60)
-I (applications\variables.h)(0x537EEA90)
-I (applications\typedefs.h)(0x537D5C07)
-I (FreeModbus\port\user_mb_app.h)(0x537968D6)
+I (applications\variables.h)(0x5386D978)
+I (applications\typedefs.h)(0x5386DBE0)
+I (FreeModbus\port\user_mb_app.h)(0x53869607)
 I (FreeModbus\modbus\include\mb.h)(0x536074A8)
 I (FreeModbus\port\port.h)(0x53741F74)
 I (FreeModbus\modbus\include\mbconfig.h)(0x537C0738)
@@ -780,7 +798,7 @@ I (Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_usart.h)(0x52CABFEA)
 I (Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_wwdg.h)(0x52CABFEA)
 I (Libraries\STM32F4xx_StdPeriph_Driver\inc\misc.h)(0x52CABFEA)
 I (drivers\board.h)(0x53689863)
-F (drivers\pwm_buck_f4.c)(0x53854178)(-c --cpu Cortex-M4.fp -g -O0 --apcs=interwork -I. -I..\..\components\finsh -I..\..\include -I..\..\libcpu\arm\common -I..\..\libcpu\arm\cortex-m4 -IFreeModbus\modbus\include -IFreeModbus\modbus\rtu -IFreeModbus\port -ILibraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x -ILibraries\CMSIS\Include -ILibraries\CMSIS\ST\STM32F4xx\Include -ILibraries\STM32F4xx_StdPeriph_Driver\inc -Iapplications -Idrivers-I "D:\Program Files\Keil\ARM\RV31\INC"-I "D:\Program Files\Keil\ARM\PACK\ARM\CMSIS\3.20.4\CMSIS\Include"-I "D:\Program Files\Keil\ARM\Inc\ST\STM32F4xx"-DUSE_STDPERIPH_DRIVER -DARM_MATH_CM4 -D__FPU_PRESENT="1" -o .\build\pwm_buck_f4.o --omf_browse .\build\pwm_buck_f4.crf --depend .\build\pwm_buck_f4.d)
+F (drivers\pwm_buck_f4.c)(0x53859363)(-c --cpu Cortex-M4.fp -g -O0 --apcs=interwork -I. -I..\..\components\finsh -I..\..\include -I..\..\libcpu\arm\common -I..\..\libcpu\arm\cortex-m4 -IFreeModbus\modbus\include -IFreeModbus\modbus\rtu -IFreeModbus\port -ILibraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x -ILibraries\CMSIS\Include -ILibraries\CMSIS\ST\STM32F4xx\Include -ILibraries\STM32F4xx_StdPeriph_Driver\inc -Iapplications -Idrivers-I "D:\Program Files\Keil\ARM\RV31\INC"-I "D:\Program Files\Keil\ARM\PACK\ARM\CMSIS\3.20.4\CMSIS\Include"-I "D:\Program Files\Keil\ARM\Inc\ST\STM32F4xx"-DUSE_STDPERIPH_DRIVER -DARM_MATH_CM4 -D__FPU_PRESENT="1" -o .\build\pwm_buck_f4.o --omf_browse .\build\pwm_buck_f4.crf --depend .\build\pwm_buck_f4.d)
 I (Libraries\CMSIS\ST\STM32F4xx\Include\stm32f4xx.h)(0x52CABFEA)
 I (Libraries\CMSIS\Include\core_cm4.h)(0x52CABFEA)
 I (D:\Program Files\Keil\ARM\ARMCC\include\stdint.h)(0x5284661A)
@@ -831,10 +849,10 @@ I (D:\Program Files\Keil\ARM\RV31\INC\string.h)(0x4F58357C)
 I (D:\Program Files\Keil\ARM\RV31\INC\math.h)(0x4F58357A)
 I (applications\my_math.h)(0x536B2687)
 I (drivers\logic.h)(0x53731C60)
-I (applications\typedefs.h)(0x537D5C07)
+I (applications\typedefs.h)(0x5386DBE0)
 I (D:\Program Files\Keil\ARM\ARMCC\include\absacc.h)(0x5284661A)
-I (applications\variables.h)(0x537EEA90)
-I (FreeModbus\port\user_mb_app.h)(0x537968D6)
+I (applications\variables.h)(0x5386D978)
+I (FreeModbus\port\user_mb_app.h)(0x53869607)
 I (FreeModbus\modbus\include\mb.h)(0x536074A8)
 I (FreeModbus\port\port.h)(0x53741F74)
 I (FreeModbus\modbus\include\mbconfig.h)(0x537C0738)
@@ -1211,9 +1229,9 @@ I (..\..\components\finsh\finsh.h)(0x52CABFEA)
 I (D:\Program Files\Keil\ARM\ARMCC\include\ctype.h)(0x52846618)
 I (D:\Program Files\Keil\ARM\ARMCC\include\stdlib.h)(0x5284661A)
 I (D:\Program Files\Keil\ARM\ARMCC\include\string.h)(0x5284661A)
-I (applications\variables.h)(0x537EEA90)
-I (applications\typedefs.h)(0x537D5C07)
-I (FreeModbus\port\user_mb_app.h)(0x537968D6)
+I (applications\variables.h)(0x5386D978)
+I (applications\typedefs.h)(0x5386DBE0)
+I (FreeModbus\port\user_mb_app.h)(0x53869607)
 I (FreeModbus\modbus\include\mb.h)(0x536074A8)
 I (FreeModbus\port\port.h)(0x53741F74)
 I (FreeModbus\modbus\include\mbconfig.h)(0x537C0738)
@@ -1431,7 +1449,7 @@ I (D:\Program Files\Keil\ARM\ARMCC\include\assert.h)(0x52846616)
 I (D:\Program Files\Keil\ARM\ARMCC\include\inttypes.h)(0x52846618)
 I (drivers\logic.h)(0x53731C60)
 F (FreeModbus\port\user_mb_app.c)(0x5374575C)(-c --cpu Cortex-M4.fp -g -O0 --apcs=interwork -I. -I..\..\components\finsh -I..\..\include -I..\..\libcpu\arm\common -I..\..\libcpu\arm\cortex-m4 -IFreeModbus\modbus\include -IFreeModbus\modbus\rtu -IFreeModbus\port -ILibraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x -ILibraries\CMSIS\Include -ILibraries\CMSIS\ST\STM32F4xx\Include -ILibraries\STM32F4xx_StdPeriph_Driver\inc -Iapplications -Idrivers-I "D:\Program Files\Keil\ARM\RV31\INC"-I "D:\Program Files\Keil\ARM\PACK\ARM\CMSIS\3.20.4\CMSIS\Include"-I "D:\Program Files\Keil\ARM\Inc\ST\STM32F4xx"-DUSE_STDPERIPH_DRIVER -DARM_MATH_CM4 -D__FPU_PRESENT="1" -o .\build\user_mb_app.o --omf_browse .\build\user_mb_app.crf --depend .\build\user_mb_app.d)
-I (FreeModbus\port\user_mb_app.h)(0x537968D6)
+I (FreeModbus\port\user_mb_app.h)(0x53869607)
 I (FreeModbus\modbus\include\mb.h)(0x536074A8)
 I (FreeModbus\port\port.h)(0x53741F74)
 I (Libraries\CMSIS\ST\STM32F4xx\Include\stm32f4xx.h)(0x52CABFEA)
@@ -1486,7 +1504,7 @@ I (FreeModbus\modbus\include\mb_m.h)(0x536074A8)
 I (FreeModbus\modbus\include\mbframe.h)(0x536074A8)
 I (FreeModbus\modbus\include\mbutils.h)(0x536074A8)
 F (.\FreeModbus\port\user_mb_app_m.c)(0x537AAFCF)(-c --cpu Cortex-M4.fp -g -O0 --apcs=interwork -I. -I..\..\components\finsh -I..\..\include -I..\..\libcpu\arm\common -I..\..\libcpu\arm\cortex-m4 -IFreeModbus\modbus\include -IFreeModbus\modbus\rtu -IFreeModbus\port -ILibraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x -ILibraries\CMSIS\Include -ILibraries\CMSIS\ST\STM32F4xx\Include -ILibraries\STM32F4xx_StdPeriph_Driver\inc -Iapplications -Idrivers-I "D:\Program Files\Keil\ARM\RV31\INC"-I "D:\Program Files\Keil\ARM\PACK\ARM\CMSIS\3.20.4\CMSIS\Include"-I "D:\Program Files\Keil\ARM\Inc\ST\STM32F4xx"-DUSE_STDPERIPH_DRIVER -DARM_MATH_CM4 -D__FPU_PRESENT="1" -o .\build\user_mb_app_m.o --omf_browse .\build\user_mb_app_m.crf --depend .\build\user_mb_app_m.d)
-I (FreeModbus\port\user_mb_app.h)(0x537968D6)
+I (FreeModbus\port\user_mb_app.h)(0x53869607)
 I (FreeModbus\modbus\include\mb.h)(0x536074A8)
 I (FreeModbus\port\port.h)(0x53741F74)
 I (Libraries\CMSIS\ST\STM32F4xx\Include\stm32f4xx.h)(0x52CABFEA)

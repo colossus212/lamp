@@ -4,6 +4,7 @@
 #define array_num (25000/50)//25ms/50us一个点
 #define pwm_num		(32)//32组
 #define time_max	25000
+#define scheme_max 32 
 
 #define PIN_LASER		GPIO_Pin_6
 #define PIN_RED			GPIO_Pin_5
@@ -200,6 +201,8 @@ typedef enum slave_reg
 	DAC0			= (80-1),
 	DAC1			= (81-1),
 	
+	remain_time		= (100-1),
+	
 }slave_reg;
 
 typedef enum slave_coil
@@ -219,7 +222,7 @@ typedef enum slave_coil
 	start_up_s		= (14-1),
 	laser_sw		= (15-1),
 	red_sw			= (16-1),
-	laser_on_ena	= (17-1),
+	laser_on_ena	= (17-1),//设置触摸屏上的权限
 	laser_off_ena	= (18-1),
 	red_on_ena		= (19-1),
 	red_off_ena		= (20-1),

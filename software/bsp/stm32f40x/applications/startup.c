@@ -19,7 +19,7 @@
 #include "stm32f4xx.h"
 #include "board.h"
 #include "soft_i2c.h"
-
+#include "variables.h"
 /**
  * @addtogroup STM32
  */
