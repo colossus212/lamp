@@ -468,6 +468,11 @@
               <FileType>1</FileType>
               <FilePath>.\applications\task2_thread.c</FilePath>
             </File>
+            <File>
+              <FileName>trig_thread.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\trig_thread.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

@@ -8,6 +8,7 @@
 
 uint16_t wave = 0;
 uint8_t soft_count_flag = 0;
+uint8_t contact_buf[5] = {0};
 
 extern BOOL xMBPortSerialInit(UCHAR ucPORT, ULONG ulBaudRate, UCHAR ucDataBits,
 		eMBParity eParity);
@@ -20,6 +21,7 @@ void check_logic(void)
 				{
 					xMBUtilSetBits( ucSCoilBuf, start_up_s, 1, 0 );
 					contact_err_flag = 1;
+					rt_kprintf("error in setp 1");
 				}
 			break;
 		case 2:
@@ -27,6 +29,7 @@ void check_logic(void)
 				{
 					xMBUtilSetBits( ucSCoilBuf, start_up_s, 1, 0 );
 					contact_err_flag = 1;
+					rt_kprintf("error in setp 2 or 3");
 				} 
 			break;
 		case 4:if(xMBUtilGetBits(ucMCoilBuf[0], X20, 3) != 0x07)
@@ -38,6 +41,7 @@ void check_logic(void)
 					else
 					{
 						contact_err_flag = 1;
+						rt_kprintf("error in setp 4");
 					}
 					xMBUtilSetBits( ucSCoilBuf, start_up_s, 1, 0 );
 				} 
@@ -52,6 +56,7 @@ void check_logic(void)
 					else
 					{
 						contact_err_flag = 1;
+						rt_kprintf("error in setp 5");
 					}
 					xMBUtilSetBits( ucSCoilBuf, start_up_s, 1, 0 );
 				} 
@@ -75,6 +80,7 @@ void check_logic(void)
 	{
 		start_flag = 0;
 		step = 0;
+//		xMBUtilSetBits( ucSCoilBuf, standby_s, 1, 0 );
 		xMBUtilSetBits( Y, Y8, 7, 0X08 );
 	}
 	
@@ -90,6 +96,7 @@ void check_logic(void)
 
 void operation(void)
 {
+	uint16_t buf = 0, buf2 = 0;
 	if(usSRegHoldBuf[wave_sel] > 0)
 		wave = usSRegHoldBuf[wave_sel] - 1;
 	
@@ -110,6 +117,37 @@ void operation(void)
 		select_pwm = wave;		
 		xMBUtilSetBits( ucSCoilBuf, save_s, 1, 0 );
 	}
+	
+//	if (xMBUtilGetBits(ucSCoilBuf, standby_s, 1 ) == 1)
+//	{
+//		xMBUtilGetBits(ucSCoilBuf, standby_s, 1 );
+//	}
+
+	xMBUtilSetBits( ucSCoilBuf, red_off_ena, 1, 
+	xMBUtilGetBits(ucSCoilBuf, start_up_s, 1 )&&xMBUtilGetBits(ucSCoilBuf, red_sw, 1 )&&
+	(0 == usSRegHoldBuf[tr_mode]) );
+	
+	xMBUtilSetBits( ucSCoilBuf, red_on_ena, 1, 
+	xMBUtilGetBits(ucSCoilBuf, start_up_s, 1 )&&(0 == xMBUtilGetBits(ucSCoilBuf, red_sw, 1 ))&&
+	(0 == usSRegHoldBuf[tr_mode]));
+	
+	buf = xMBUtilGetBits(ucSCoilBuf, standby_s, 1 );
+	buf2 = ~buf;
+	
+	xMBUtilSetBits( ucSCoilBuf, ready_ena, 1, started_flag &&(0 == xMBUtilGetBits(ucSCoilBuf, standby_s, 1 )));
+	
+	xMBUtilSetBits( ucSCoilBuf, stand_by_ena, 1, started_flag &&(1 == xMBUtilGetBits(ucSCoilBuf, standby_s, 1)));
+	
+	xMBUtilSetBits( ucSCoilBuf, laser_on_ena, 1, xMBUtilGetBits(ucSCoilBuf, standby_s, 1) 
+					&&(0 == usSRegHoldBuf[tr_mode])&&(0 == xMBUtilGetBits(ucSCoilBuf, laser_sw, 1 )));
+	
+	xMBUtilSetBits( ucSCoilBuf, laser_off_ena, 1, xMBUtilGetBits(ucSCoilBuf, standby_s, 1) 
+					&&(0 == usSRegHoldBuf[tr_mode])&&(1 == xMBUtilGetBits(ucSCoilBuf, laser_sw, 1)));	
+//	xMBUtilSetBits( ucSCoilBuf, ready_ena, 1, 1 );
+//	xMBUtilSetBits( ucSCoilBuf, stand_by_ena, 1, 1 );
+	xMBUtilSetBits( ucSCoilBuf, ext_ena, 1, (~usSRegHoldBuf[tr_mode]) );
+	xMBUtilSetBits( ucSCoilBuf, int_ena, 1, usSRegHoldBuf[tr_mode] );
+	
 }
 
 void set_coil(uint8_t n, uint8_t value)
@@ -132,6 +170,7 @@ void rt_slave_thread_entry(void* parameter)
 	eMBEnable(  );
 	rt_thread_delay(1);
 	usSRegHoldBuf[wave_sel] = 1;
+//	xMBUtilSetBits( ucSCoilBuf, standby_s, 1, 1 );
 	while(1)
 	{
 		eMBPoll( );

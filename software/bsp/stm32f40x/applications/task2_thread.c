@@ -134,11 +134,11 @@ void rt_task2_thread_entry(void* parameter)
 
 		
 		END_LOOP:
-		if(ss) 
-		{
-			TIM_Cmd(TIM8, ENABLE);
-			ss = 0;
-		}
+//		if(ss) 
+//		{
+//			TIM_Cmd(TIM8, ENABLE);
+//			ss = 0;
+//		}
 		rt_thread_delay(10);
 	}
 }

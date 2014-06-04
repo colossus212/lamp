@@ -27,6 +27,7 @@ extern uint16_t soft_disp;
 extern uint8_t soft_count_flag;
 extern uint16_t wave;
 extern uint8_t select_pwm;
+extern uint8_t started_flag;
 
 #if      M_COIL_NCOILS%8
 extern UCHAR    ucMCoilBuf[MB_MASTER_TOTAL_SLAVE_NUM][M_COIL_NCOILS/8+1];

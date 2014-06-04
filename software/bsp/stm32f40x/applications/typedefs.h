@@ -258,6 +258,7 @@ typedef enum slave_coil
 	red_sta			= (58-1),//ºì¹â×´Ì¬
 	contactor_err	= (59-1),
 	
+	
 	x0_s			= (100-1),
 	x8_s			= (108-1),
 	x16_s			= (116-1),
