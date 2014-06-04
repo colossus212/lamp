@@ -122,7 +122,7 @@ void pwm_init(void)
 //FINSH_FUNCTION_EXPORT(cal_array, cal_array 0-3500*0.1A width:0-25000us);
 //#endif
 
-float	Kp3 = 0.002f, Ki3 = 0.0003f, Kd3 = 0.0f;
+float	Kp3 = 0.0012f, Ki3 = 0.0003f, Kd3 = 0.0f;
 uint8_t pid_flag = 0;//用于清零积分量。
 void set_pid(uint32_t p, uint32_t i, uint32_t d)
 {
@@ -233,7 +233,7 @@ void TIM8_UP_TIM13_IRQHandler(void)
 {
 	uint16_t I1 = 0, I2 = 0, power = 0;
 	rt_interrupt_enter();
-	logic_out(1,1);
+//	logic_out(1,1);
 	I1 = adc_get(0);
 	I2 = adc_get(1);
 	power = adc_get(2);
@@ -251,7 +251,7 @@ void TIM8_UP_TIM13_IRQHandler(void)
 		}
 	}
 	
-	logic_out(1,0);
+//	logic_out(1,0);
 	rt_interrupt_leave();
 }
 

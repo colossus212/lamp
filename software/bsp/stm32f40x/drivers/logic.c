@@ -14,7 +14,7 @@ logic_io GPIO_in[in_size] =
 	
 logic_io GPIO_out[out_size] = 
 	{{GPIOG,GPIO_Pin_10},{GPIOG,GPIO_Pin_11},{GPIOE,GPIO_Pin_0},{GPIOE,GPIO_Pin_1},
-	 {GPIOG,GPIO_Pin_8}, {GPIOE,GPIO_Pin_13},{GPIOB,GPIO_Pin_5}};
+	 {GPIOG,GPIO_Pin_8}, {GPIOE,GPIO_Pin_13},{GPIOB,GPIO_Pin_5}};//¸÷½Å¹¦¼ûLOGIC.H
 
 void logic_init(void)
 {

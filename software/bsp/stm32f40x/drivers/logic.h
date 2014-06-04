@@ -14,6 +14,7 @@ typedef struct logic_io
 
 typedef enum logic_name
 {
+	/*out*/
 	mcu_run 	= 0,
 	mcu_err		= 1,
 	mcu_trig	= 2,
@@ -23,7 +24,7 @@ typedef enum logic_name
 	
 	usart3_dir 	= 5,
 	eeprom_wp 	= 6,
-	
+	/*in*/
 	
 }logic_name;	
 

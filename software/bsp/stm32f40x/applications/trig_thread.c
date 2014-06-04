@@ -1,16 +1,34 @@
 #include "stm32f4xx.h"
 #include "rtthread.h"
+#include "typedefs.h"
+#include "variables.h"
 
+
+rt_event_t trig_event;
 
 void rt_trig_thread_entry(void* parameter)
 {	
 	rt_uint32_t e = 0;
 	rt_thread_delay(1);
-
+	trig_event = rt_event_create("trig_event", RT_IPC_FLAG_FIFO);
+	
 	while(1)
 	{
+		rt_event_recv(trig_event,manual_trig | exit_trig,
+			RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, RT_WAITING_FOREVER, &e);
 		
-		rt_thread_delay(5);
+		switch(e)
+		{
+			case manual_trig:trig_laser_out(frq);
+				break;
+			case exit_trig:trig_laser_out(0);
+				break;
+			case 0:break;
+			default:break;
+		}
+		
+		
+//		rt_thread_delay(5);
 	}
 }
 

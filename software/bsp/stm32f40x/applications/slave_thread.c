@@ -80,7 +80,8 @@ void check_logic(void)
 	{
 		start_flag = 0;
 		step = 0;
-//		xMBUtilSetBits( ucSCoilBuf, standby_s, 1, 0 );
+		xMBUtilSetBits( ucSCoilBuf, standby_s, 1, 0 );
+		xMBUtilSetBits( ucSCoilBuf, laser_sw, 1, 0 );
 		xMBUtilSetBits( Y, Y8, 7, 0X08 );
 	}
 	
@@ -90,6 +91,14 @@ void check_logic(void)
 		
 		if(usSRegHoldBuf[remain_time] == 0)
 		soft_count_flag = 0;
+	}
+	
+	if(frq != usSRegHoldBuf[frq_set])
+	{
+		if(usSRegHoldBuf[frq_set] <=usSRegHoldBuf[frq_max] )
+		{
+			frq = usSRegHoldBuf[frq_set];
+		}
 	}
 	
 }
@@ -118,11 +127,30 @@ void operation(void)
 		xMBUtilSetBits( ucSCoilBuf, save_s, 1, 0 );
 	}
 	
-//	if (xMBUtilGetBits(ucSCoilBuf, standby_s, 1 ) == 1)
+//	if (xMBUtilGetBits(ucSCoilBuf, start_up_s, 1 ) == 0)
 //	{
-//		xMBUtilGetBits(ucSCoilBuf, standby_s, 1 );
+//		xMBUtilSetBits( ucSCoilBuf, standby_s, 1, 0 );
 //	}
 
+	if (xMBUtilGetBits(ucSCoilBuf, laser_sw, 1 ) == 1)
+	{
+		if(laser_flag == 0)
+		{
+			rt_event_send(trig_event, manual_trig);
+			xMBUtilSetBits( ucSCoilBuf, laser_sw, 1, (frq != 0)?1:0 );
+			laser_flag = 1;
+		}
+	}
+	else
+	{
+		if(laser_flag)
+		stop_trigger();
+	}
+//	if(1)
+//	{
+//	
+//	}
+	
 	xMBUtilSetBits( ucSCoilBuf, red_off_ena, 1, 
 	xMBUtilGetBits(ucSCoilBuf, start_up_s, 1 )&&xMBUtilGetBits(ucSCoilBuf, red_sw, 1 )&&
 	(0 == usSRegHoldBuf[tr_mode]) );
@@ -130,9 +158,6 @@ void operation(void)
 	xMBUtilSetBits( ucSCoilBuf, red_on_ena, 1, 
 	xMBUtilGetBits(ucSCoilBuf, start_up_s, 1 )&&(0 == xMBUtilGetBits(ucSCoilBuf, red_sw, 1 ))&&
 	(0 == usSRegHoldBuf[tr_mode]));
-	
-	buf = xMBUtilGetBits(ucSCoilBuf, standby_s, 1 );
-	buf2 = ~buf;
 	
 	xMBUtilSetBits( ucSCoilBuf, ready_ena, 1, started_flag &&(0 == xMBUtilGetBits(ucSCoilBuf, standby_s, 1 )));
 	
@@ -170,6 +195,7 @@ void rt_slave_thread_entry(void* parameter)
 	eMBEnable(  );
 	rt_thread_delay(1);
 	usSRegHoldBuf[wave_sel] = 1;
+	usSRegHoldBuf[frq_max] = 100;
 //	xMBUtilSetBits( ucSCoilBuf, standby_s, 1, 1 );
 	while(1)
 	{

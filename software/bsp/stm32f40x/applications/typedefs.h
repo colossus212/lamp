@@ -6,11 +6,15 @@
 #define time_max	25000
 #define scheme_max 32 
 
-#define PIN_LASER		GPIO_Pin_6
-#define PIN_RED			GPIO_Pin_5
-#define PIN_MSEL0		GPIO_Pin_4
-#define PIN_MSEL1		GPIO_Pin_3
-#define PIN_MSEL2		GPIO_Pin_2
+//#define PIN_LASER		GPIO_Pin_6
+//#define PIN_RED		GPIO_Pin_5
+//#define PIN_MSEL0		GPIO_Pin_4
+//#define PIN_MSEL1		GPIO_Pin_3
+//#define PIN_MSEL2		GPIO_Pin_2
+
+#define manual_trig (1<<1)//液晶屏触发
+#define exit_trig	(1<<2)//打标卡触发
+
 
 typedef struct pwm_struct
 {
