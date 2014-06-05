@@ -127,12 +127,10 @@ void operation(void)
 		xMBUtilSetBits( ucSCoilBuf, save_s, 1, 0 );
 	}
 	
-//	if (xMBUtilGetBits(ucSCoilBuf, start_up_s, 1 ) == 0)
-//	{
-//		xMBUtilSetBits( ucSCoilBuf, standby_s, 1, 0 );
-//	}
+	logic_out(red_pin, xMBUtilGetBits(ucSCoilBuf, red_sw, 1 ));
 
-	if (xMBUtilGetBits(ucSCoilBuf, laser_sw, 1 ) == 1)
+	
+	if (xMBUtilGetBits(ucSCoilBuf, laser_sw, 1 )&&(xMBUtilGetBits(ucSCoilBuf, standby_s, 1 )))
 	{
 		if(laser_flag == 0)
 		{

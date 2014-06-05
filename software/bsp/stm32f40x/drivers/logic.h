@@ -18,12 +18,12 @@ typedef enum logic_name
 	mcu_run 	= 0,
 	mcu_err		= 1,
 	mcu_trig	= 2,
-	mcu_wait	= 3,
-	
-//	pwm_en		= 4,
-	
+	mcu_wait	= 3,	
+//	pwm_en		= 4,	
 	usart3_dir 	= 5,
 	eeprom_wp 	= 6,
+	red_pin		= 7,
+	shutter_pin = 8,//øÏ√≈
 	/*in*/
 	
 }logic_name;	

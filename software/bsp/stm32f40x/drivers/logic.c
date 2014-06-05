@@ -5,7 +5,7 @@
 #include "color.h"
 
 #define in_size 4
-#define out_size 7
+#define out_size 9
 
 rt_event_t exit_event;
 
@@ -14,7 +14,8 @@ logic_io GPIO_in[in_size] =
 	
 logic_io GPIO_out[out_size] = 
 	{{GPIOG,GPIO_Pin_10},{GPIOG,GPIO_Pin_11},{GPIOE,GPIO_Pin_0},{GPIOE,GPIO_Pin_1},
-	 {GPIOG,GPIO_Pin_8}, {GPIOE,GPIO_Pin_13},{GPIOB,GPIO_Pin_5}};//各脚功见LOGIC.H
+	 {GPIOG,GPIO_Pin_8}, {GPIOE,GPIO_Pin_13},{GPIOB,GPIO_Pin_5},{GPIOC,GPIO_Pin_4},
+	 {GPIOC,GPIO_Pin_5}};//各脚功见LOGIC.H
 
 void logic_init(void)
 {
@@ -28,7 +29,7 @@ void logic_init(void)
 #ifdef STM32F4XX
 //	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE);
-//	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC, ENABLE);
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC, ENABLE);
 //	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOD, ENABLE);
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOE, ENABLE);
 //	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOF, ENABLE);
