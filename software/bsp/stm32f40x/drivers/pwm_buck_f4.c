@@ -12,16 +12,16 @@
 #define IGBT_FREQ 20000
 #define pwm_period (SystemCoreClock / IGBT_FREQ - 1)
 
-#define CONFIG_DEFAULT_L_KP						4
-#define CONFIG_DEFAULT_L_KI						0.4
+#define CONFIG_DEFAULT_L_KP						0.45
+#define CONFIG_DEFAULT_L_KI						0.3
 #define CONFIG_DEFAULT_L_KD						0.0//0.01
 #define CONFIG_DEFAULT_P_KP						2
 #define CONFIG_DEFAULT_P_KI						0.01
 #define CONFIG_DEFAULT_P_KD						1
 
-arm_pid_instance_f32 L1_Pid_Instance;//L1氙灯电流PID参数
-arm_pid_instance_f32 L2_Pid_Instance;//L2氙灯电流PID参数
-arm_pid_instance_f32 P_Pid_Instance;//P背光能量PID参数
+static arm_pid_instance_f32 L1_Pid_Instance;//L1氙灯电流PID参数
+static arm_pid_instance_f32 L2_Pid_Instance;//L2氙灯电流PID参数
+static arm_pid_instance_f32 P_Pid_Instance;//P背光能量PID参数
 
 float pid_out[500] = {0};
 float p_get[500] = {0};
@@ -45,6 +45,16 @@ static __inline void init_pid(void)
 	arm_pid_init_f32 (&P_Pid_Instance, 1);//初始化PID参数
 }
 
+void test_init_pid(uint16_t p, uint16_t i, uint16_t d)
+{
+	L1_Pid_Instance.Kp = (float)p/100;
+	L1_Pid_Instance.Ki = (float)i/100;
+	L1_Pid_Instance.Kd = (float)d/100;
+	arm_pid_init_f32 (&L1_Pid_Instance, 1);//初始化PID参数
+}
+#ifdef FINSH_USING_SYMTAB
+FINSH_FUNCTION_EXPORT(test_init_pid, test_init_pid );
+#endif
 void pwm_init(void)
 {
 	GPIO_InitTypeDef GPIO_InitStructure;
@@ -150,7 +160,7 @@ void control_current(float I1, uint8_t pwm_struct_num)//I1 is real current, unit
 	if(interrupt_times < pwm_struct[pwm_struct_num]. positive_pulse)
 	{
 		pwm_struct[pwm_struct_num].busy_flag = 1;
-		interrupt_times++;
+		
 		{			
 			pwm_ena(1);
 			ref_percent = (float)pwm_struct[pwm_struct_num].p_array[interrupt_times]/1000;
@@ -163,6 +173,7 @@ void control_current(float I1, uint8_t pwm_struct_num)//I1 is real current, unit
 			p_get[interrupt_times] = i_percent;
 			if(percent > 0.98f) percent = 0.98f;
 			if(percent < 0.0f) percent = 0;
+			interrupt_times++;
 		}
 		
 	}
@@ -180,6 +191,7 @@ void control_current(float I1, uint8_t pwm_struct_num)//I1 is real current, unit
 			interrupt_times = 0;
 			pwm_struct[pwm_struct_num].busy_flag = 0;
 			arm_pid_reset_f32 (&L1_Pid_Instance);
+//			init_pid();
 		}
 	}
 	
@@ -192,10 +204,10 @@ FINSH_FUNCTION_EXPORT(control_current, control_current i1 i2);
 #endif
 
 extern void trig_adc(void);
-extern uint16_t adc_get(uint8_t ch);
+extern float adc_get(uint8_t ch);
 void TIM8_UP_TIM13_IRQHandler(void)
 {
-	uint16_t I1 = 0, I2 = 0, power = 0;
+	float I1 = 0, I2 = 0, power = 0;
 	rt_interrupt_enter();
 //	logic_out(1,1);
 	I1 = adc_get(0);
@@ -240,7 +252,7 @@ void print_pidout(void)
 	for(i = 0;i<500;i++)
 	{
 		rt_kprintf("pidout[%.3d] = %.4d%, i_percent = %.4d%, set_percent = %.4d%,\n",
-		i,(uint16_t)(pid_out[i]*100),(uint16_t)(p_get[i]/10),pwm_struct[0].p_array[i]/10);
+		i,(uint16_t)(pid_out[i]*100),(uint16_t)(p_get[i]*100),pwm_struct[0].p_array[i]/10);
 	}
 }
 #ifdef FINSH_USING_SYMTAB

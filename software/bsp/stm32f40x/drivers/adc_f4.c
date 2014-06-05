@@ -199,9 +199,9 @@ void adc_initialize(void)
 #endif	
 	/* ADC Common Init **********************************************************/
 	ADC_CommonInitStructure.ADC_Mode = ADC_Mode_Independent;//ADC独立模式
-	ADC_CommonInitStructure.ADC_Prescaler = ADC_Prescaler_Div4;//ADC采样周期6分频  APB2 / 4 = 84M / 4 = 21M < 36M
+	ADC_CommonInitStructure.ADC_Prescaler = ADC_Prescaler_Div8;//ADC采样周期6分频  APB2 / 4 = 84M / 4 = 21M < 36M
 	ADC_CommonInitStructure.ADC_DMAAccessMode = ADC_DMAAccessMode_Disabled;
-	ADC_CommonInitStructure.ADC_TwoSamplingDelay = ADC_TwoSamplingDelay_5Cycles;//单次采样无效
+	ADC_CommonInitStructure.ADC_TwoSamplingDelay = ADC_TwoSamplingDelay_10Cycles;//单次采样无效
 	ADC_CommonInit(&ADC_CommonInitStructure);
 	
 	/* ADC1 Init ****************************************************************/
@@ -235,17 +235,19 @@ void trig_adc(void)//must close external trigger in ADC_Init()
 FINSH_FUNCTION_EXPORT(trig_adc, trig_adc);
 #endif
 
-uint16_t adc_get(uint8_t ch)
+float adc_get(uint8_t ch)
 {
 	uint8_t i = 0;
 	q15_t mean = 0;
 	q15_t rms = 0;
+	float data = 0;
 //	trig_adc();
 	switch (ch)
 	{
 		case 0: arm_mean_q15(ADC1ConvertedValue, 15, &mean);
 				arm_rms_q15(ADC1ConvertedValue, 15, &rms);
-				mean = mean*12500/4095/33;//I = code*2.5V/4095/33R*5000,unit 1A
+		
+				data = (float)mean*12500/4095/33;//I = code*2.5V/4095/33R*5000,unit 1A
 //				rt_kprintf("mean = %d, rms = %d", mean,rms);
 			break;
 		case 1: arm_mean_q15(ADC2ConvertedValue , 15, &mean);
@@ -265,7 +267,7 @@ uint16_t adc_get(uint8_t ch)
 		default:
 			break;
 	}
-	return mean;
+	return data;
 }
 #ifdef FINSH_USING_SYMTAB
 FINSH_FUNCTION_EXPORT(adc_get, adc_get(uint8_t ch));

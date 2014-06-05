@@ -28,7 +28,7 @@ void rt_trig_thread_entry(void* parameter)
 		}
 		
 		
-//		rt_thread_delay(5);
+		rt_thread_delay(50);
 	}
 }
 

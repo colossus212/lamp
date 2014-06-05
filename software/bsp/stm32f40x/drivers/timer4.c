@@ -107,6 +107,7 @@ FINSH_FUNCTION_EXPORT(trig_laser_out, trig_mode single 0 serial 2);
 void stop_trigger(void)
 {
 	laser_flag = 0;
+	xMBUtilSetBits( ucSCoilBuf, laser_sw, 1, 0 );
 //	TIM_Cmd(TIM8, DISABLE);
 	TIM_Cmd(TIM4, DISABLE);
 }
