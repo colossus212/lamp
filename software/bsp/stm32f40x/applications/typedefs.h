@@ -29,13 +29,14 @@ typedef struct pwm_struct
 	uint16_t positive_pulse;
 	uint16_t negative_pulse;
 	
-	uint16_t p_array[array_num];//precision is 0.1%//the last is 0//50us*500=25ms
+	float p_array[array_num];//0.0-0.999
 }pwm_st;
 
 typedef struct program
 {
 	uint16_t percent[16];	//
 	uint16_t t[16];			//
+//	uint16_t current_max;
 	uint16_t CRC16_data;
 }program;
 

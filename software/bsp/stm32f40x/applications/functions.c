@@ -3,13 +3,15 @@
 #include "my_math.h"
 #include "variables.h"
 
+uint16_t array_buf[array_num] = {0};
+
 void calculate_array(uint8_t num)
 { 
 	uint16_t k = 0;
 	uint16_t *p ;
 	
-	rt_memset(pwm_struct[num].p_array, 0, 500);//将数组清0
-	p = pwm_struct[num].p_array;
+	rt_memset(array_buf, 0, array_num*2);//将数组清0
+	p = array_buf;
 	
 	linear_offset( p , 0,
 		program_data[num].percent[0], 
@@ -23,7 +25,12 @@ void calculate_array(uint8_t num)
 		p += (program_data[num].t[k+1] - program_data[num].t[k])*2;//50us间隔
 
 	}
-	pwm_struct[num].p_array[499] = 0;//数组最后一字节为0；
+	for(k = 0; k <array_num; k++ )
+	{
+		pwm_struct[num].p_array[k] = (float)array_buf[k]/1000; 
+	}
+	
+	pwm_struct[num].p_array[499] = 0.0f;//数组最后一字节为0；
 	
 	pwm_struct[num].positive_pulse = 500;
 	pwm_struct[num].negative_pulse = 10;
@@ -36,7 +43,7 @@ void print_array(uint8_t num)
 	if (num > 0) num = num - 1;
 	for(i = 0; i < 500; i++)
 	{
-		rt_kprintf("array[%d] = %d\n",i, pwm_struct[num].p_array[i]);
+		rt_kprintf("array[%d] = %d\n",i, (uint16_t)(pwm_struct[num].p_array[i]*100));
 	}
 }
 #ifdef FINSH_USING_SYMTAB

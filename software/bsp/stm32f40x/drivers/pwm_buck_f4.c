@@ -94,34 +94,6 @@ void pwm_init(void)
 
 }
 
-//void pid_1(void)
-//{
-//	uint16_t i = 0;
-//}
-
-//void pid_2(void)
-//{
-//	uint16_t i = 0;
-//}
-
-//void cal_array(uint16_t I, uint16_t width)
-//{
-//	uint16_t i = 0;
-//	if(I > 3500) I = 3500;
-//	for(i = 0; i < 500; i++)
-//	{
-//		buck_part.p_array[i] = I;
-//	}
-//	buck_part.positive_pulse = width/50;
-//	if(buck_part.positive_pulse >= 500) buck_part.positive_pulse = 499;
-//	buck_part.negative_pulse = 500;
-//	
-////	pwm_ena(1);
-//}
-//#ifdef FINSH_USING_SYMTAB
-//FINSH_FUNCTION_EXPORT(cal_array, cal_array 0-3500*0.1A width:0-25000us);
-//#endif
-
 float	Kp3 = 0.30f, Ki3 = 0.25f, Kd3 = 0.0f;
 uint8_t pid_flag = 0;//用于清零积分量。
 void set_pid(uint32_t p, uint32_t i, uint32_t d)
@@ -147,14 +119,14 @@ float_t pid3(float err)//in and REF is percent
 	Error = err;
 	if(pid_flag) {IntTerm_C3 = 0;PrevError_C3 = 0; pid_flag = 0;}
 	
-	if(Error <= 600)//积分分离
+//	if(Error <= 600)//积分分离
 	IntTerm_C3 += Ki3*Error;//IntTerm_C = Ki*(e(0) + e(1) + ... + e(k))
 	Output = Kp3 * Error;
 //	test_1 = IntTerm_C;
-	if(IntTerm_C3 > 1.0f)//积分限幅
-	{
-		IntTerm_C3 = 1.0f;
-	}
+//	if(IntTerm_C3 > 1.0f)//积分限幅
+//	{
+//		IntTerm_C3 = 1.0f;
+//	}
 //	if(IntTerm_C3 < (double)min)
 //	{
 //		IntTerm_C3 = (double)min;
@@ -185,25 +157,31 @@ void control_current(float I1, uint8_t pwm_struct_num)//I1 is real current, unit
 	float i_percent = 0,ref_percent = 0;
 	float error_pid = 0;
 	static uint16_t interrupt_times = 0;
-//	logic_out(1,1);
-	i_percent = I1/((float)usSRegHoldBuf[current_peak]/10);
+	
+//	i_percent = I1/((float)usSRegHoldBuf[current_peak]/10);
 	
 	if(interrupt_times < pwm_struct[pwm_struct_num]. positive_pulse)
 	{
-		pwm_struct[pwm_struct_num].busy_flag = 1;
-		
-		{			
+		logic_out(1,1);
+		if(pwm_struct[pwm_struct_num].busy_flag == 0)
+		{
+			pwm_struct[pwm_struct_num].busy_flag = 1;
 			pwm_ena(1);
-			ref_percent = (float)pwm_struct[pwm_struct_num].p_array[interrupt_times]/1000;
-			error_pid = ref_percent - i_percent;
+		}
+		{						
+//			ref_percent = (float)pwm_struct[pwm_struct_num].p_array[interrupt_times]/1000;
+//			error_pid = pwm_struct[pwm_struct_num].p_array[interrupt_times] - i_percent;
+			error_pid = pwm_struct[pwm_struct_num].p_array[interrupt_times] - I1;
 			percent = pid3(error_pid);			
 //			if(interrupt_times < 20) percent = 0.98f;//测试98%占空比时电流最大有多大.2ms
 //			else percent = 0;
 			pid_out[interrupt_times] = percent;
-			p_get[interrupt_times] = i_percent;
+			p_get[interrupt_times] = I1;
+//			p_get[interrupt_times] = i_percent;
 			if(percent > 0.98f) percent = 0.98f;
 			if(percent < 0.0f) percent = 0;
 			interrupt_times++;
+			if(interrupt_times >= 40)	logic_out(1,0);
 		}
 		
 	}
@@ -222,12 +200,13 @@ void control_current(float I1, uint8_t pwm_struct_num)//I1 is real current, unit
 			pid_flag = 1;
 			pwm_struct[pwm_struct_num].busy_flag = 0;
 //			init_pid();
+
 		}
 	}
 	
 	TIM_SetCompare1(TIM8, (uint16_t)(float)(percent * pwm_period));
 
-//	logic_out(1,0);
+
 }
 #ifdef FINSH_USING_SYMTAB
 FINSH_FUNCTION_EXPORT(control_current, control_current i1 i2);
@@ -282,7 +261,7 @@ void print_pidout(void)
 	for(i = 0;i<500;i++)
 	{
 		rt_kprintf("pidout[%.3d] = %.4d%, i_percent = %.4d%, set_percent = %.4d%,\n",
-		i,(uint16_t)(pid_out[i]*100),(uint16_t)(p_get[i]*100),pwm_struct[0].p_array[i]/10);
+		i,(uint16_t)(pid_out[i]*100),(uint16_t)(p_get[i]*100),(uint16_t)(pwm_struct[0].p_array[i]*100));
 	}
 }
 #ifdef FINSH_USING_SYMTAB

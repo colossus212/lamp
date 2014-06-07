@@ -3,6 +3,7 @@
 #include "logic.h"
 #include "rtthread.h"
 #include "finsh.h"
+#include "variables.h"
 
 #define adc_size 8
 typedef struct adc_io
@@ -244,10 +245,10 @@ float adc_get(uint8_t ch)
 //	trig_adc();
 	switch (ch)
 	{
-		case 0: arm_mean_q15(ADC1ConvertedValue, 10, &mean);
+		case 0: arm_mean_q15(ADC1ConvertedValue, 8, &mean);
 //				arm_rms_q15(ADC1ConvertedValue, 10, &rms);
-		
-				data = (float)mean*12500/4095/25;//I = code*2.5V/4095/25R*5000,unit 1A
+		//0.01221/usSRegHoldBuf[current_peak] = 125000/4095/25 = 12500*10/4095/25/usSRegHoldBuf[current_peak]
+				 data = (float)mean*1.221f/usSRegHoldBuf[current_peak];//I = code*2.5V/4095/25R*5000,unit 1A
 //				rt_kprintf("mean = %d, rms = %d", mean,rms);
 			break;
 		case 1: arm_mean_q15(ADC2ConvertedValue , 15, &mean);

@@ -23,7 +23,7 @@ void timer4_init(void)
 	TIM_TimeBaseInit(TIM4, &TIM_TimeBaseStructure);
 	
 	NVIC_InitStructure.NVIC_IRQChannel = TIM4_IRQn;
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
 	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
 	NVIC_Init(&NVIC_InitStructure);
@@ -59,7 +59,7 @@ void TIM4_IRQHandler(void)
 		}	
 	}
 
-	logic_out(1,(test_frq++%2));
+//	logic_out(1,(test_frq++%2));
 	rt_interrupt_leave();
 }
 
