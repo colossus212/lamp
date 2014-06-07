@@ -473,6 +473,11 @@
               <FileType>1</FileType>
               <FilePath>.\applications\trig_thread.c</FilePath>
             </File>
+            <File>
+              <FileName>check_thread.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\check_thread.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

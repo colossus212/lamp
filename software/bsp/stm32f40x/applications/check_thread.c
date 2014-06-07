@@ -115,50 +115,54 @@ void operation(void)
 		select_pwm = wave;		
 		xMBUtilSetBits( ucSCoilBuf, save_s, 1, 0 );
 	}
-	
-	logic_out(red_pin, xMBUtilGetBits(ucSCoilBuf, red_sw, 1 ));
-
-	
-	if (xMBUtilGetBits(ucSCoilBuf, laser_sw, 1 )&&(xMBUtilGetBits(ucSCoilBuf, standby_s, 1 )))
-	{	
-		if(laser_flag == 0)
-		{	
-			rt_event_send(trig_event, manual_trig);
-			laser_flag = 1;
-		}
-		xMBUtilSetBits( ucSCoilBuf, laser_sw, 1, (frq != 0)?1:0 );		
-	}
-	else
+		logic_out(shutter_pin, 1);		
+	if((2 == usSRegHoldBuf[tr_mode]))
 	{
-		if(laser_flag)
-		stop_trigger();
+
+		logic_out(red_pin, xMBUtilGetBits(ucSCoilBuf, red_sw, 1 ));
+		if (xMBUtilGetBits(ucSCoilBuf, laser_sw, 1 )&&(xMBUtilGetBits(ucSCoilBuf, standby_s, 1 )))
+		{	
+			if(laser_flag == 0)
+			{	
+				rt_event_send(trig_event, manual_trig);
+				laser_flag = 1;
+			}
+			xMBUtilSetBits( ucSCoilBuf, laser_sw, 1, (frq != 0)?1:0 );		
+		}
+		else
+		{
+			if(laser_flag)
+			stop_trigger();
+		}
 	}
+	
+	
 //	if(1)
 //	{
 //	
 //	}
 	
 	xMBUtilSetBits( ucSCoilBuf, red_off_ena, 1, 
-	xMBUtilGetBits(ucSCoilBuf, start_up_s, 1 )&&xMBUtilGetBits(ucSCoilBuf, red_sw, 1 )&&
-	(0 == usSRegHoldBuf[tr_mode]) );
+	/*xMBUtilGetBits(ucSCoilBuf, start_up_s, 1 )&&*/xMBUtilGetBits(ucSCoilBuf, red_sw, 1 )&&
+	(2 == usSRegHoldBuf[tr_mode]) );
 	
 	xMBUtilSetBits( ucSCoilBuf, red_on_ena, 1, 
-	xMBUtilGetBits(ucSCoilBuf, start_up_s, 1 )&&(0 == xMBUtilGetBits(ucSCoilBuf, red_sw, 1 ))&&
-	(0 == usSRegHoldBuf[tr_mode]));
+	/*xMBUtilGetBits(ucSCoilBuf, start_up_s, 1 )&&*/(0 == xMBUtilGetBits(ucSCoilBuf, red_sw, 1 ))&&
+	(2 == usSRegHoldBuf[tr_mode]));
 	
 	xMBUtilSetBits( ucSCoilBuf, ready_ena, 1, started_flag &&(0 == xMBUtilGetBits(ucSCoilBuf, standby_s, 1 )));
 	
 	xMBUtilSetBits( ucSCoilBuf, stand_by_ena, 1, started_flag &&(1 == xMBUtilGetBits(ucSCoilBuf, standby_s, 1)));
 	
 	xMBUtilSetBits( ucSCoilBuf, laser_on_ena, 1, xMBUtilGetBits(ucSCoilBuf, standby_s, 1) 
-					&&(0 == usSRegHoldBuf[tr_mode])&&(0 == xMBUtilGetBits(ucSCoilBuf, laser_sw, 1 )));
+					&&(2 == usSRegHoldBuf[tr_mode])&&(0 == xMBUtilGetBits(ucSCoilBuf, laser_sw, 1 )));
 	
 	xMBUtilSetBits( ucSCoilBuf, laser_off_ena, 1, xMBUtilGetBits(ucSCoilBuf, standby_s, 1) 
-					&&(0 == usSRegHoldBuf[tr_mode])&&(1 == xMBUtilGetBits(ucSCoilBuf, laser_sw, 1)));	
+					&&(2 == usSRegHoldBuf[tr_mode])&&(1 == xMBUtilGetBits(ucSCoilBuf, laser_sw, 1)));	
 //	xMBUtilSetBits( ucSCoilBuf, ready_ena, 1, 1 );
 //	xMBUtilSetBits( ucSCoilBuf, stand_by_ena, 1, 1 );
-	xMBUtilSetBits( ucSCoilBuf, ext_ena, 1, (~usSRegHoldBuf[tr_mode]) );
-	xMBUtilSetBits( ucSCoilBuf, int_ena, 1, usSRegHoldBuf[tr_mode] );
+	xMBUtilSetBits( ucSCoilBuf, ext_ena, 1, (1 != usSRegHoldBuf[tr_mode]) );
+	xMBUtilSetBits( ucSCoilBuf, int_ena, 1, (2 != usSRegHoldBuf[tr_mode]) );
 	
 }
 
@@ -176,8 +180,9 @@ void rt_check_thread_entry(void* parameter)
 		xMBUtilSetBits( ucSCoilBuf, x16_s, 8, xMBUtilGetBits(ucMCoilBuf[0], X16, 8 ) );
 		xMBUtilSetBits( ucSCoilBuf, y0_s, 8, Y[0] );
 		xMBUtilSetBits( ucSCoilBuf, y8_s, 8, Y[1] );
-		xMBUtilSetBits( ucSCoilBuf, io_pg2, 5, (uint8_t)(GPIO_ReadInputData( GPIOG)>>2) );
-		xMBUtilSetBits( ucSCoilBuf, io_pd8, 8, (uint8_t)(GPIO_ReadInputData( GPIOD)>>8) );
+		xMBUtilSetBits( ucSCoilBuf, io_pg2, 5, (uint8_t)(~GPIO_ReadInputData( GPIOG)>>2) );
+		xMBUtilSetBits( ucSCoilBuf, io_pd10, 6, (uint8_t)(~GPIO_ReadInputData( GPIOD)>>10) );
+		xMBUtilSetBits( ucSCoilBuf, io_pd8, 2, (uint8_t)(GPIO_ReadInputData( GPIOD)>>8) );
 		xMBUtilSetBits( ucSCoilBuf, io_pc4, 2, (uint8_t)(GPIO_ReadInputData( GPIOC)>>4) );
 		xMBUtilSetBits( ucSCoilBuf, soft_start, 1, xMBUtilGetBits(ucMCoilBuf[0], X22, 1 ) );
 		xMBUtilSetBits( ucSCoilBuf, charge_sta, 1, xMBUtilGetBits(Y, 14, 1 ) );

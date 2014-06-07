@@ -12,49 +12,9 @@
 #define IGBT_FREQ 20000
 #define pwm_period (SystemCoreClock / IGBT_FREQ - 1)
 
-#define CONFIG_DEFAULT_L_KP						0.45
-#define CONFIG_DEFAULT_L_KI						0.3
-#define CONFIG_DEFAULT_L_KD						0.0//0.01
-#define CONFIG_DEFAULT_P_KP						2
-#define CONFIG_DEFAULT_P_KI						0.01
-#define CONFIG_DEFAULT_P_KD						1
-
-static arm_pid_instance_f32 L1_Pid_Instance;//L1氙灯电流PID参数
-static arm_pid_instance_f32 L2_Pid_Instance;//L2氙灯电流PID参数
-static arm_pid_instance_f32 P_Pid_Instance;//P背光能量PID参数
-
 float pid_out[500] = {0};
 float p_get[500] = {0};
 
-static __inline void init_pid(void)
-{//初始化PID使用默认参数填充结构体
-	L1_Pid_Instance.Kp = CONFIG_DEFAULT_L_KP;
-	L1_Pid_Instance.Ki = CONFIG_DEFAULT_L_KI;
-	L1_Pid_Instance.Kd = CONFIG_DEFAULT_L_KD;
-	
-	L2_Pid_Instance.Kp = CONFIG_DEFAULT_L_KP;
-	L2_Pid_Instance.Ki = CONFIG_DEFAULT_L_KI;
-	L2_Pid_Instance.Kd = CONFIG_DEFAULT_L_KD;
-	
-	P_Pid_Instance.Kp = CONFIG_DEFAULT_P_KP;
-	P_Pid_Instance.Ki = CONFIG_DEFAULT_P_KI;
-	P_Pid_Instance.Kd = CONFIG_DEFAULT_P_KD;
-	
-	arm_pid_init_f32 (&L1_Pid_Instance, 1);//初始化PID参数
-	arm_pid_init_f32 (&L2_Pid_Instance, 1);//初始化PID参数
-	arm_pid_init_f32 (&P_Pid_Instance, 1);//初始化PID参数
-}
-
-void test_init_pid(uint16_t p, uint16_t i, uint16_t d)
-{
-	L1_Pid_Instance.Kp = (float)p/100;
-	L1_Pid_Instance.Ki = (float)i/100;
-	L1_Pid_Instance.Kd = (float)d/100;
-	arm_pid_init_f32 (&L1_Pid_Instance, 1);//初始化PID参数
-}
-#ifdef FINSH_USING_SYMTAB
-FINSH_FUNCTION_EXPORT(test_init_pid, test_init_pid );
-#endif
 void pwm_init(void)
 {
 	GPIO_InitTypeDef GPIO_InitStructure;
@@ -67,8 +27,6 @@ void pwm_init(void)
 	
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC, ENABLE);
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_TIM8, ENABLE);////APB2 max frquency is 84M
-	
-	init_pid();
 	
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
@@ -136,6 +94,79 @@ void pwm_init(void)
 
 }
 
+//void pid_1(void)
+//{
+//	uint16_t i = 0;
+//}
+
+//void pid_2(void)
+//{
+//	uint16_t i = 0;
+//}
+
+//void cal_array(uint16_t I, uint16_t width)
+//{
+//	uint16_t i = 0;
+//	if(I > 3500) I = 3500;
+//	for(i = 0; i < 500; i++)
+//	{
+//		buck_part.p_array[i] = I;
+//	}
+//	buck_part.positive_pulse = width/50;
+//	if(buck_part.positive_pulse >= 500) buck_part.positive_pulse = 499;
+//	buck_part.negative_pulse = 500;
+//	
+////	pwm_ena(1);
+//}
+//#ifdef FINSH_USING_SYMTAB
+//FINSH_FUNCTION_EXPORT(cal_array, cal_array 0-3500*0.1A width:0-25000us);
+//#endif
+
+float	Kp3 = 0.30f, Ki3 = 0.25f, Kd3 = 0.0f;
+uint8_t pid_flag = 0;//用于清零积分量。
+void set_pid(uint32_t p, uint32_t i, uint32_t d)
+{
+	Kp3 = (float)p/10000;
+	Ki3 = (float)i/10000;
+	Kd3 = (float)d/10000;
+//	S3->Kp = (float32_t)p/10000;
+//	S3->Ki = (float32_t)i/10000;
+//	S3->Kd = (float32_t)d/10000;
+//	arm_pid_init_f32( S3,1);
+}
+#ifdef FINSH_USING_SYMTAB
+FINSH_FUNCTION_EXPORT(set_pid, set_pid Kp3=p/10000 Ki3=i/10000 Kd3=d/10000);
+#endif
+////float max = 1000, min = 200;
+float_t pid3(float err)//in and REF is percent
+{
+	static float PrevError_C3 = 0, IntTerm_C3 = 0/*sum of integral*/;
+	float Error = 0, Output = 0;//, R = 0;
+
+////	R = (float)(Ref/10);
+	Error = err;
+	if(pid_flag) {IntTerm_C3 = 0;PrevError_C3 = 0; pid_flag = 0;}
+	
+	if(Error <= 600)//积分分离
+	IntTerm_C3 += Ki3*Error;//IntTerm_C = Ki*(e(0) + e(1) + ... + e(k))
+	Output = Kp3 * Error;
+//	test_1 = IntTerm_C;
+	if(IntTerm_C3 > 1.0f)//积分限幅
+	{
+		IntTerm_C3 = 1.0f;
+	}
+//	if(IntTerm_C3 < (double)min)
+//	{
+//		IntTerm_C3 = (double)min;
+//	}
+  Output += IntTerm_C3;
+  Output += Kd3 * (Error - PrevError_C3);
+
+  PrevError_C3 = Error;
+
+  return (Output);//u(k)
+}
+
 void control_power(uint16_t I1, uint8_t pwm_struct_num)
 {
 	
@@ -155,7 +186,7 @@ void control_current(float I1, uint8_t pwm_struct_num)//I1 is real current, unit
 	float error_pid = 0;
 	static uint16_t interrupt_times = 0;
 //	logic_out(1,1);
-	i_percent = I1/350;//I1*1000/350,I1 uint 1A ,i_percent unit 0.1%
+	i_percent = I1/((float)usSRegHoldBuf[current_peak]/10);
 	
 	if(interrupt_times < pwm_struct[pwm_struct_num]. positive_pulse)
 	{
@@ -165,8 +196,7 @@ void control_current(float I1, uint8_t pwm_struct_num)//I1 is real current, unit
 			pwm_ena(1);
 			ref_percent = (float)pwm_struct[pwm_struct_num].p_array[interrupt_times]/1000;
 			error_pid = ref_percent - i_percent;
-			percent = arm_pid_f32(&L1_Pid_Instance, error_pid);
-//			percent = pid3(i_percent, pwm_struct[pwm_struct_num].p_array[interrupt_times]);			
+			percent = pid3(error_pid);			
 //			if(interrupt_times < 20) percent = 0.98f;//测试98%占空比时电流最大有多大.2ms
 //			else percent = 0;
 			pid_out[interrupt_times] = percent;
@@ -189,8 +219,8 @@ void control_current(float I1, uint8_t pwm_struct_num)//I1 is real current, unit
 			TIM_Cmd(TIM8, DISABLE);
 			pwm_ena(0);
 			interrupt_times = 0;
+			pid_flag = 1;
 			pwm_struct[pwm_struct_num].busy_flag = 0;
-			arm_pid_reset_f32 (&L1_Pid_Instance);
 //			init_pid();
 		}
 	}
@@ -211,8 +241,8 @@ void TIM8_UP_TIM13_IRQHandler(void)
 	rt_interrupt_enter();
 //	logic_out(1,1);
 	I1 = adc_get(0);
-	I2 = adc_get(1);
-	power = adc_get(2);
+//	I2 = adc_get(1);
+//	power = adc_get(2);
 	trig_adc();
 	if(TIM_GetITStatus(TIM8, TIM_IT_Update) != RESET)
 	{	
@@ -262,8 +292,24 @@ FINSH_FUNCTION_EXPORT(print_pidout, print_pidout);
 
 
 
-
-
+void pp(void)
+{
+	uint8_t i = 0, j = 0;
+	for(j = 50; j > 0; j--)
+	for(i = 0; i < 80; i++)
+	{
+		if((uint16_t)(p_get[i]*usSRegHoldBuf[current_peak]/100) >= j)
+		rt_kprintf("*");
+		else
+		rt_kprintf(" ");
+		if(i >= 80-1) rt_kprintf("\n");
+	}
+	for(i = 0; i < 40; i++)
+	rt_kprintf("_");
+}
+#ifdef FINSH_USING_SYMTAB
+FINSH_FUNCTION_EXPORT(pp, print_picture);
+#endif
 
 
 

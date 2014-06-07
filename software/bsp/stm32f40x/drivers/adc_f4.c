@@ -199,9 +199,9 @@ void adc_initialize(void)
 #endif	
 	/* ADC Common Init **********************************************************/
 	ADC_CommonInitStructure.ADC_Mode = ADC_Mode_Independent;//ADC独立模式
-	ADC_CommonInitStructure.ADC_Prescaler = ADC_Prescaler_Div8;//ADC采样周期6分频  APB2 / 4 = 84M / 4 = 21M < 36M
+	ADC_CommonInitStructure.ADC_Prescaler = ADC_Prescaler_Div4;//ADC采样周期6分频  APB2 / 4 = 84M / 4 = 21M < 36M
 	ADC_CommonInitStructure.ADC_DMAAccessMode = ADC_DMAAccessMode_Disabled;
-	ADC_CommonInitStructure.ADC_TwoSamplingDelay = ADC_TwoSamplingDelay_10Cycles;//单次采样无效
+	ADC_CommonInitStructure.ADC_TwoSamplingDelay = ADC_TwoSamplingDelay_5Cycles;//单次采样无效
 	ADC_CommonInit(&ADC_CommonInitStructure);
 	
 	/* ADC1 Init ****************************************************************/
@@ -244,10 +244,10 @@ float adc_get(uint8_t ch)
 //	trig_adc();
 	switch (ch)
 	{
-		case 0: arm_mean_q15(ADC1ConvertedValue, 15, &mean);
-				arm_rms_q15(ADC1ConvertedValue, 15, &rms);
+		case 0: arm_mean_q15(ADC1ConvertedValue, 10, &mean);
+//				arm_rms_q15(ADC1ConvertedValue, 10, &rms);
 		
-				data = (float)mean*12500/4095/33;//I = code*2.5V/4095/33R*5000,unit 1A
+				data = (float)mean*12500/4095/25;//I = code*2.5V/4095/25R*5000,unit 1A
 //				rt_kprintf("mean = %d, rms = %d", mean,rms);
 			break;
 		case 1: arm_mean_q15(ADC2ConvertedValue , 15, &mean);

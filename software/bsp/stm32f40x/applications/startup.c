@@ -73,6 +73,8 @@ void rtthread_startup(void)
 	extern int task2_thread_start(void);
 	extern int trig_thread_start(void);
 	extern int check_thread_start(void);
+	extern int input_thread_start(void);
+	
 	/* init board */
 	rt_hw_board_init();
 
@@ -103,10 +105,12 @@ void rtthread_startup(void)
 
 	led_thread_start();
 	master_thread_start();
-	slave_thread_start();
+	
 	task2_thread_start();
 	trig_thread_start();
 	check_thread_start();
+	input_thread_start();
+	slave_thread_start();
 #ifdef RT_USING_FINSH
 	/* init finsh */
 	finsh_system_init();

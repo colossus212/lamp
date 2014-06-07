@@ -11,6 +11,10 @@
 //#define PIN_MSEL0		GPIO_Pin_4
 //#define PIN_MSEL1		GPIO_Pin_3
 //#define PIN_MSEL2		GPIO_Pin_2
+#define io_laser_event 	(1<<1)
+#define io_red_event	(1<<2)
+
+#define exit_io_event 	(io_laser_event | io_red_event)
 
 #define manual_trig (1<<1)//液晶屏触发
 #define exit_trig	(1<<2)//打标卡触发
@@ -239,6 +243,7 @@ typedef enum slave_coil
 	
 	io_pg2			= (25-1),
 	io_pd8			= (30-1),
+	io_pd10			= (32-1),
 	io_pc4			= (38-1),
 	
 	miss_phase		= (40-1),

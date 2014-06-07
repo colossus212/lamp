@@ -25,6 +25,17 @@ typedef enum logic_name
 	red_pin		= 7,
 	shutter_pin = 8,//¿ìÃÅ
 	/*in*/
+	mkin0 		= 0,
+	mkin1		= 1,
+	mkin2		= 2,
+	mkin3		= 3,
+	mkin4		= 4,
+	mkin5		= 5,
+	mkin6		= 6,
+	mkin7		= 7,	
+	mkin8		= 8,
+	mkin9		= 9,
+	mkin10		= 10,
 	
 }logic_name;	
 

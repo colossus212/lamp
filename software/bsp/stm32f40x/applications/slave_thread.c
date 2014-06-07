@@ -38,6 +38,7 @@ void rt_slave_thread_entry(void* parameter)
 	rt_thread_delay(1);
 	usSRegHoldBuf[wave_sel] = 1;
 	usSRegHoldBuf[frq_max] = 100;
+	usSRegHoldBuf[current_peak] = 1000;
 //	xMBUtilSetBits( ucSCoilBuf, standby_s, 1, 1 );
 	while(1)
 	{

@@ -3,19 +3,26 @@
 #include "stm32f4xx.h"
 #include "finsh.h"
 #include "color.h"
+#include "typedefs.h"
 
-#define in_size 4
+#define in_size 11
 #define out_size 9
 
 rt_event_t exit_event;
 
 logic_io GPIO_in[in_size] = 
-	{{GPIOE,GPIO_Pin_2}, {GPIOE,GPIO_Pin_3}, {GPIOE,GPIO_Pin_4}, {GPIOE,GPIO_Pin_5}};
+{
+{GPIOG,GPIO_Pin_6}, {GPIOG,GPIO_Pin_5}, {GPIOG,GPIO_Pin_4}, {GPIOG,GPIO_Pin_3}, 
+{GPIOG,GPIO_Pin_2}, {GPIOD,GPIO_Pin_15},{GPIOD,GPIO_Pin_14},{GPIOD,GPIO_Pin_13},
+{GPIOD,GPIO_Pin_12},{GPIOD,GPIO_Pin_11},{GPIOD,GPIO_Pin_10}
+};
 	
 logic_io GPIO_out[out_size] = 
-	{{GPIOG,GPIO_Pin_10},{GPIOG,GPIO_Pin_11},{GPIOE,GPIO_Pin_0},{GPIOE,GPIO_Pin_1},
-	 {GPIOG,GPIO_Pin_8}, {GPIOE,GPIO_Pin_13},{GPIOB,GPIO_Pin_5},{GPIOC,GPIO_Pin_4},
-	 {GPIOC,GPIO_Pin_5}};//各脚功见LOGIC.H
+{
+{GPIOG,GPIO_Pin_10},{GPIOG,GPIO_Pin_11},{GPIOE,GPIO_Pin_0},{GPIOE,GPIO_Pin_1},
+{GPIOG,GPIO_Pin_8}, {GPIOE,GPIO_Pin_13},{GPIOB,GPIO_Pin_5},{GPIOC,GPIO_Pin_4},
+{GPIOC,GPIO_Pin_5}
+};//各脚功见LOGIC.H
 
 void logic_init(void)
 {
@@ -27,10 +34,11 @@ void logic_init(void)
 	uint16_t jj = 0xffff;
 /************************************** stm32f4xx *****************************************/
 #ifdef STM32F4XX
+		exit_event = rt_event_create("exit_event",RT_IPC_FLAG_FIFO);
 //	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE);
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC, ENABLE);
-//	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOD, ENABLE);
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOD, ENABLE);
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOE, ENABLE);
 //	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOF, ENABLE);
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOG, ENABLE);
@@ -61,34 +69,35 @@ void logic_init(void)
 		
 	}
 	while(jj--);
-	SYSCFG_EXTILineConfig(EXTI_PortSourceGPIOE, EXTI_PinSource2);
-	SYSCFG_EXTILineConfig(EXTI_PortSourceGPIOE, EXTI_PinSource3);
-	SYSCFG_EXTILineConfig(EXTI_PortSourceGPIOE, EXTI_PinSource4);
-	SYSCFG_EXTILineConfig(EXTI_PortSourceGPIOE, EXTI_PinSource5);
+
+	SYSCFG_EXTILineConfig(EXTI_PortSourceGPIOG, EXTI_PinSource5);
+	SYSCFG_EXTILineConfig(EXTI_PortSourceGPIOG, EXTI_PinSource6);
 	
 	EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;
 	EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Rising_Falling;
-	EXTI_InitStructure.EXTI_Line = EXTI_Line2;
 	EXTI_InitStructure.EXTI_LineCmd = ENABLE;
-	EXTI_Init(&EXTI_InitStructure);
-	
-	EXTI_InitStructure.EXTI_Line = EXTI_Line3;
-	EXTI_Init(&EXTI_InitStructure);
-	EXTI_InitStructure.EXTI_Line = EXTI_Line4;
-	EXTI_Init(&EXTI_InitStructure);
+//	EXTI_InitStructure.EXTI_Line = EXTI_Line2;
+//	EXTI_Init(&EXTI_InitStructure);
+//	
+//	EXTI_InitStructure.EXTI_Line = EXTI_Line3;
+//	EXTI_Init(&EXTI_InitStructure);
+//	EXTI_InitStructure.EXTI_Line = EXTI_Line4;
+//	EXTI_Init(&EXTI_InitStructure);
 	EXTI_InitStructure.EXTI_Line = EXTI_Line5;
 	EXTI_Init(&EXTI_InitStructure);
+	EXTI_InitStructure.EXTI_Line = EXTI_Line6;
+	EXTI_Init(&EXTI_InitStructure);
 	
-	NVIC_InitStructure.NVIC_IRQChannel = EXTI2_IRQn;
 	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 2;
 	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 2;
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
-	NVIC_Init(&NVIC_InitStructure);
-	
-	NVIC_InitStructure.NVIC_IRQChannel = EXTI3_IRQn;
-	NVIC_Init(&NVIC_InitStructure);
-	NVIC_InitStructure.NVIC_IRQChannel = EXTI4_IRQn;
-	NVIC_Init(&NVIC_InitStructure);
+//	NVIC_InitStructure.NVIC_IRQChannel = EXTI2_IRQn;
+//	NVIC_Init(&NVIC_InitStructure);
+//	
+//	NVIC_InitStructure.NVIC_IRQChannel = EXTI3_IRQn;
+//	NVIC_Init(&NVIC_InitStructure);
+//	NVIC_InitStructure.NVIC_IRQChannel = EXTI4_IRQn;
+//	NVIC_Init(&NVIC_InitStructure);
 	NVIC_InitStructure.NVIC_IRQChannel = EXTI9_5_IRQn;
 	NVIC_Init(&NVIC_InitStructure);
 
@@ -121,7 +130,6 @@ void logic_init(void)
 		GPIO_Init(GPIO_in[i].GPIOx, &GPIO_InitStructure);
 	}
 #endif	
-	exit_event = rt_event_create("exit_event",  RT_IPC_FLAG_FIFO);
 }
 
 
@@ -223,16 +231,21 @@ void EXTI9_5_IRQHandler(void)
 {
 	rt_interrupt_enter();
 	logic_out(3,1);
-	EXTI_ClearITPendingBit(EXTI_Line6);
+	
 	EXTI_ClearITPendingBit(EXTI_Line7);
 	EXTI_ClearITPendingBit(EXTI_Line8);
 	EXTI_ClearITPendingBit(EXTI_Line9);
 	if(EXTI_GetITStatus(EXTI_Line5) != RESET)
 	{	
-		
+		rt_event_send(exit_event, io_red_event);
 		EXTI_ClearITPendingBit(EXTI_Line5);
 	}
-
+	
+	if(EXTI_GetITStatus(EXTI_Line6) != RESET)
+	{	
+		rt_event_send(exit_event, io_laser_event);
+		EXTI_ClearITPendingBit(EXTI_Line6);
+	}
 	rt_interrupt_leave();
 }
 
