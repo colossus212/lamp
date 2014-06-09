@@ -327,7 +327,7 @@ FINSH_FUNCTION_EXPORT(print_pidout, print_pidout);
 void pp(void)
 {
 	uint8_t i = 0, j = 0;
-	for(j = 50; j > 0; j--)
+	for(j = 40; j > 0; j--)
 	for(i = 0; i < 80; i++)
 	{
 		if((uint16_t)(p_get[i]*usSRegHoldBuf[current_peak]/100) >= j)

@@ -93,13 +93,13 @@ struct rt_device uart3_device;
 #define RCC_APBPeriph_UART2	RCC_APB1Periph_USART2
 
 /* USART3_REMAP[1:0] = 00 */
-#define UART3_GPIO_TX		GPIO_Pin_10
-#define UART3_TX_PIN_SOURCE GPIO_PinSource10
-#define UART3_GPIO_RX		GPIO_Pin_11
-#define UART3_RX_PIN_SOURCE GPIO_PinSource11
-#define UART3_GPIO			GPIOB
-#define UART3_GPIO_RCC   	RCC_AHB1Periph_GPIOB
-#define RCC_APBPeriph_UART3	RCC_APB1Periph_USART3
+//#define UART3_GPIO_TX		GPIO_Pin_10
+//#define UART3_TX_PIN_SOURCE GPIO_PinSource10
+//#define UART3_GPIO_RX		GPIO_Pin_11
+//#define UART3_RX_PIN_SOURCE GPIO_PinSource11
+//#define UART3_GPIO			GPIOB
+//#define UART3_GPIO_RCC   	RCC_AHB1Periph_GPIOB
+//#define RCC_APBPeriph_UART3	RCC_APB1Periph_USART3
 //#define UART3_TX_DMA		DMA1_Stream1
 //#define UART3_RX_DMA		DMA1_Stream3
 
