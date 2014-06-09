@@ -31,6 +31,7 @@ extern uint8_t started_flag;
 extern rt_event_t trig_event;
 extern uint16_t frq;
 extern uint8_t laser_flag;
+extern uint8_t test_pwm_ft;
 
 #if      M_COIL_NCOILS%8
 extern UCHAR    ucMCoilBuf[MB_MASTER_TOTAL_SLAVE_NUM][M_COIL_NCOILS/8+1];

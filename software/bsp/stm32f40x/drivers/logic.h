@@ -36,6 +36,7 @@ typedef enum logic_name
 	mkin8		= 8,
 	mkin9		= 9,
 	mkin10		= 10,
+	pwm_ft		= 11,
 	
 }logic_name;	
 

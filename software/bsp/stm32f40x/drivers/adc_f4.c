@@ -31,6 +31,8 @@ q15_t ADC1ConvertedValue[ADC_BUFFER_SIZE];//ADC1
 q15_t ADC2ConvertedValue[ADC_BUFFER_SIZE];//ADC2 __IO q15_t ADC2ConvertedValue[ADC_BUFFER_SIZE];
 q15_t ADC3ConvertedValue[ADC_BUFFER_SIZE];//ADC3
 
+float c_max_test = 0;
+
 adc_io adc[adc_size] = {
 {ADC_Channel_0,GPIOA, GPIO_Pin_0}/*AIN4*/, {ADC_Channel_1,GPIOA, GPIO_Pin_1}/*AIN5*/, 
 {ADC_Channel_2,GPIOA, GPIO_Pin_2}/*AIN6*/, {ADC_Channel_3,GPIOA, GPIO_Pin_3}/*AIN7*/,
@@ -248,7 +250,7 @@ float adc_get(uint8_t ch)
 		case 0: arm_mean_q15(ADC1ConvertedValue, 8, &mean);
 //				arm_rms_q15(ADC1ConvertedValue, 10, &rms);
 		//0.01221/usSRegHoldBuf[current_peak] = 125000/4095/25 = 12500*10/4095/25/usSRegHoldBuf[current_peak]
-				 data = (float)mean*1.221f/usSRegHoldBuf[current_peak];//I = code*2.5V/4095/25R*5000,unit 1A
+				 data = (float)mean*0.1221f/c_max_test;//I = code*2.5V/4095/25R*5000,unit 1A
 //				rt_kprintf("mean = %d, rms = %d", mean,rms);
 			break;
 		case 1: arm_mean_q15(ADC2ConvertedValue , 15, &mean);

@@ -2,6 +2,7 @@
 #include "rtthread.h"
 #include "variables.h"
 
+extern float c_max_test;
 void check_logic(void)
 {
 	switch (step)
@@ -52,7 +53,7 @@ void check_logic(void)
 			break;
 		default:break;
 	}
-	
+//	test_pwm_ft = logic_in(pwm_ft);
 	if((xMBUtilGetBits(ucMCoilBuf[0], X15, 1) == 0)/*||(xMBUtilGetBits(ucMCoilBuf[0], X12, 1) == 0)?*/)
 	{
 		xMBUtilSetBits( ucSCoilBuf, start_up_s, 1, 0 );
@@ -88,6 +89,10 @@ void check_logic(void)
 		{
 			frq = usSRegHoldBuf[frq_set];
 		}
+	}
+	if((float)usSRegHoldBuf[current_peak]/10 != c_max_test)
+	{
+		c_max_test = (float)usSRegHoldBuf[current_peak]/10;
 	}
 	
 }

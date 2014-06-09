@@ -5,7 +5,7 @@
 #include "color.h"
 #include "typedefs.h"
 
-#define in_size 11
+#define in_size 12
 #define out_size 9
 
 rt_event_t exit_event;
@@ -14,7 +14,7 @@ logic_io GPIO_in[in_size] =
 {
 {GPIOG,GPIO_Pin_6}, {GPIOG,GPIO_Pin_5}, {GPIOG,GPIO_Pin_4}, {GPIOG,GPIO_Pin_3}, 
 {GPIOG,GPIO_Pin_2}, {GPIOD,GPIO_Pin_15},{GPIOD,GPIO_Pin_14},{GPIOD,GPIO_Pin_13},
-{GPIOD,GPIO_Pin_12},{GPIOD,GPIO_Pin_11},{GPIOD,GPIO_Pin_10}
+{GPIOD,GPIO_Pin_12},{GPIOD,GPIO_Pin_11},{GPIOD,GPIO_Pin_10},{GPIOG,GPIO_Pin_7}
 };
 	
 logic_io GPIO_out[out_size] = 
@@ -72,6 +72,7 @@ void logic_init(void)
 
 	SYSCFG_EXTILineConfig(EXTI_PortSourceGPIOG, EXTI_PinSource5);
 	SYSCFG_EXTILineConfig(EXTI_PortSourceGPIOG, EXTI_PinSource6);
+	SYSCFG_EXTILineConfig(EXTI_PortSourceGPIOG, EXTI_PinSource7);
 	
 	EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;
 	EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Rising_Falling;
@@ -87,9 +88,11 @@ void logic_init(void)
 	EXTI_Init(&EXTI_InitStructure);
 	EXTI_InitStructure.EXTI_Line = EXTI_Line6;
 	EXTI_Init(&EXTI_InitStructure);
+	EXTI_InitStructure.EXTI_Line = EXTI_Line7;
+	EXTI_Init(&EXTI_InitStructure);
 	
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 2;
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 2;
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
 //	NVIC_InitStructure.NVIC_IRQChannel = EXTI2_IRQn;
 //	NVIC_Init(&NVIC_InitStructure);
@@ -226,15 +229,13 @@ void EXTI4_IRQHandler(void)
 
 	rt_interrupt_leave();
 }
-
+uint8_t test_pwm_ft = 0;
 void EXTI9_5_IRQHandler(void)
 {
 	rt_interrupt_enter();
 	logic_out(3,1);
 	
-	EXTI_ClearITPendingBit(EXTI_Line7);
 	EXTI_ClearITPendingBit(EXTI_Line8);
-	EXTI_ClearITPendingBit(EXTI_Line9);
 	if(EXTI_GetITStatus(EXTI_Line5) != RESET)
 	{	
 		rt_event_send(exit_event, io_red_event);
@@ -245,6 +246,20 @@ void EXTI9_5_IRQHandler(void)
 	{	
 		rt_event_send(exit_event, io_laser_event);
 		EXTI_ClearITPendingBit(EXTI_Line6);
+	}
+	
+	if(EXTI_GetITStatus(EXTI_Line7) != RESET)
+	{	
+		if(logic_in(pwm_ft))
+		{
+			test_pwm_ft = 1;
+		}
+		EXTI_ClearITPendingBit(EXTI_Line7);
+	}
+	
+	if(EXTI_GetITStatus(EXTI_Line9) != RESET)
+	{	
+		EXTI_ClearITPendingBit(EXTI_Line9);
 	}
 	rt_interrupt_leave();
 }

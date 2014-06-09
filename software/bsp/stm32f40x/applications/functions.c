@@ -33,7 +33,7 @@ void calculate_array(uint8_t num)
 	pwm_struct[num].p_array[499] = 0.0f;//数组最后一字节为0；
 	
 	pwm_struct[num].positive_pulse = 500;
-	pwm_struct[num].negative_pulse = 10;
+	pwm_struct[num].negative_pulse = 200;
 	
 }
 
