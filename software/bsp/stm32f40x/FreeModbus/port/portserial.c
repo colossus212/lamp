@@ -39,9 +39,6 @@ static void prvvUARTTxReadyISR(void);
 static void prvvUARTRxISR(void);
 /* ----------------------- Start implementation -----------------------------*/
 uint32_t x= 10000;
-
-uint8_t flag3_rxen = 0, flag3_txen = 0;
-
 void vMBPortSerialEnable(BOOL xRxEnable, BOOL xTxEnable)
 {
 	
@@ -50,26 +47,22 @@ void vMBPortSerialEnable(BOOL xRxEnable, BOOL xTxEnable)
 		/* 485通信时，等待串口移位寄存器中的数据发送完成后，再去使能485的接收、失能485的发送
 		 * 该延时时间可以结合CPU主频及串口波特率做适当调整
 		 * */
-		flag3_rxen = 1;
 		vMBDelay(3200);
 		SLAVE_RS485_RECEIVE_MODE;
 		USART_ITConfig(USART3, USART_IT_RXNE, ENABLE);
 	}
 	else
 	{
-		flag3_rxen = 0;
 		SLAVE_RS485_SEND_MODE;
 		USART_ITConfig(USART3, USART_IT_RXNE, DISABLE);
 	}
 	if (xTxEnable)
 	{
-		flag3_txen = 1;
 //		SLAVE_RS485_SEND_MODE;
 		USART_ITConfig(USART3, USART_IT_TXE, ENABLE);
 	}
 	else
 	{
-		flag3_txen = 0;
 //		SLAVE_RS485_RECEIVE_MODE;
 		USART_ITConfig(USART3, USART_IT_TXE, DISABLE);
 	}

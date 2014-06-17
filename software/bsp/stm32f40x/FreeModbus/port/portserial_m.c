@@ -38,31 +38,25 @@ static void prvvUARTTxReadyISR(void);
 static void prvvUARTRxISR(void);
 /* ----------------------- Start implementation -----------------------------*/
 
-uint8_t flag6_rxen = 0, flag6_txen = 0;
-
 void vMBMasterPortSerialEnable(BOOL xRxEnable, BOOL xTxEnable)
 {
 	if (xRxEnable)
 	{
 //		vMBDelay(1000);
-		flag6_rxen = 1;
 		MASTER_RS485_RECEIVE_MODE;
 		USART_ITConfig(USART6, USART_IT_RXNE, ENABLE);
 	}
 	else
 	{
-		flag6_rxen = 0;
 		MASTER_RS485_SEND_MODE;
 		USART_ITConfig(USART6, USART_IT_RXNE, DISABLE);
 	}
 	if (xTxEnable)
 	{
-		flag6_txen = 1;
 		USART_ITConfig(USART6, USART_IT_TXE, ENABLE);
 	}
 	else
 	{
-		flag6_rxen = 0;
 		USART_ITConfig(USART6, USART_IT_TXE, DISABLE);
 	}
 }

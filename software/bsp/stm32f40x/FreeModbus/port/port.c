@@ -24,56 +24,18 @@
 /* ----------------------- Modbus includes ----------------------------------*/
 #include "port.h"
 /* ----------------------- Variables ----------------------------------------*/
-extern uint8_t flag3_rxen, flag3_txen, flag6_rxen, flag6_txen;
+
 /* ----------------------- Start implementation -----------------------------*/
 void EnterCriticalSection(void)
 {
-//	//关闭全局中断
-//	__disable_irq();
-	USART_ITConfig(USART6, USART_IT_RXNE, DISABLE);
-	USART_ITConfig(USART6, USART_IT_TXE, DISABLE);
-	USART_ITConfig(USART3, USART_IT_RXNE, DISABLE);
-	USART_ITConfig(USART3, USART_IT_TXE, DISABLE);
+	//关闭全局中断
+	__disable_irq();
 }
 
 void ExitCriticalSection(void)
 {
-//	//开启全局中断
-//	__enable_irq();
-	if (flag3_rxen)
-	{
-		USART_ITConfig(USART3, USART_IT_RXNE, ENABLE);
-	}
-	else
-	{
-		USART_ITConfig(USART3, USART_IT_RXNE, DISABLE);
-	}
-	if (flag3_txen)
-	{
-		USART_ITConfig(USART3, USART_IT_TXE, ENABLE);
-	}
-	else
-	{
-		USART_ITConfig(USART3, USART_IT_TXE, DISABLE);
-	}
-
-	
-	if (flag6_rxen)
-	{
-		USART_ITConfig(USART6, USART_IT_RXNE, ENABLE);
-	}
-	else
-	{
-		USART_ITConfig(USART6, USART_IT_RXNE, DISABLE);
-	}
-	if (flag6_txen)
-	{
-		USART_ITConfig(USART6, USART_IT_TXE, ENABLE);
-	}
-	else
-	{
-		USART_ITConfig(USART6, USART_IT_TXE, DISABLE);
-	}
+	//开启全局中断
+	__enable_irq();
 }
 
 void vMBDelay(ULONG nCount)

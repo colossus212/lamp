@@ -227,6 +227,7 @@ void TIM8_UP_TIM13_IRQHandler(void)
 //	I2 = adc_get(1);
 //	power = adc_get(2);
 	trig_adc();
+	if(interrupt_times < 500) p_get[interrupt_times] = I1;
 	if(TIM_GetITStatus(TIM8, TIM_IT_Update) != RESET)
 	{	
 		TIM_ClearITPendingBit(TIM8, TIM_IT_Update);
@@ -234,9 +235,18 @@ void TIM8_UP_TIM13_IRQHandler(void)
 		{
 //			TIM_SetCompare1(TIM8, (uint16_t)(percent * pwm_period));
 			
+			if(interrupt_times == 0) 
+			{
+				eMBDisable(  );
+				eMBMasterDisable(  );
+			}
 			if(interrupt_times < pwm_struct[select_pwm]. positive_pulse)
 			{			
-//				if(interrupt_times == 0) logic_out(1,1);
+				if(interrupt_times == 0)
+				{
+					eMBDisable(  );
+					eMBMasterDisable(  );
+				}
 //				if(pwm_struct[select_pwm].busy_flag == 0)
 				{
 					pwm_struct[select_pwm].busy_flag = 1;
@@ -247,8 +257,7 @@ void TIM8_UP_TIM13_IRQHandler(void)
 					
 					percent = pid3(error_pid);	
 										
-					pid_out[interrupt_times] = percent;
-					p_get[interrupt_times] = I1;
+
 					if(percent > 0.98f) percent = 0.98f;
 					if(percent < 0.0f) percent = 0.0f;
 //					pid_out[interrupt_times] = percent;
@@ -271,6 +280,8 @@ void TIM8_UP_TIM13_IRQHandler(void)
 					pid_flag = 1;
 					pwm_struct[select_pwm].busy_flag = 0;
 					if(pid_flag) {IntTerm_C3 = 0;PrevError_C3 = 0; pid_flag = 0;}
+					eMBEnable(  );
+					eMBMasterEnable(  );
 		//			init_pid();
 
 				}
@@ -282,9 +293,12 @@ void TIM8_UP_TIM13_IRQHandler(void)
 		{
 			control_power(power, select_pwm);
 		}
-		
-		TIM_SetCompare1(TIM8, (uint16_t)(percent * pwm_period));
-		if(interrupt_times < 500) code[interrupt_times] =TIM8->CCR1;
+		TIM_SetCompare1(TIM8, (uint16_t)(pwm_period * percent));
+		if(interrupt_times < 500) 
+		{
+			pid_out[interrupt_times] = percent;
+			code[interrupt_times] = TIM8->CCR1;
+		}
 	}
 	
 //	logic_out(1,0);
