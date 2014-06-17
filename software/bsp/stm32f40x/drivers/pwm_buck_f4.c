@@ -10,13 +10,11 @@
 #include "variables.h"
 
 #define IGBT_FREQ 20000
-#define pwm_period 8399u//(SystemCoreClock / IGBT_FREQ - 1)
-
-//uint16_t pwm_period = SystemCoreClock / IGBT_FREQ - 1;
+#define pwm_period (SystemCoreClock / IGBT_FREQ - 1)
 
 float pid_out[500] = {0};
 float p_get[500] = {0};
-uint16_t code11[500] = {0};
+uint16_t code[500] = {0};
 static float PrevError_C3 = 0, IntTerm_C3 = 0/*sum of integral*/;
 
 void pwm_init(void)
@@ -219,17 +217,16 @@ extern float adc_get(uint8_t ch);
 void TIM8_UP_TIM13_IRQHandler(void)
 {
 	float I1 = 0, I2 = 0, power = 0;
-	static float percent1 = 0 ;
+	static float percent = 0 ;
 	float error_pid = 0;
 	static uint16_t interrupt_times = 0;
-//	rt_enter_critical();/*调度器上锁*/
-//	rt_interrupt_enter();
+	rt_enter_critical();/*调度器上锁*/
+	rt_interrupt_enter();
 //	logic_out(1,1);
 	I1 = adc_get(0);
 //	I2 = adc_get(1);
 //	power = adc_get(2);
 	trig_adc();
-	if(interrupt_times < 500) p_get[interrupt_times] = I1;
 	if(TIM_GetITStatus(TIM8, TIM_IT_Update) != RESET)
 	{	
 		TIM_ClearITPendingBit(TIM8, TIM_IT_Update);
@@ -237,7 +234,6 @@ void TIM8_UP_TIM13_IRQHandler(void)
 		{
 //			TIM_SetCompare1(TIM8, (uint16_t)(percent * pwm_period));
 			
-			if(interrupt_times == 0) rt_enter_critical();/*调度器上锁*/
 			if(interrupt_times < pwm_struct[select_pwm]. positive_pulse)
 			{			
 //				if(interrupt_times == 0) logic_out(1,1);
@@ -249,11 +245,12 @@ void TIM8_UP_TIM13_IRQHandler(void)
 				{	
 					error_pid = pwm_struct[select_pwm].p_array[interrupt_times] - I1;
 					
-					percent1 = pid3(error_pid);	
+					percent = pid3(error_pid);	
 										
-					
-					if(percent1 > 0.98f) percent1 = 0.98f;
-					if(percent1 < 0.0f) percent1 = 0.0f;
+					pid_out[interrupt_times] = percent;
+					p_get[interrupt_times] = I1;
+					if(percent > 0.98f) percent = 0.98f;
+					if(percent < 0.0f) percent = 0.0f;
 //					pid_out[interrupt_times] = percent;
 					interrupt_times++;
 //					if(interrupt_times == 40)	logic_out(1,0);
@@ -264,7 +261,7 @@ void TIM8_UP_TIM13_IRQHandler(void)
 			else
 			{
 				interrupt_times++;
-				percent1 = 0;
+				percent = 0;
 
 				if( interrupt_times > pwm_struct[select_pwm].positive_pulse + pwm_struct[select_pwm].negative_pulse)
 				{
@@ -274,7 +271,6 @@ void TIM8_UP_TIM13_IRQHandler(void)
 					pid_flag = 1;
 					pwm_struct[select_pwm].busy_flag = 0;
 					if(pid_flag) {IntTerm_C3 = 0;PrevError_C3 = 0; pid_flag = 0;}
-					rt_exit_critical();/* 退出临界区*/
 		//			init_pid();
 
 				}
@@ -286,17 +282,14 @@ void TIM8_UP_TIM13_IRQHandler(void)
 		{
 			control_power(power, select_pwm);
 		}
-		TIM_SetCompare1(TIM8, (uint16_t)(pwm_period * percent1));
-		if(interrupt_times < 500) 
-		{
-			pid_out[interrupt_times] = percent1;
-			code11[interrupt_times] = TIM8->CCR1;
-		}
+		
+		TIM_SetCompare1(TIM8, (uint16_t)(percent * pwm_period));
+		if(interrupt_times < 500) code[interrupt_times] =TIM8->CCR1;
 	}
 	
 //	logic_out(1,0);
-//	rt_interrupt_leave();
-//	rt_exit_critical();/* 退出临界区*/
+	rt_interrupt_leave();
+	rt_exit_critical();/* 退出临界区*/
 }
 
 extern uint8_t ss;
@@ -320,7 +313,7 @@ void print_pidout(void)
 	for(i = 0;i<500;i++)
 	{
 		rt_kprintf(" pidout[%.3d] = %.4d%,code = %.5d, i_percent = %.4d%, set_percent = %.4d%,\n",
-		i,(uint16_t)(pid_out[i]*100),(uint16_t)code11[i],
+		i,(uint16_t)(pid_out[i]*100),code[i],
 					(uint16_t)(p_get[i]*100),(uint16_t)(pwm_struct[0].p_array[i]*100));
 	}
 }

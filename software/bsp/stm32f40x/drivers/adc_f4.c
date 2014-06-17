@@ -204,7 +204,7 @@ void adc_initialize(void)
 	ADC_CommonInitStructure.ADC_Mode = ADC_Mode_Independent;//ADC独立模式
 	ADC_CommonInitStructure.ADC_Prescaler = ADC_Prescaler_Div4;//ADC采样周期6分频  APB2 / 4 = 84M / 4 = 21M < 36M
 	ADC_CommonInitStructure.ADC_DMAAccessMode = ADC_DMAAccessMode_Disabled;
-	ADC_CommonInitStructure.ADC_TwoSamplingDelay = ADC_TwoSamplingDelay_5Cycles;//单次采样无效
+	ADC_CommonInitStructure.ADC_TwoSamplingDelay = ADC_TwoSamplingDelay_16Cycles;//单次采样无效
 	ADC_CommonInit(&ADC_CommonInitStructure);
 	
 	/* ADC1 Init ****************************************************************/
@@ -249,8 +249,8 @@ float adc_get(uint8_t ch)
 	{
 		case 0: arm_mean_q15(ADC1ConvertedValue, 16, &mean);
 //				arm_rms_q15(ADC1ConvertedValue, 10, &rms);
-				 data = (float)mean*0.0925/c_max_test;//0.0925 = 2.5V/4095/33R*5000
-		//2.5/4095/33*2000= 0.037f
+		//0.01221/usSRegHoldBuf[current_peak] = 125000/4095/25 = 12500*10/4095/25/usSRegHoldBuf[current_peak]
+				 data = (float)mean*0.1221f/c_max_test;//I = code*2.5V/4095/25R*5000,unit 1A
 						//测量值与实际值偏小10%左右，
 //				rt_kprintf("mean = %d, rms = %d", mean,rms);
 			break;
