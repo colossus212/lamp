@@ -285,6 +285,7 @@ void TIM8_UP_TIM13_IRQHandler(void)
 			control_power(power, select_pwm);
 		}
 		TIM_SetCompare1(TIM8, (uint16_t)(pwm_period * percent));
+		
 		if(interrupt_times < 500) 
 		{
 			pid_out[interrupt_times] = percent;
