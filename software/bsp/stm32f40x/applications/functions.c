@@ -9,6 +9,7 @@ void calculate_array(uint8_t num)
 { 
 	uint16_t k = 0;
 	uint16_t *p ;
+	float sum = 0.0f;
 	
 	rt_memset(array_buf, 0, array_num*2);//将数组清0
 	p = array_buf;
@@ -42,8 +43,13 @@ void calculate_array(uint8_t num)
 //		pwm_struct[num].positive_pulse = 500;
 	}
 	
-	pwm_struct[num].negative_pulse = 200;
-	
+//	pwm_struct[num].negative_pulse = 20;
+	for(k = 0; k < 500; k++)
+	{
+		sum += pwm_struct[num].p_array[k] * usSRegHoldBuf[current_peak];
+	}
+	pwm_struct[num].negative_pulse = (uint16_t)(sum/12.5f);
+	usSRegHoldBuf[frq_max] = 200000/(pwm_struct[num].negative_pulse + pwm_struct[num].positive_pulse + 20);
 }
 
 void print_array(uint8_t num)

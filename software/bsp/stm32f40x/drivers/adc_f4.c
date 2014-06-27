@@ -247,9 +247,9 @@ float adc_get(uint8_t ch)
 //	trig_adc();
 	switch (ch)
 	{
-		case 0: arm_mean_q15(ADC1ConvertedValue, 16, &mean);
+		case 0: arm_mean_q15(ADC1ConvertedValue, 15, &mean);
 //				arm_rms_q15(ADC1ConvertedValue, 10, &rms);
-				 data = (float)mean*0.0925/c_max_test;//0.0925 = 2.5V/4095/33R*5000
+				 data = (float)mean*0.0925f/c_max_test;//0.0925 = 2.5V/4095/33R*5000
 		//2.5/4095/33*2000= 0.037f
 						//测量值与实际值偏小10%左右，
 //				rt_kprintf("mean = %d, rms = %d", mean,rms);
@@ -257,6 +257,7 @@ float adc_get(uint8_t ch)
 		case 1: arm_mean_q15(ADC2ConvertedValue , 15, &mean);
 			break;
 		case 2: arm_mean_q15(ADC3ConvertedValue , 15, &mean);
+				data = (float)mean/3276;//功率百分比，调节电位器，使350A对应2.0V
 			break;
 		case 3: mean = 0;
 			break;

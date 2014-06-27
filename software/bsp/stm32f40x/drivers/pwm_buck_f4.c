@@ -14,6 +14,7 @@
 
 float pid_out[500] = {0};
 float p_get[500] = {0};
+float i_get[500] = {0};
 uint16_t code[500] = {0};
 static float PrevError_C3 = 0, IntTerm_C3 = 0/*sum of integral*/;
 
@@ -96,7 +97,7 @@ void pwm_init(void)
 
 }
 
-float	Kp3 = 0.30f, Ki3 = 0.10f, Kd3 = 0.1f;
+float	Kp3 = 0.30f, Ki3 = 0.10f, Kd3 = 0.0f;
 uint8_t pid_flag = 0;//用于清零积分量。
 void set_pid(uint32_t p, uint32_t i, uint32_t d)
 {
@@ -220,50 +221,42 @@ void TIM8_UP_TIM13_IRQHandler(void)
 	static float percent = 0 ;
 	float error_pid = 0;
 	static uint16_t interrupt_times = 0;
+	static uint8_t flag_modbus = 0;
 	rt_enter_critical();/*调度器上锁*/
 	rt_interrupt_enter();
-//	logic_out(1,1);
+	logic_out(1,1);
 	I1 = adc_get(0);
 //	I2 = adc_get(1);
-//	power = adc_get(2);
+	power = adc_get(2);//功率百分比
 	trig_adc();
-	if(interrupt_times < 500) p_get[interrupt_times] = I1;
+	if(interrupt_times < 500) 
+	{
+		p_get[interrupt_times] = power;
+		i_get[interrupt_times] = I1;
+	}
 	if(TIM_GetITStatus(TIM8, TIM_IT_Update) != RESET)
 	{	
 		TIM_ClearITPendingBit(TIM8, TIM_IT_Update);
+
 		if(pwm_struct[select_pwm].mode == 0)
 		{
 //			TIM_SetCompare1(TIM8, (uint16_t)(percent * pwm_period));
 			
-			if(interrupt_times == 0) 
-			{
-				eMBDisable(  );
-				eMBMasterDisable(  );
-			}
 			if(interrupt_times < pwm_struct[select_pwm]. positive_pulse)
 			{			
-				if(interrupt_times == 0)
-				{
-					eMBDisable(  );
-					eMBMasterDisable(  );
-				}
-//				if(pwm_struct[select_pwm].busy_flag == 0)
-				{
 					pwm_struct[select_pwm].busy_flag = 1;
 					pwm_ena(1);
-				}
+				
 				{	
 					error_pid = pwm_struct[select_pwm].p_array[interrupt_times] - I1;
-					
+//					logic_out(1,1);
 					percent = pid3(error_pid);	
-										
+//					logic_out(1,0);					
 
 					if(percent > 0.98f) percent = 0.98f;
 					if(percent < 0.0f) percent = 0.0f;
-//					pid_out[interrupt_times] = percent;
+//					percent = 0.3f;
 					interrupt_times++;
-//					if(interrupt_times == 40)	logic_out(1,0);
-//					if(interrupt_times >= 40)  percent = 0.0f;
 				}
 				
 			}
@@ -275,14 +268,12 @@ void TIM8_UP_TIM13_IRQHandler(void)
 				if( interrupt_times > pwm_struct[select_pwm].positive_pulse + pwm_struct[select_pwm].negative_pulse)
 				{
 					TIM_Cmd(TIM8, DISABLE);
+					TIM_ClearITPendingBit(TIM8, TIM_IT_Update);
 					pwm_ena(0);
 					interrupt_times = 0;
 					pid_flag = 1;
 					pwm_struct[select_pwm].busy_flag = 0;
 					if(pid_flag) {IntTerm_C3 = 0;PrevError_C3 = 0; pid_flag = 0;}
-					eMBEnable(  );
-					eMBMasterEnable(  );
-		//			init_pid();
 
 				}
 			}
@@ -301,7 +292,7 @@ void TIM8_UP_TIM13_IRQHandler(void)
 		}
 	}
 	
-//	logic_out(1,0);
+	logic_out(1,0);
 	rt_interrupt_leave();
 	rt_exit_critical();/* 退出临界区*/
 }
@@ -344,7 +335,7 @@ void pp(void)
 	for(j = 40; j > 0; j--)
 	for(i = 0; i < 80; i++)
 	{
-		if((uint16_t)(p_get[i]*usSRegHoldBuf[current_peak]/100) >= j)
+		if((uint16_t)(p_get[i]*usSRegHoldBuf[current_peak]/10) >= j)
 		rt_kprintf("*");
 		else
 		rt_kprintf(" ");

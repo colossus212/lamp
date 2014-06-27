@@ -24,21 +24,23 @@ void set_coil(uint8_t n, uint8_t value)
 #ifdef FINSH_USING_SYMTAB
 FINSH_FUNCTION_EXPORT(set_coil, set_coil num value);
 #endif
-
+extern void tim1_init(void);
 void rt_slave_thread_entry(void* parameter)
 {	
 //	rt_uint32_t e = -1;
 	rt_thread_delay(1);
 	para_init();
 	logic_init();
+	tim1_init();
+//	pwm_init();
 //	 xMBPortSerialInit(3,  115200,  8, MB_PAR_NONE );
-	eMBInit( MB_RTU, 0x01, 3, 115200, MB_PAR_NONE );
+	eMBInit( MB_ASCII, 0x01, 3, 115200, MB_PAR_NONE );
 	// Enable the Modbus Protocol Stack.
 	eMBEnable(  );
 	rt_thread_delay(1);
 	usSRegHoldBuf[wave_sel] = 1;
 	usSRegHoldBuf[frq_max] = 100;
-	usSRegHoldBuf[current_peak] = 1000;
+	usSRegHoldBuf[current_peak] = 100;
 //	xMBUtilSetBits( ucSCoilBuf, standby_s, 1, 1 );
 	while(1)
 	{
