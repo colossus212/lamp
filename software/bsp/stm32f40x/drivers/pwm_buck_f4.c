@@ -16,7 +16,7 @@ float pid_out[500] = {0};
 float p_get[500] = {0};
 float i_get[500] = {0};
 uint16_t code[500] = {0};
-static float PrevError_C3 = 0, IntTerm_C3 = 0/*sum of integral*/;
+
 
 void pwm_init(void)
 {
@@ -96,34 +96,60 @@ void pwm_init(void)
 //	TIM_Cmd(TIM8, ENABLE);			//tim8 enable
 
 }
+static float PrevError_C1 = 0, IntTerm_C1 = 0/*sum of integral*/;
+float	Kp1 = 200.0f, Ki1 = 25.0f, Kd1 = 0.0f;
+void set_pid1(uint32_t p, uint32_t i, uint32_t d)
+{
+	Kp1 = (float)p/10;
+	Ki1 = (float)i/10;
+	Kd1 = (float)d/10;
+}
+#ifdef FINSH_USING_SYMTAB
+FINSH_FUNCTION_EXPORT(set_pid1, set_pid1 Kp1=p/10 Ki1=i/10 Kd1=d/10);
+#endif
+float_t pid1(float err1)//功率PID,算出电流大小,unit 1A
+{	
+	float Error = 0, Output = 0;//, R = 0;
 
+	Error = err1;	
+	IntTerm_C1 += Ki1*Error;//IntTerm_C = Ki*(e(0) + e(1) + ... + e(k))
+	Output = Kp1 * Error;
+	if(IntTerm_C1 > 350.0f)//积分限幅
+	{
+		IntTerm_C1 = 350.0f;
+	}
+//	if(IntTerm_C1 < (double)min)
+//	{
+//		IntTerm_C1 = (double)min;
+//	}
+  Output += IntTerm_C1;
+  Output += Kd1 * (Error - PrevError_C1);
+
+  PrevError_C1 = Error;
+
+  return (Output);//u(k)
+}
+
+static float PrevError_C3 = 0, IntTerm_C3 = 0/*sum of integral*/;
 float	Kp3 = 0.30f, Ki3 = 0.10f, Kd3 = 0.0f;
-uint8_t pid_flag = 0;//用于清零积分量。
-void set_pid(uint32_t p, uint32_t i, uint32_t d)
+void set_pid3(uint32_t p, uint32_t i, uint32_t d)
 {
 	Kp3 = (float)p/10000;
 	Ki3 = (float)i/10000;
 	Kd3 = (float)d/10000;
-//	S3->Kp = (float32_t)p/10000;
-//	S3->Ki = (float32_t)i/10000;
-//	S3->Kd = (float32_t)d/10000;
-//	arm_pid_init_f32( S3,1);
 }
 #ifdef FINSH_USING_SYMTAB
-FINSH_FUNCTION_EXPORT(set_pid, set_pid Kp3=p/10000 Ki3=i/10000 Kd3=d/10000);
+FINSH_FUNCTION_EXPORT(set_pid3, set_pid3 Kp3=p/10000 Ki3=i/10000 Kd3=d/10000);
 #endif
 ////float max = 1000, min = 200;
-float_t pid3(float err)//in and REF is percent
+float_t pid3(float err3)//in and REF is percent
 {
 	
 	float Error = 0, Output = 0;//, R = 0;
 
-////	R = (float)(Ref/10);
-	Error = err;	
-//	if(Error <= 600)//积分分离
+	Error = err3;	
 	IntTerm_C3 += Ki3*Error;//IntTerm_C = Ki*(e(0) + e(1) + ... + e(k))
 	Output = Kp3 * Error;
-//	test_1 = IntTerm_C;
 	if(IntTerm_C3 > 1.0f)//积分限幅
 	{
 		IntTerm_C3 = 1.0f;
@@ -140,10 +166,6 @@ float_t pid3(float err)//in and REF is percent
   return (Output);//u(k)
 }
 
-void control_power(uint16_t I1, uint8_t pwm_struct_num)
-{
-	
-}
 
 void trig_laser(void)
 {
@@ -152,76 +174,17 @@ void trig_laser(void)
 #ifdef FINSH_USING_SYMTAB
 FINSH_FUNCTION_EXPORT(trig_laser, trigger laser);
 #endif
-//void control_current(float I1, uint8_t pwm_struct_num)//I1 is real current, unit 1A,I2 is reference current
-//{
-//	float percent = 0 ;
-//	float i_percent = 0,ref_percent = 0;
-//	float error_pid = 0;
-//	static uint16_t interrupt_times = 0;
-//	
-////	i_percent = I1/((float)usSRegHoldBuf[current_peak]/10);
-//	
-//	if(interrupt_times < pwm_struct[pwm_struct_num]. positive_pulse)
-//	{
-//		logic_out(1,1);
-//		if(pwm_struct[pwm_struct_num].busy_flag == 0)
-//		{
-//			pwm_struct[pwm_struct_num].busy_flag = 1;
-//			pwm_ena(1);
-//		}
-//		{						
-////			ref_percent = (float)pwm_struct[pwm_struct_num].p_array[interrupt_times]/1000;
-////			error_pid = pwm_struct[pwm_struct_num].p_array[interrupt_times] - i_percent;
-//			error_pid = pwm_struct[pwm_struct_num].p_array[interrupt_times] - I1;
-//			percent = pid3(error_pid);			
-////			if(interrupt_times < 20) percent = 0.98f;//测试98%占空比时电流最大有多大.2ms
-////			else percent = 0;
-//			pid_out[interrupt_times] = percent;
-//			p_get[interrupt_times] = I1;
-////			p_get[interrupt_times] = i_percent;
-//			if(percent > 0.98f) percent = 0.98f;
-//			if(percent < 0.0f) percent = 0;
-//			interrupt_times++;
-//			if(interrupt_times >= 40)	logic_out(1,0);
-//		}
-//		
-//	}
-//	else
-//	{
-//		interrupt_times++;
-//		percent = 0;
-//		
-////		pid_out[interrupt_times] = percent;
-////		p_get[interrupt_times] = i_percent;
-//		if( interrupt_times > pwm_struct[pwm_struct_num].positive_pulse + pwm_struct[pwm_struct_num].negative_pulse)
-//		{
-//			TIM_Cmd(TIM8, DISABLE);
-//			pwm_ena(0);
-//			interrupt_times = 0;
-//			pid_flag = 1;
-//			pwm_struct[pwm_struct_num].busy_flag = 0;
-////			init_pid();
 
-//		}
-//	}
-//	
-//	TIM_SetCompare1(TIM8, (uint16_t)(float)(percent * pwm_period));
-
-
-//}
-//#ifdef FINSH_USING_SYMTAB
-//FINSH_FUNCTION_EXPORT(control_current, control_current i1 i2);
-//#endif
 
 extern void trig_adc(void);
 extern float adc_get(uint8_t ch);
 void TIM8_UP_TIM13_IRQHandler(void)
 {
 	float I1 = 0, I2 = 0, power = 0;
-	static float percent = 0 ;
+	static float percent = 0, percent1 = 0 ;
 	float error_pid = 0;
 	static uint16_t interrupt_times = 0;
-	static uint8_t flag_modbus = 0;
+//	static uint8_t flag_modbus = 0;
 	rt_enter_critical();/*调度器上锁*/
 	rt_interrupt_enter();
 	logic_out(1,1);
@@ -237,7 +200,6 @@ void TIM8_UP_TIM13_IRQHandler(void)
 	if(TIM_GetITStatus(TIM8, TIM_IT_Update) != RESET)
 	{	
 		TIM_ClearITPendingBit(TIM8, TIM_IT_Update);
-
 		if(pwm_struct[select_pwm].mode == 0)
 		{
 //			TIM_SetCompare1(TIM8, (uint16_t)(percent * pwm_period));
@@ -271,9 +233,9 @@ void TIM8_UP_TIM13_IRQHandler(void)
 					TIM_ClearITPendingBit(TIM8, TIM_IT_Update);
 					pwm_ena(0);
 					interrupt_times = 0;
-					pid_flag = 1;
 					pwm_struct[select_pwm].busy_flag = 0;
-					if(pid_flag) {IntTerm_C3 = 0;PrevError_C3 = 0; pid_flag = 0;}
+					IntTerm_C3 = 0;
+					PrevError_C3 = 0; 
 
 				}
 			}
@@ -282,7 +244,47 @@ void TIM8_UP_TIM13_IRQHandler(void)
 		}
 		else
 		{
-			control_power(power, select_pwm);
+			if(interrupt_times < pwm_struct[select_pwm]. positive_pulse)
+			{			
+					pwm_struct[select_pwm].busy_flag = 1;
+					pwm_ena(1);
+				
+				{	
+//					logic_out(1,1);
+					error_pid = pwm_struct[select_pwm].p_array[interrupt_times] - power;
+					percent1 = pid1(error_pid)/c_max_test;
+					if(percent1 > 1.0f) percent1 = 1.0f;
+					if(percent1 < 0.0f) percent1 = 0.0f;
+					error_pid = percent1 - I1;
+					percent = pid3(error_pid);	
+//					logic_out(1,0);					
+
+					if(percent > 0.98f) percent = 0.98f;
+					if(percent < 0.0f) percent = 0.0f;
+//					percent = 0.3f;
+					interrupt_times++;
+				}
+				
+			}
+			else
+			{
+				interrupt_times++;
+				percent = 0;
+
+				if( interrupt_times > pwm_struct[select_pwm].positive_pulse + pwm_struct[select_pwm].negative_pulse)
+				{
+					TIM_Cmd(TIM8, DISABLE);
+					TIM_ClearITPendingBit(TIM8, TIM_IT_Update);
+					pwm_ena(0);
+					interrupt_times = 0;
+					pwm_struct[select_pwm].busy_flag = 0;
+					IntTerm_C3 = 0;
+					PrevError_C3 = 0;
+					IntTerm_C1 = 0;
+					PrevError_C1 = 0; 
+
+				}
+			}
 		}
 		TIM_SetCompare1(TIM8, (uint16_t)(pwm_period * percent));
 		
@@ -298,28 +300,13 @@ void TIM8_UP_TIM13_IRQHandler(void)
 	rt_exit_critical();/* 退出临界区*/
 }
 
-extern uint8_t ss;
-void open_tim8(void)
-{
-	uint16_t i = 0;
-	for(i = 0;i<500;i++)
-	{
-		p_get[i] = 0;
-		pid_out[i] = 0;
-	}
-	ss = 1;
-}
-#ifdef FINSH_USING_SYMTAB
-FINSH_FUNCTION_EXPORT(open_tim8, open_tim8);
-#endif
-
 void print_pidout(void)
 {
 	uint16_t i = 0;
 	for(i = 0;i<500;i++)
 	{
-		rt_kprintf(" pidout[%.3d] = %.4d%,code = %.5d, i_percent = %.4d%, set_percent = %.4d%,\n",
-		i,(uint16_t)(pid_out[i]*100),code[i],
+		rt_kprintf(" pidout[%.3d] = %.4d%,code = %.5d, i_percent = %.4d%,p = %.4d%, set_percent = %.4d%,\n",
+		i,(uint16_t)(pid_out[i]*100),code[i],(uint16_t)(i_get[i]*100),
 					(uint16_t)(p_get[i]*100),(uint16_t)(pwm_struct[0].p_array[i]*100));
 	}
 }

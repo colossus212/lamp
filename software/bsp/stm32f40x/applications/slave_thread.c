@@ -30,7 +30,7 @@ void rt_slave_thread_entry(void* parameter)
 //	rt_uint32_t e = -1;
 	rt_thread_delay(1);
 	para_init();
-	logic_init();
+//	logic_init();
 	tim1_init();
 //	pwm_init();
 //	 xMBPortSerialInit(3,  115200,  8, MB_PAR_NONE );

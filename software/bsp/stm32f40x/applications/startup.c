@@ -100,17 +100,18 @@ void rtthread_startup(void)
 	bkpsram_init();
 	init_soft_i2c();
 	timer4_init();
+	logic_init();
 	/* init application */
 	rt_application_init();
 
 	led_thread_start();
 	master_thread_start();
-	
+	slave_thread_start();
 	task2_thread_start();
 	trig_thread_start();
 	check_thread_start();
 	input_thread_start();
-	slave_thread_start();
+	
 #ifdef RT_USING_FINSH
 	/* init finsh */
 	finsh_system_init();

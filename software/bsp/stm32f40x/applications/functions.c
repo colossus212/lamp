@@ -50,6 +50,8 @@ void calculate_array(uint8_t num)
 	}
 	pwm_struct[num].negative_pulse = (uint16_t)(sum/12.5f);
 	usSRegHoldBuf[frq_max] = 200000/(pwm_struct[num].negative_pulse + pwm_struct[num].positive_pulse + 20);
+	
+	pwm_struct[num].mode = xMBUtilGetBits(ucSCoilBuf, feedback, 1 ); 
 }
 
 void print_array(uint8_t num)
