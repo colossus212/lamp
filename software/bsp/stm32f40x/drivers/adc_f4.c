@@ -249,9 +249,9 @@ float adc_get(uint8_t ch)
 	{
 		case 0: arm_mean_q15(ADC1ConvertedValue, 15, &mean);
 //				arm_rms_q15(ADC1ConvertedValue, 10, &rms);
-				 data = (float)mean*0.0925f/c_max_test;//0.0925 = 2.5V/4095/33R*5000
-		//2.5/4095/33*2000= 0.037f
-						//测量值与实际值偏小10%左右，
+				 data = (float)mean*0.0925f;//0.0925 = 2.5V/4095/33R*5000
+				//data为实际电流值
+						//测量值与实际值偏大10%左右，
 //				rt_kprintf("mean = %d, rms = %d", mean,rms);
 			break;
 		case 1: arm_mean_q15(ADC2ConvertedValue , 15, &mean);

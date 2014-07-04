@@ -24,8 +24,8 @@ typedef struct pwm_struct
 {
 	uint8_t mode;//1 = power mode ; 0 = current mode
 	uint8_t busy_flag;//1 = busy
-	uint16_t current_max;
-	uint16_t power_max;
+//	uint16_t current_max;
+//	uint16_t power_max;
 	uint16_t positive_pulse;
 	uint16_t negative_pulse;
 	

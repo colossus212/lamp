@@ -97,7 +97,8 @@ void pwm_init(void)
 
 }
 static float PrevError_C1 = 0, IntTerm_C1 = 0/*sum of integral*/;
-float	Kp1 = 200.0f, Ki1 = 25.0f, Kd1 = 0.0f;
+//float	Kp1 = 200.0f, Ki1 = 50.0f/*25.0f*/, Kd1 = 0.0f;
+float	Kp1 = 120.0f, Ki1 = 50.0f/*25.0f*/, Kd1 = 0.0f;
 void set_pid1(uint32_t p, uint32_t i, uint32_t d)
 {
 	Kp1 = (float)p/10;
@@ -131,13 +132,13 @@ float_t pid1(float err1)//功率PID,算出电流大小,unit 1A
 }
 
 static float PrevError_C3 = 0, IntTerm_C3 = 0/*sum of integral*/;
-float	Kp3 = 0.30f, Ki3 = 0.10f, Kd3 = 0.0f;
+float	Kp3 = 0.0020f, Ki3 = 0.0006f, Kd3 = 0.0007f;
 void set_pid3(uint32_t p, uint32_t i, uint32_t d)
 {
 	Kp3 = (float)p/10000;
 	Ki3 = (float)i/10000;
 	Kd3 = (float)d/10000;
-}
+}  
 #ifdef FINSH_USING_SYMTAB
 FINSH_FUNCTION_EXPORT(set_pid3, set_pid3 Kp3=p/10000 Ki3=i/10000 Kd3=d/10000);
 #endif
@@ -154,9 +155,9 @@ float_t pid3(float err3)//in and REF is percent
 	{
 		IntTerm_C3 = 1.0f;
 	}
-//	if(IntTerm_C3 < (double)min)
+//	if(IntTerm_C3 < 0.0f)
 //	{
-//		IntTerm_C3 = (double)min;
+//		IntTerm_C3 = 0.0f;
 //	}
   Output += IntTerm_C3;
   Output += Kd3 * (Error - PrevError_C3);
@@ -188,7 +189,7 @@ void TIM8_UP_TIM13_IRQHandler(void)
 //	rt_enter_critical();/*调度器上锁*/
 	rt_interrupt_enter();
 	logic_out(1,1);
-	I1 = adc_get(0);
+	I1 = adc_get(0);//电流值
 //	I2 = adc_get(1);
 	power = adc_get(2);//功率百分比
 	trig_adc();
@@ -210,7 +211,8 @@ void TIM8_UP_TIM13_IRQHandler(void)
 					pwm_ena(1);
 				
 				{	
-					error_pid = pwm_struct[select_pwm].p_array[interrupt_times] - I1;
+					error_pid = pwm_struct[select_pwm].p_array[interrupt_times] \
+								* program_data[select_pwm].current_max - I1;
 //					logic_out(1,1);
 					percent = pid3(error_pid);	
 //					logic_out(1,0);					
@@ -252,8 +254,9 @@ void TIM8_UP_TIM13_IRQHandler(void)
 				{	
 //					logic_out(1,1);
 					error_pid = pwm_struct[select_pwm].p_array[interrupt_times] - power;
-					percent1 = pid1(error_pid)/c_max_test;
-					if(percent1 > 1.0f) percent1 = 1.0f;
+					percent1 = pid1(error_pid);//percent1为计算得出的电流值
+					if(percent1 > program_data[select_pwm].current_max)
+						percent1 = program_data[select_pwm].current_max;
 					if(percent1 < 0.0f) percent1 = 0.0f;
 					error_pid = percent1 - I1;
 					percent = pid3(error_pid);	
@@ -305,8 +308,8 @@ void print_pidout(void)
 	uint16_t i = 0;
 	for(i = 0;i<500;i++)
 	{
-		rt_kprintf(" pidout[%.3d] = %.4d%,code = %.5d, i_percent = %.4d%,p = %.4d%, set_percent = %.4d%,\n",
-		i,(uint16_t)(pid_out[i]*100),code[i],(uint16_t)(i_get[i]*100),
+		rt_kprintf(" pidout[%.3d] = %.4d%,code = %.5d, i_percent = %.4d,p = %.4d%, set_percent = %.4d%,\n",
+		i,(uint16_t)(pid_out[i]*100),code[i],(uint16_t)i_get[i],
 					(uint16_t)(p_get[i]*100),(uint16_t)(pwm_struct[select_pwm].p_array[i]*100));
 	}
 }
