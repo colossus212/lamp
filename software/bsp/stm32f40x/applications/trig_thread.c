@@ -19,16 +19,25 @@ void rt_trig_thread_entry(void* parameter)
 		
 		switch(e)
 		{
-			case manual_trig:trig_laser_out(frq);
+			case manual_trig:if(usSRegHoldBuf[tr_mode] == 2)
+							{
+								trig_laser_out(frq);
+								select_pwm = wave;
+							}
 				break;
-			case exit_trig:trig_laser_out(0);
-				break;
-			case 0:break;
+//			case exit_trig:	if(usSRegHoldBuf[tr_mode] == 1)//外部触发模式
+//							{
+////								select_pwm = wave;//外部IO读取得到.input_thread中.
+//								usSRegHoldBuf[wave_sel] = select_pwm + 1;
+//								trig_laser_out(0);
+//							}
+//				break;
+//			case 0:break;
 			default:break;
 		}
 		
 		
-		rt_thread_delay(50);
+//		rt_thread_delay(50);
 	}
 }
 
@@ -39,7 +48,7 @@ int trig_thread_start(void)
 
 	trig_thread = rt_thread_create("trig_thread",
 								rt_trig_thread_entry, RT_NULL,
-								4096, 5, 20);
+								4096, 2, 20);
 
 	if (trig_thread != RT_NULL)
 		rt_thread_startup(trig_thread);

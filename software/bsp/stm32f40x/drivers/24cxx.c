@@ -216,10 +216,21 @@ FINSH_FUNCTION_EXPORT(test_eeprom, test eeprom);
 void clear_eeprom(void)
 {
 	uint8_t clsnum[page_size] = {0};
-	uint16_t i = 0;
+	uint16_t i = 0,j = 0;
 	for(i = 0; i< EE_MEM_SIZE/page_size; i++)
 	{
 		write_bytes(page_size*i, clsnum,page_size);
+	}
+	for(i = 0; i< EE_MEM_SIZE/page_size; i++)
+	{
+		read_bytes(i*page_size,clsnum ,page_size);
+		for(j = 0; j< 16; j++)
+		{
+			if(clsnum[j] != 0)
+			{
+				rt_kprintf("clear eeprom error!\n");
+			}
+		}
 	}
 	
 	rt_kprintf("clear eeprom success!\n");

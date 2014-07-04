@@ -31,16 +31,16 @@ void rt_slave_thread_entry(void* parameter)
 	rt_thread_delay(1);
 	para_init();
 //	logic_init();
-	tim1_init();
+//	tim1_init();
 //	pwm_init();
 //	 xMBPortSerialInit(3,  115200,  8, MB_PAR_NONE );
 	eMBInit( MB_ASCII, 0x01, 3, 115200, MB_PAR_NONE );
 	// Enable the Modbus Protocol Stack.
 	eMBEnable(  );
 	rt_thread_delay(1);
-	usSRegHoldBuf[wave_sel] = 1;
-	usSRegHoldBuf[frq_max] = 100;
-	usSRegHoldBuf[current_peak] = 100;
+
+//	usSRegHoldBuf[frq_max] = 100;
+//	usSRegHoldBuf[current_peak] = 100;
 //	xMBUtilSetBits( ucSCoilBuf, standby_s, 1, 1 );
 	while(1)
 	{

@@ -3,6 +3,7 @@
 #include "variables.h"
 
 extern float c_max_test;
+
 void check_logic(void)
 {
 	switch (step)
@@ -53,12 +54,14 @@ void check_logic(void)
 			break;
 		default:break;
 	}
-//	test_pwm_ft = logic_in(pwm_ft);
-	if((xMBUtilGetBits(ucMCoilBuf[0], X15, 1) == 0)||(xMBUtilGetBits(ucMCoilBuf[0], X8, 1) == 0))
+//	test_pwm_ft = logic_in(pwm_ft);//x9为水流检测开关//x8为温度开关//X14为钥匙开关//x15为急停开关
+	if((xMBUtilGetBits(ucMCoilBuf[0], X9, 1) == 0)||(xMBUtilGetBits(ucMCoilBuf[0], X8, 1) == 0)
+		|| (xMBUtilGetBits(ucMCoilBuf[0], X14, 1) == 0) || (xMBUtilGetBits(ucMCoilBuf[0], X15, 1 )==0))
 	{
 		xMBUtilSetBits( ucSCoilBuf, start_up_s, 1, 0 );
 	}
-	
+	xMBUtilSetBits( ucSCoilBuf, water_f_alarm, 1, (xMBUtilGetBits(ucMCoilBuf[0], X9, 1) == 0)?1:0 );
+	xMBUtilSetBits( ucSCoilBuf, IGBT_t_alarm, 1, (xMBUtilGetBits(ucMCoilBuf[0], X8, 1) == 0)?1:0 );
 	if(xMBUtilGetBits(ucSCoilBuf, start_up_s, 1 ) == 1)
 	{
 		start_flag = 1;
@@ -99,28 +102,42 @@ void check_logic(void)
 
 void operation(void)
 {
-	uint16_t buf = 0, buf2 = 0;
-	if(usSRegHoldBuf[wave_sel] > 0)
-		wave = usSRegHoldBuf[wave_sel] - 1;
+//	uint16_t buf = 0, buf2 = 0;
+
+	
+	if(wave + 1 != usSRegHoldBuf[wave_sel])
+	{
+		if(usSRegHoldBuf[wave_sel] > 0)
+		{
+			wave = usSRegHoldBuf[wave_sel] - 1;
+		}
+		else
+		{
+			usSRegHoldBuf[wave_sel] = 1;
+			wave = 0;
+		}
+		read_scheme(wave);
+		check_disp_para();
+//		calculate_array(wave);
+	}
 	
 	if (xMBUtilGetBits(ucSCoilBuf, read_s, 1 ) == 1)
 	{		
 		read_scheme(wave);
 		check_disp_para();
 		calculate_array(wave);
-		select_pwm = wave;
 		xMBUtilSetBits( ucSCoilBuf, read_s, 1, 0 );
 	}
 	
 	if (xMBUtilGetBits(ucSCoilBuf, save_s, 1 ) == 1)
 	{
 		check_disp_para();
-		save_scheme(wave);
+		save_scheme(wave);		
 		calculate_array(wave);
-		select_pwm = wave;		
+		save_scheme(wave);	
 		xMBUtilSetBits( ucSCoilBuf, save_s, 1, 0 );
 	}
-		logic_out(shutter_pin, 1);		
+	logic_out(shutter_pin, 1);		
 	if((2 == usSRegHoldBuf[tr_mode]))
 	{
 
@@ -173,9 +190,9 @@ void operation(void)
 
 void rt_check_thread_entry(void* parameter)
 {	
-	rt_uint32_t e = 0;
-	rt_thread_delay(1);
-
+//	rt_uint32_t e = 0;
+	rt_thread_delay(100);
+	wave = usSRegHoldBuf[wave_sel];
 	while(1)
 	{
 		operation();
@@ -193,7 +210,7 @@ void rt_check_thread_entry(void* parameter)
 		xMBUtilSetBits( ucSCoilBuf, charge_sta, 1, xMBUtilGetBits(Y, 14, 1 ) );
 		xMBUtilSetBits( ucSCoilBuf, lamp1_sta, 1, xMBUtilGetBits(ucMCoilBuf[0], X20, 1 ) );
 		xMBUtilSetBits( ucSCoilBuf, interlock_sta, 1, xMBUtilGetBits(ucMCoilBuf[0], X13, 1 ) );
-		xMBUtilSetBits( ucSCoilBuf, key_switch, 1, xMBUtilGetBits(ucMCoilBuf[0], X14, 1 ) );
+		xMBUtilSetBits( ucSCoilBuf, key_switch, 1, xMBUtilGetBits(ucMCoilBuf[0], X14, 1 ) == 0 );
 		xMBUtilSetBits( ucSCoilBuf, emergency_sw, 1, xMBUtilGetBits(ucMCoilBuf[0], X15, 1 ) );
 		xMBUtilSetBits( ucSCoilBuf, main_supply_sw, 1, xMBUtilGetBits(ucMCoilBuf[0], X21, 1 ) );
 		xMBUtilSetBits( ucSCoilBuf, ignition_sw, 1, xMBUtilGetBits(Y, 12, 1 ) );

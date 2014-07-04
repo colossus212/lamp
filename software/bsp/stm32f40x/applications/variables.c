@@ -5,7 +5,7 @@
 
 uint8_t select_pwm = 0;
 
-uint16_t master_datas[M_REG_HOLDING_NREGS] = {0};
+//uint16_t master_datas[M_REG_HOLDING_NREGS] = {0};
 
 pwm_st pwm_struct[pwm_num];
 //save_program program1 __at(0x40024000);//将数组定义在0x40024000 #include <absacc.h>

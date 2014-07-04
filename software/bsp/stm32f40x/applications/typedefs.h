@@ -36,7 +36,9 @@ typedef struct program
 {
 	uint16_t percent[16];	//
 	uint16_t t[16];			//
-//	uint16_t current_max;
+	uint8_t feedback_mode;
+	uint16_t max_frq;
+	uint16_t current_max;
 	uint16_t CRC16_data;
 }program;
 
@@ -91,11 +93,11 @@ typedef struct program
 //	
 //}PLC;
 
-typedef enum master_reg
-{
-	percent1_m 		= 0,
-	
-}master_reg;
+//typedef enum master_reg
+//{
+//	percent1_m 		= 0,
+//	
+//}master_reg;
 
 typedef enum master_coil
 {

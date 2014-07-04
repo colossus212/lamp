@@ -47,6 +47,10 @@ void init_soft_i2c(void)
 	GPIO_Init(I2C_PORT, &GPIO_InitStructure);	
 #endif
 	i2c_lock = rt_mutex_create("I2cLock", RT_IPC_FLAG_FIFO);
+//	if(i2c_lock != RT_NULL)
+//	{
+//		rt_kprintf("init i2c success");
+//	}
 }
 
 

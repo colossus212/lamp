@@ -4,6 +4,7 @@
 #include "finsh.h"
 #include "color.h"
 #include "typedefs.h"
+#include "variables.h"
 
 #define in_size 12
 #define out_size 9
@@ -238,13 +239,16 @@ void EXTI9_5_IRQHandler(void)
 	EXTI_ClearITPendingBit(EXTI_Line8);
 	if(EXTI_GetITStatus(EXTI_Line5) != RESET)
 	{	
-		rt_event_send(exit_event, io_red_event);
+		rt_event_send(exit_event, io_red_event);	
 		EXTI_ClearITPendingBit(EXTI_Line5);
 	}
 	
 	if(EXTI_GetITStatus(EXTI_Line6) != RESET)
 	{	
-		rt_event_send(exit_event, io_laser_event);
+		if(pwm_struct[select_pwm].busy_flag == 0)
+		{
+			rt_event_send(exit_event, io_laser_event);	
+		}
 		EXTI_ClearITPendingBit(EXTI_Line6);
 	}
 	

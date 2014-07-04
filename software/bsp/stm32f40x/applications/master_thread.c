@@ -31,7 +31,7 @@ int master_thread_start(void)
 
 	master_thread = rt_thread_create("master_thread",
 								rt_master_thread_entry, RT_NULL,
-								4096, 3, 20);
+								4096, 5, 20);
 
 	if (master_thread != RT_NULL)
 		rt_thread_startup(master_thread);

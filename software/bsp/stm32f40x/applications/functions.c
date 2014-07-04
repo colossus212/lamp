@@ -10,6 +10,7 @@ void calculate_array(uint8_t num)
 	uint16_t k = 0;
 	uint16_t *p ;
 	float sum = 0.0f;
+	if(num >= scheme_max ) num = scheme_max - 1;
 	
 	rt_memset(array_buf, 0, array_num*2);//将数组清0
 	p = array_buf;
@@ -46,12 +47,16 @@ void calculate_array(uint8_t num)
 //	pwm_struct[num].negative_pulse = 20;
 	for(k = 0; k < 500; k++)
 	{
-		sum += pwm_struct[num].p_array[k] * usSRegHoldBuf[current_peak];
+		sum += pwm_struct[num].p_array[k] * program_data[num].current_max ;//usSRegHoldBuf[current_peak];
 	}
-	pwm_struct[num].negative_pulse = (uint16_t)(sum/12.5f);
-	usSRegHoldBuf[frq_max] = 200000/(pwm_struct[num].negative_pulse + pwm_struct[num].positive_pulse + 20);
-	
-	pwm_struct[num].mode = xMBUtilGetBits(ucSCoilBuf, feedback, 1 ); 
+	pwm_struct[num].negative_pulse = (uint16_t)(sum/12.5f) + 20;
+	usSRegHoldBuf[frq_max] = 200000/(pwm_struct[num].negative_pulse + pwm_struct[num].positive_pulse);
+	if(usSRegHoldBuf[frq_max] >1000)
+	{
+		usSRegHoldBuf[frq_max] = 1000;
+	}
+	pwm_struct[num].negative_pulse = 200000/usSRegHoldBuf[frq_max] - pwm_struct[num].positive_pulse;
+	pwm_struct[num].mode = program_data[num].feedback_mode; 
 }
 
 void print_array(uint8_t num)

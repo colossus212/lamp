@@ -10,13 +10,13 @@
 
 
 /*variables*/
-extern uint16_t master_datas[M_REG_HOLDING_NREGS];
+//extern uint16_t master_datas[M_REG_HOLDING_NREGS];
 extern uint8_t select_pwm;
 extern rt_event_t exit_event;
 extern uint8_t start_flag;
 extern uint8_t pre_burn_err;
 // extern save_program program1;
-extern program program_data[32];
+extern program program_data[] ;
 extern pwm_st pwm_struct[pwm_num] ;
 extern USHORT   usSRegHoldBuf[S_REG_HOLDING_NREGS] ;
 extern uint8_t Y[2];

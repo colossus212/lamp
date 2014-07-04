@@ -185,7 +185,7 @@ void TIM8_UP_TIM13_IRQHandler(void)
 	float error_pid = 0;
 	static uint16_t interrupt_times = 0;
 //	static uint8_t flag_modbus = 0;
-	rt_enter_critical();/*调度器上锁*/
+//	rt_enter_critical();/*调度器上锁*/
 	rt_interrupt_enter();
 	logic_out(1,1);
 	I1 = adc_get(0);
@@ -297,7 +297,7 @@ void TIM8_UP_TIM13_IRQHandler(void)
 	
 	logic_out(1,0);
 	rt_interrupt_leave();
-	rt_exit_critical();/* 退出临界区*/
+//	rt_exit_critical();/* 退出临界区*/
 }
 
 void print_pidout(void)
@@ -307,7 +307,7 @@ void print_pidout(void)
 	{
 		rt_kprintf(" pidout[%.3d] = %.4d%,code = %.5d, i_percent = %.4d%,p = %.4d%, set_percent = %.4d%,\n",
 		i,(uint16_t)(pid_out[i]*100),code[i],(uint16_t)(i_get[i]*100),
-					(uint16_t)(p_get[i]*100),(uint16_t)(pwm_struct[0].p_array[i]*100));
+					(uint16_t)(p_get[i]*100),(uint16_t)(pwm_struct[select_pwm].p_array[i]*100));
 	}
 }
 #ifdef FINSH_USING_SYMTAB
